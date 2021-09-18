@@ -10,7 +10,6 @@ async function bootstrap() {
 		.setTitle('canon-server-nest')
 		.setDescription('The canon server API description')
 		.setVersion('1.0')
-		.addTag('canon')
 		.build();
 	const document = SwaggerModule.createDocument(app, config);
 	SwaggerModule.setup('api', app, document);

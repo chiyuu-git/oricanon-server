@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Connection, EntityManager } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CatsModule } from './cats/cats.module';
-import { UsersModule } from './users/users.module';
+import { GroupsModule } from './groups/groups.module';
+
 @Module({
 	imports: [
 		TypeOrmModule.forRoot({
@@ -12,14 +13,18 @@ import { UsersModule } from './users/users.module';
 			port: 3306,
 			username: 'root',
 			password: '123456',
-			database: 'demo',
+			database: 'canon',
 			autoLoadEntities: true,
 			synchronize: true,
 		}),
-		CatsModule,
-		UsersModule,
+		GroupsModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+	constructor(
+		private readonly connection: Connection,
+		private readonly entityManager: EntityManager,
+	) {}
+}
