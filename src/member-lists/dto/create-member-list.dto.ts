@@ -1,12 +1,12 @@
 import { IsArray, IsString } from 'class-validator';
-import { ProjectName, List, ListType } from '../projects.type';
+import { ProjectName, List, ListType } from '../member-lists.type';
 
-export class CreateProjectDto {
+export class CreateMemberListDto {
     @IsString()
     projectName: ProjectName;
 
     @IsString()
-    listType: ListType;
+    type: ListType;
 
     @IsArray()
     list: List;

@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection, EntityManager } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ProjectsModule } from './projects/projects.module';
+import { MemberListsModule } from './member-lists/member-lists.module';
 
 @Module({
     imports: [
@@ -18,7 +18,7 @@ import { ProjectsModule } from './projects/projects.module';
             synchronize: false,
             logging: true,
         }),
-        ProjectsModule,
+        MemberListsModule,
     ],
     controllers: [AppController],
     providers: [AppService],

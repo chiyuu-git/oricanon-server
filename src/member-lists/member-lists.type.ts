@@ -1,5 +1,5 @@
 /**
- * @file projectsModule 下的公共类型
+ * @file MemberListsModule 下的公共类型
  */
 
 export enum ProjectName {
@@ -15,7 +15,7 @@ export enum ListType {
     characterCouple = 'characterCouple',
 }
 
-interface Character {
+export interface Character {
     name: string;
     /**
      * 角色的罗马音简称 e.g: honoka
@@ -23,7 +23,7 @@ interface Character {
     romaName: string;
     pixivTag: string;
 }
-interface CharacterCouple {
+export interface CharacterCouple {
     /**
      * couple 元组由两名成员组成，按公式顺序开始排列组合
      */
@@ -37,7 +37,7 @@ interface CharacterCouple {
     // intersectionTag 由前两个字段计算得出即可
     // pixivIntersectionTag: string;
 }
-interface Seiyuu {
+export interface Seiyuu {
     name: string;
     /**
      * 声优的罗马音简称 e.g: emi
@@ -57,3 +57,15 @@ interface Seiyuu {
 //     ? T[]
 //     : never;
 export type List = Character[] | CharacterCouple[] | Seiyuu[];
+
+/**
+ * 以 projectName 为主要字段整合全部 memberList，其中
+ * 1. ll 没有 seiyuus 字段
+ *2.  couples 字段仅 llss 存在
+ */
+export interface ListFormatWithProject {
+    projectName: ProjectName;
+    characters: Character[];
+    characterCouples?: CharacterCouple[];
+    seiyuus?: Seiyuu[];
+}

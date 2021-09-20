@@ -1,8 +1,10 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { ProjectName, List, ListType } from '../projects.type';
+import { ProjectName, List, ListType } from '../member-lists.type';
 
-@Entity()
-export class Project {
+@Entity({
+    name: 'member_list',
+})
+export class MemberList {
     @PrimaryColumn({
         type: 'enum',
         name: 'project_name',
@@ -13,11 +15,10 @@ export class Project {
 
     @PrimaryColumn({
         type: 'enum',
-        name: 'list_type',
         enum: ListType,
         default: ListType.character,
     })
-    listType: ListType;
+    type: ListType;
 
     @Column({ type: 'json' })
     list: List;

@@ -9,9 +9,10 @@ module.exports = {
         node: true,
     },
     extends: [
+        'airbnb-base',
         'plugin:unicorn/recommended',
         'plugin:promise/recommended',
-        'plugin:@typescript-eslint/recommended'
+        'plugin:@typescript-eslint/recommended',
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -75,6 +76,9 @@ module.exports = {
         '@typescript-eslint/explicit-module-boundary-types': OFF,
         '@typescript-eslint/no-explicit-any': OFF,
         '@typescript-eslint/no-use-before-define': ERROR,
+        // js 的 no-shadow 规则会导致 eslint 误识别 enum 类型
+        'no-shadow': OFF,
+        '@typescript-eslint/no-shadow': ERROR,
 
         // typescript 的 unused 其实并不需要
         // '@typescript-eslint/no-unused-vars': WARN,
@@ -82,8 +86,8 @@ module.exports = {
         'no-unused-expressions': WARN,
         'no-plusplus': OFF,
         'no-console': OFF,
-        // TODO: 这个error好烦，先注释了
-        // 'class-methods-use-this': WARN,
+        // TODO: 这个error好烦，先关闭了
+        'class-methods-use-this': OFF,
         'no-continue': ERROR,
 
         /**
@@ -107,7 +111,34 @@ module.exports = {
         'object-curly-newline': [ERROR, { consistent: true }],
         'array-bracket-newline': [ERROR, 'consistent'],
         'array-element-newline': [ERROR, 'consistent'],
+        'no-multiple-empty-lines': [
+            ERROR,
+            {
+                'max': 1,
+                'maxBOF': 0,
+                // 与 eol-last 规则保持一致
+                'maxEOF': 1,
+            },
+        ],
+        // typescript 相关代码格式字段
+        '@typescript-eslint/type-annotation-spacing': [ERROR, { after: true }],
+
+        /**
+         * airbnb-base 定制，处理一下与继承的配置冲突的rule
+         * iterators/generators
+         */
+        'no-restricted-syntax': [OFF, 'iterators/generators'],
+        // 因为 nestjs 的设计问题 空的 constructor 存在依赖注入，无法去除
+        'no-useless-constructor': OFF,
+        'max-classes-per-file': OFF,
+
     },
     // node 工具链都是js文件，针对这些js文件单独配置部分 rule
-    overrides: [{ files: ['**/*.js'], rules: { 'unicorn/prefer-module': OFF } }],
+    overrides: [{
+        files: ['**/*.js'],
+        rules: {
+            'unicorn/prefer-module': OFF,
+            'no-shadow': ERROR,
+        },
+    }],
 };
