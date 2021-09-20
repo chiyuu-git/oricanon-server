@@ -1,0 +1,37 @@
+fix: 修复 XXX 的问题
+
+changelog:
+
+# 整体格式
+# <type>[(<scope>)]: <subject>[（level）][（<icafe>）]
+#
+# <body>
+#
+# <footnote>
+#
+# type
+#   feat fix perf refactor build style test docs
+#   feat| fix | perf | refactor 四类，认为是上线类型，会对最终的产出内容有影响，会记录到上线内容中
+# scope
+#   选填；具体的内容，由各个项目本身决定
+# level
+#   非兼容 高 中 低
+#   上线类型，必填；非上线类型不填，表示无影响
+# icafe
+#   格式为：name-id
+#   上线类型，必填
+# subject
+#   要使用祈使句，且不要以标点符号结尾
+#   最好小于 50 字符，必须小于 72 字符
+# 注意：head 后两个括号必须是全角字符
+# body
+#   大体要写的内容，见上述的模板
+#   body 格式不做严格限制，最好符合 markdown 语法
+#   内容需要包含完全理解并检查 Commit 的正确性与估计上线影响的所有信息。
+# footnote
+#   包含 qa、icafe、changelog 三部分
+#   qa：上线类型 非必填
+#   icafe：填入其他相关的 icafe，按空格分割；没有，可删除这一行，或留空
+#   changelog：没有，可删除这一行，或留空
+#
+# 详细链接：http://agroup.baidu.com/swandocuments/md/article/2137256

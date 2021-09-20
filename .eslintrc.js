@@ -76,16 +76,20 @@ module.exports = {
         '@typescript-eslint/explicit-module-boundary-types': OFF,
         '@typescript-eslint/no-explicit-any': OFF,
         '@typescript-eslint/no-use-before-define': ERROR,
-        '@typescript-eslint/no-unused-vars': WARN,
+
+        // TODO: 这个error好烦，先改为WARN了
+        'class-methods-use-this': WARN,
+        'no-continue': ERROR,
 
         // 代码格式相关的，逐步去除
         'prettier/prettier': ERROR,
         'lines-between-class-members': [ERROR, 'always'],
+        // typescript 的 unused 其实并不需要
+        // '@typescript-eslint/no-unused-vars': WARN,
+        'no-unused-vars': WARN,
         'no-unused-expressions': WARN,
         'no-plusplus': OFF,
         'no-console': OFF,
-        'class-methods-use-this': ERROR,
-        'no-continue': ERROR,
         // 换行符，不同的系统不一样，不做要求
         'linebreak-style': OFF,
         // 控制对象、数组的换行，要么全部换行，要么全部不换行，保持一致即可
