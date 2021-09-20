@@ -1,24 +1,24 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { projectName, list, listType } from '../projects.type';
+import { ProjectName, List, ListType } from '../projects.type';
 
 @Entity()
 export class Project {
     @PrimaryColumn({
         type: 'enum',
         name: 'project_name',
-        enum: projectName,
-        default: projectName.LLSS,
+        enum: ProjectName,
+        default: ProjectName.llss,
     })
-    projectName: projectName;
+    projectName: ProjectName;
 
     @PrimaryColumn({
         type: 'enum',
         name: 'list_type',
-        enum: listType,
-        default: listType.CHARACTER,
+        enum: ListType,
+        default: ListType.character,
     })
-    listType: listType;
+    listType: ListType;
 
     @Column({ type: 'json' })
-    list: list;
+    list: List;
 }

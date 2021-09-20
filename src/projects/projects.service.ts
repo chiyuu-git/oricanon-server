@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProjectDto } from './dto/create-project.dto';
-import { QueryProjectDto } from './dto/query-project-dto';
+import { FindProjectDto, QueryProjectDto } from './dto/query-project-dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { Project } from './entities/project.entity';
 
@@ -31,6 +31,7 @@ export class ProjectsService {
         return `This action returns a #${JSON.stringify(project)} project`;
     }
 
+
     async update({ projectName, listType }: UpdateProjectDto, UpdateProjectDto: UpdateProjectDto) {
         const project = await this.projectsRepository.update({ projectName, listType }, UpdateProjectDto);
         // 执行 UPDATE user SET firstName = Rizzrak WHERE firstName = Timber
@@ -40,5 +41,16 @@ export class ProjectsService {
     remove({ projectName, listType }: QueryProjectDto) {
         // TODO: 添加废除标记
         return `This action removes a #${projectName} ${listType} project`;
+    }
+
+    /**
+     * 以下均为扩展能力，基于基础的 service 扩展
+     */
+    async findListByType({ listType }: FindProjectDto) {
+        const projects = await this.projectsRepository.find({
+            select: ['projectName', 'list'],
+            where: { listType }
+        });
+        return projects;
     }
 }

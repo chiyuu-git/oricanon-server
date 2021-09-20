@@ -11,8 +11,7 @@ module.exports = {
     extends: [
         'plugin:unicorn/recommended',
         'plugin:promise/recommended',
-        'plugin:@typescript-eslint/recommended',
-        'prettier',
+        'plugin:@typescript-eslint/recommended'
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -20,7 +19,7 @@ module.exports = {
         ecmaVersion: 12,
         sourceType: 'module',
     },
-    plugins: ['import', 'unicorn', 'promise', '@typescript-eslint', 'prettier'],
+    plugins: ['import', 'unicorn', 'promise', '@typescript-eslint'],
     settings: {
         'import/resolver': {
             node: { extensions: ['.tsx', '.ts', '.js', '.json'] },
@@ -47,14 +46,14 @@ module.exports = {
             ERROR,
             {
                 cases: {
-                    // 中划线
+                    // 统一使用中划线命名
                     kebabCase: true,
                     // 小驼峰
-                    camelCase: true,
+                    camelCase: false,
                     // 下划线
                     snakeCase: false,
                     // 大驼峰
-                    pascalCase: true,
+                    pascalCase: false,
                 },
             },
         ],
@@ -77,19 +76,31 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': OFF,
         '@typescript-eslint/no-use-before-define': ERROR,
 
-        // TODO: 这个error好烦，先改为WARN了
-        'class-methods-use-this': WARN,
-        'no-continue': ERROR,
-
-        // 代码格式相关的，逐步去除
-        'prettier/prettier': ERROR,
-        'lines-between-class-members': [ERROR, 'always'],
         // typescript 的 unused 其实并不需要
         // '@typescript-eslint/no-unused-vars': WARN,
         'no-unused-vars': WARN,
         'no-unused-expressions': WARN,
         'no-plusplus': OFF,
         'no-console': OFF,
+        // TODO: 这个error好烦，先注释了
+        // 'class-methods-use-this': WARN,
+        'no-continue': ERROR,
+
+        /**
+         * 代码格式相关的规则，代替prettier
+         */
+        'indent': [ERROR, 4, { SwitchCase: 1 }],
+        // 空格相关的规则
+        'keyword-spacing': ERROR,
+        'object-curly-spacing': [ERROR, 'always'],
+        'lines-between-class-members': [ERROR, 'always'],
+        // 同一个对象内部，是否使用单引号、双引号保持一致即可
+        'quote-props': ['error', 'consistent'],
+        'semi': [ERROR, 'always'],
+        'max-len': [ERROR, 120],
+        'quotes': [ERROR, 'single'],
+        'jsx-quotes': [ERROR, 'prefer-single'],
+        'brace-style': [ERROR, 'stroustrup', { allowSingleLine: false }],
         // 换行符，不同的系统不一样，不做要求
         'linebreak-style': OFF,
         // 控制对象、数组的换行，要么全部换行，要么全部不换行，保持一致即可

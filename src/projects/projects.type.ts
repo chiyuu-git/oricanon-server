@@ -2,20 +2,20 @@
  * @file projectsModule 下的公共类型
  */
 
-export enum projectName {
-    LL = 'lovelive',
-    LLS = 'lovelive_sunshine',
-    LLSS = 'lovelive_superstar',
-    LLN = 'lovelive_nijigasaki_high_school_idol_club',
+export enum ProjectName {
+    ll = 'lovelive',
+    lls = 'lovelive_sunshine',
+    llss = 'lovelive_superstar',
+    lln = 'lovelive_nijigasaki_high_school_idol_club',
 }
 
-export enum listType {
-    CHARACTER = 'character',
-    SEIYUU = 'seiyuu',
-    CHARACTER_COUPLE = 'characterCouple',
+export enum ListType {
+    character = 'character',
+    seiyuu = 'seiyuu',
+    characterCouple = 'characterCouple',
 }
 
-interface ICharacter {
+interface Character {
     name: string;
     /**
      * 角色的罗马音简称 e.g: honoka
@@ -23,7 +23,7 @@ interface ICharacter {
     romaName: string;
     pixivTag: string;
 }
-interface ICharacterCouple {
+interface CharacterCouple {
     /**
      * couple 元组由两名成员组成，按公式顺序开始排列组合
      */
@@ -37,7 +37,7 @@ interface ICharacterCouple {
     // intersectionTag 由前两个字段计算得出即可
     // pixivIntersectionTag: string;
 }
-interface ISeiyuu {
+interface Seiyuu {
     name: string;
     /**
      * 声优的罗马音简称 e.g: emi
@@ -56,4 +56,4 @@ interface ISeiyuu {
 //     : T extends ICharacterCouple
 //     ? T[]
 //     : never;
-export type list = ICharacter[] | ICharacterCouple[] | ISeiyuu[];
+export type List = Character[] | CharacterCouple[] | Seiyuu[];
