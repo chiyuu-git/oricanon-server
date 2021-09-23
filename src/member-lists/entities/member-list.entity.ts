@@ -1,5 +1,9 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { ProjectName, List, ListType } from '../member-lists.type';
+import {
+    ProjectName,
+    List,
+    ListType,
+} from '../member-lists.type';
 
 @Entity({
     name: 'member_list',

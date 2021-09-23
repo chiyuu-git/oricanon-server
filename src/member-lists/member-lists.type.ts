@@ -49,23 +49,27 @@ export interface Seiyuu {
 /**
  * list是三选一类型的数组
  */
-// export type list<T> = T extends ICharacter
-//     ? T[]
-//     : T extends ISeiyuu
-//     ? T[]
-//     : T extends ICharacterCouple
-//     ? T[]
-//     : never;
+
 export type List = Character[] | CharacterCouple[] | Seiyuu[];
 
-/**
- * 以 projectName 为主要字段整合全部 memberList，其中
- * 1. ll 没有 seiyuus 字段
- *2.  couples 字段仅 llss 存在
- */
-export interface ListFormatWithProject {
+export interface CharacterMemberList {
     projectName: ProjectName;
-    characters: Character[];
-    characterCouples?: CharacterCouple[];
-    seiyuus?: Seiyuu[];
+    listType: ListType.character;
+    list: Character[];
+}
+export interface CharacterCoupleMemberList {
+    projectName: ProjectName;
+    listType: ListType.characterCouple;
+    list: CharacterCouple[];
+}
+export interface SeiyuuMemberList {
+    projectName: ProjectName;
+    listType: ListType.seiyuu;
+    list: Seiyuu[];
+}
+
+export interface MemberListType {
+    [ListType.character]: CharacterMemberList;
+    [ListType.seiyuu]: SeiyuuMemberList;
+    [ListType.characterCouple]: CharacterCoupleMemberList;
 }

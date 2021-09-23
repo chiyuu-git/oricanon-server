@@ -4,7 +4,23 @@ import { MemberListsService } from './member-lists.service';
 import { CreateMemberListDto } from './dto/create-member-list.dto';
 import { UpdateMemberListDto } from './dto/update-member-list.dto';
 import { QueryMemberListDto } from './dto/query-member-list-dto';
-import { ListType, ProjectName } from './member-lists.type';
+import { Character, CharacterCouple, ListType, ProjectName, Seiyuu } from './member-lists.type';
+
+/**
+ * 以 projectName 为主要字段整合全部 memberList，其中
+ * 1. ll 没有 seiyuus 字段
+ *2.  couples 字段仅 llss 存在
+ */
+interface ListFormatWithProject {
+    projectName: ProjectName;
+    characters: Character[];
+    characterCouples?: CharacterCouple[];
+    seiyuus?: Seiyuu[];
+}
+/**
+ * 中间变量，以 projectName 为属性名整合全部的list
+ */
+ type ProjectMap = Record<ProjectName, Partial<ListFormatWithProject>>;
 
 @ApiTags('MemberLists')
 @Controller('memberLists')
@@ -53,19 +69,54 @@ export class MemberListsController {
     @ApiParam({ name: 'type', enum: ListType })
     async findListOfType(@Param('type') type: ListType) {
         if (ListType[type]) {
-            const MemberListsOfType = await this.memberListsService.findListByType({ type });
-            return `find all list of ${type} ${JSON.stringify(MemberListsOfType)}`;
+            const MemberListsOfType = await this.memberListsService.findListByType(type);
+            return MemberListsOfType;
         }
 
         return `type ${type} not exist`;
     }
 
     /**
+     * 获取所有的pixivTags
+     */
+    @Get('all_pixiv_tags')
+    async getAllPixivTags() {
+        const characterLists = await this.memberListsService.findListByType(ListType.character);
+        const allPixivTags = characterLists.map(({ projectName, list }) => {
+            const pixivTags = list.map(({ pixivTag }) => pixivTag);
+            return {
+                projectName,
+                pixivTags,
+            };
+        });
+        return allPixivTags;
+    }
+
+    /**
      * 以 projectName 为主要字段整合全部 memberList ，并返回
+     * TODO: 这里第二个 as 断言， 是否有更好的处理方法
      */
     @Get('list_format_with_project')
     async formatListWithProject() {
-        const formatList = await this.memberListsService.formatListWithProject();
+        const memberLists = await this.memberListsService.findAll();
+        const formatList: ListFormatWithProject[] = [];
+        const projectMap: ProjectMap = {} as ProjectMap;
+        for (const memberList of memberLists) {
+            const { projectName, type, list } = memberList;
+            if (projectMap[projectName]) {
+                projectMap[projectName][`${type}s`] = list;
+            }
+            else {
+                projectMap[projectName] = {
+                    projectName,
+                    [`${type}s`]: list,
+                };
+            }
+        }
+
+        for (const memberList of Object.values(projectMap)) {
+            formatList.push(memberList as ListFormatWithProject);
+        }
         return formatList;
     }
 }

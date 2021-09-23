@@ -1,16 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ProjectName, ListFormatWithProject } from './member-lists.type';
+import { MemberListType, ListType } from './member-lists.type';
 import { CreateMemberListDto } from './dto/create-member-list.dto';
 import { QueryMemberListDto } from './dto/query-member-list-dto';
 import { UpdateMemberListDto } from './dto/update-member-list.dto';
 import { MemberList } from './entities/member-list.entity';
-
-/**
- * 中间变量，以 projectName 为属性名整合全部的list
- */
-type ProjectMap = Record<ProjectName, Partial<ListFormatWithProject>>;
 
 @Injectable()
 export class MemberListsService {
@@ -19,7 +14,7 @@ export class MemberListsService {
         private MemberListsRepository: Repository<MemberList>,
     ) {}
 
-    private async findAll() {
+    async findAll() {
         return this.MemberListsRepository.find();
     }
 
@@ -50,41 +45,14 @@ export class MemberListsService {
         return `This action removes a #${projectName} ${type} memberList`;
     }
 
-    /**
-     * 以下均为扩展能力，基于基础的 service 扩展
-     */
-    async findListByType({ type }: QueryMemberListDto) {
+    async findListByType<T extends keyof MemberListType>(type: T): Promise<MemberListType[T][]> {
         const memberList = await this.MemberListsRepository.find({
             select: ['projectName', 'list'],
             where: { type },
         });
-        return memberList;
-    }
-
-    /**
-     * 以 projectName 为主要字段整合memberList
-     * TODO: 这里第二个 as 断言， 是否有更好的处理方法
-     */
-    async formatListWithProject() {
-        const memberLists = await this.findAll();
-        const formatList: ListFormatWithProject[] = [];
-        const projectMap: ProjectMap = {} as ProjectMap;
-        for (const memberList of memberLists) {
-            const { projectName, type, list } = memberList;
-            if (projectMap[projectName]) {
-                projectMap[projectName][`${type}s`] = list;
-            }
-            else {
-                projectMap[projectName] = {
-                    projectName,
-                    [`${type}s`]: list,
-                };
-            }
-        }
-
-        for (const memberList of Object.values(projectMap)) {
-            formatList.push(memberList as ListFormatWithProject);
-        }
-        return formatList;
+        /**
+         * TODO: 这里使用了一个强制断言，看下是否有更好的方法实现
+         */
+        return memberList as unknown as MemberListType[T][];
     }
 }

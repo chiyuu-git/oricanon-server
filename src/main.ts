@@ -15,6 +15,8 @@ async function bootstrap() {
     SwaggerModule.setup('api', app, document);
 
     app.useGlobalPipes(new ValidationPipe());
+    // 允许跨域
+    app.enableCors();
     await app.listen(3000);
 }
 bootstrap();
