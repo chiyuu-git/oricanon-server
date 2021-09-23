@@ -77,19 +77,46 @@ export class MemberListsController {
     }
 
     /**
-     * 获取所有的pixivTags
+     * 获取所有角色的pixivTags
      */
-    @Get('all_pixiv_tags')
-    async getAllPixivTags() {
+    @Get('all_character_pixiv_tags')
+    async getAllCharacterPixivTags() {
         const characterLists = await this.memberListsService.findListByType(ListType.character);
-        const allPixivTags = characterLists.map(({ projectName, list }) => {
+        const allCharacterPixivTags = characterLists.map(({ projectName, list }) => {
             const pixivTags = list.map(({ pixivTag }) => pixivTag);
             return {
                 projectName,
                 pixivTags,
             };
         });
-        return allPixivTags;
+        return allCharacterPixivTags;
+    }
+
+    /**
+     * 获取所有角色cp的pixivTags
+     */
+    @Get('all_couple_pixiv_tags')
+    async getAllCouplePixivTags() {
+        const coupleLists = await this.memberListsService.findListByType(ListType.characterCouple);
+        const allCouplePixivTags = coupleLists.map(({ projectName, list }) => {
+            const tags: string[] = [];
+            const reverseTags: string[] = [];
+            const intersectionTags: string[] = [];
+            for (const { pixivTag, pixivReverseTag } of list) {
+                tags.push(pixivTag);
+                if (pixivReverseTag) {
+                    reverseTags.push(pixivReverseTag);
+                    intersectionTags.push(`${pixivTag} ${pixivReverseTag}`);
+                }
+            }
+            return {
+                projectName,
+                pixivTags: tags,
+                pixivReverseTags: reverseTags,
+                pixivIntersectionTags: intersectionTags,
+            };
+        });
+        return allCouplePixivTags;
     }
 
     /**
