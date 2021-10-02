@@ -22,8 +22,8 @@ interface ListFormatWithProject {
  */
  type ProjectMap = Record<ProjectName, Partial<ListFormatWithProject>>;
 
-@ApiTags('MemberLists')
-@Controller('memberLists')
+@ApiTags('member_lists')
+@Controller('member_lists')
 export class MemberListsController {
     constructor(private readonly memberListsService: MemberListsService) {}
 

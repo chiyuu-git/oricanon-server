@@ -1,23 +1,14 @@
-import { ObjectSchema } from '@hapi/joi';
-import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
+import {
+    ArgumentMetadata,
+    BadRequestException,
+    Injectable,
+    PipeTransform,
+} from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
 
 @Injectable()
-export class JoiValidationPipe implements PipeTransform {
-    constructor(private schema: ObjectSchema) {}
-
-    transform(value: any, metadata: ArgumentMetadata) {
-        const { error } = this.schema.validate(value);
-        if (error) {
-            throw new BadRequestException('Validation failed');
-        }
-        return value;
-    }
-}
-
-@Injectable()
-export class ValidationPipe implements PipeTransform<any> {
+export class MyValidationPipe implements PipeTransform<any> {
     async transform(value: any, { metatype: metaType }: ArgumentMetadata) {
         if (!metaType || !this.toValidate(metaType)) {
             return value;
@@ -25,7 +16,7 @@ export class ValidationPipe implements PipeTransform<any> {
         const object = plainToClass(metaType, value);
         const errors = await validate(object);
         if (errors.length > 0) {
-            throw new BadRequestException('Validation failed');
+            throw new BadRequestException(errors);
         }
         return value;
     }
@@ -33,7 +24,7 @@ export class ValidationPipe implements PipeTransform<any> {
     // eslint-disable-next-line @typescript-eslint/ban-types
     private toValidate(metatype: Function): boolean {
         // eslint-disable-next-line @typescript-eslint/ban-types
-        const types: Function[] = [String, Boolean, Number, Array, Object];
+        const types: Function[] = [String, Boolean, Number, Array, Date, Object];
         return !types.includes(metatype);
     }
 }

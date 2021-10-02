@@ -4,6 +4,7 @@ import { Connection, EntityManager } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MemberListsModule } from './member-lists/member-lists.module';
+import { CouplePixivTagModule } from './couple-pixiv-tags/couple-pixiv-tags.module';
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { MemberListsModule } from './member-lists/member-lists.module';
             logging: true,
         }),
         MemberListsModule,
+        CouplePixivTagModule,
     ],
     controllers: [AppController],
     providers: [AppService],

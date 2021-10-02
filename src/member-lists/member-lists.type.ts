@@ -2,12 +2,9 @@
  * @file MemberListsModule 下的公共类型
  */
 
-export enum ProjectName {
-    ll = 'lovelive',
-    lls = 'lovelive_sunshine',
-    llss = 'lovelive_superstar',
-    lln = 'lovelive_nijigasaki_high_school_idol_club',
-}
+import { ProjectName } from '../canon.type';
+
+export { ProjectName } from '../canon.type';
 
 export enum ListType {
     character = 'character',
@@ -52,24 +49,20 @@ export interface Seiyuu {
 
 export type List = Character[] | CharacterCouple[] | Seiyuu[];
 
-export interface CharacterMemberList {
-    projectName: ProjectName;
-    listType: ListType.character;
-    list: Character[];
-}
-export interface CharacterCoupleMemberList {
-    projectName: ProjectName;
-    listType: ListType.characterCouple;
-    list: CharacterCouple[];
-}
-export interface SeiyuuMemberList {
-    projectName: ProjectName;
-    listType: ListType.seiyuu;
-    list: Seiyuu[];
-}
-
-export interface MemberListType {
-    [ListType.character]: CharacterMemberList;
-    [ListType.seiyuu]: SeiyuuMemberList;
-    [ListType.characterCouple]: CharacterCoupleMemberList;
+export interface MemberListMap {
+    [ListType.character]: {
+        projectName: ProjectName;
+        listType: ListType.character;
+        list: Character[];
+    };
+    [ListType.seiyuu]: {
+        projectName: ProjectName;
+        listType: ListType.seiyuu;
+        list: Seiyuu[];
+    };
+    [ListType.characterCouple]: {
+        projectName: ProjectName;
+        listType: ListType.characterCouple;
+        list: CharacterCouple[];
+    };
 }

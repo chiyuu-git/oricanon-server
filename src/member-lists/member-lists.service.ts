@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { MemberListType, ListType } from './member-lists.type';
+import { MemberListMap } from './member-lists.type';
 import { CreateMemberListDto } from './dto/create-member-list.dto';
 import { QueryMemberListDto } from './dto/query-member-list-dto';
 import { UpdateMemberListDto } from './dto/update-member-list.dto';
@@ -14,13 +14,13 @@ export class MemberListsService {
         private MemberListsRepository: Repository<MemberList>,
     ) {}
 
-    async findAll() {
-        return this.MemberListsRepository.find();
-    }
-
     async create(CreateProjectDto: CreateMemberListDto) {
         await this.MemberListsRepository.insert(CreateProjectDto);
         return 'This action adds a new memberList';
+    }
+
+    async findAll() {
+        return this.MemberListsRepository.find();
     }
 
     async findOne({ projectName, type }: QueryMemberListDto) {
@@ -31,7 +31,7 @@ export class MemberListsService {
                 type,
             },
         });
-        return `This action returns a memberList: #${JSON.stringify(memberList)}`;
+        return memberList;
     }
 
     async update({ projectName, type }: UpdateMemberListDto, updateProjectDto: UpdateMemberListDto) {
@@ -45,7 +45,7 @@ export class MemberListsService {
         return `This action removes a #${projectName} ${type} memberList`;
     }
 
-    async findListByType<T extends keyof MemberListType>(type: T): Promise<MemberListType[T][]> {
+    async findListByType<T extends keyof MemberListMap>(type: T): Promise<MemberListMap[T][]> {
         const memberList = await this.MemberListsRepository.find({
             select: ['projectName', 'list'],
             where: { type },
@@ -53,6 +53,6 @@ export class MemberListsService {
         /**
          * TODO: 这里使用了一个强制断言，看下是否有更好的方法实现
          */
-        return memberList as unknown as MemberListType[T][];
+        return memberList as unknown as MemberListMap[T][];
     }
 }

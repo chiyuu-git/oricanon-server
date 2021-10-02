@@ -1,8 +1,6 @@
 {
-    // 使用 stylelint 自身的校验即可
-    "css.validate": false,
-    "less.validate": false,
-    "scss.validate": false,
+    // 服务器项目不需要styleline
+    "stylelint.enable": false,
     // 指定哪些文件不参与搜索
     "search.exclude": {
         "**/node_modules": true,

@@ -10,6 +10,8 @@ module.exports = {
     },
     extends: [
         'airbnb-base',
+        'plugin:import/recommended',
+        'plugin:import/typescript',
         'plugin:unicorn/recommended',
         'plugin:promise/recommended',
         'plugin:@typescript-eslint/recommended',
@@ -24,6 +26,7 @@ module.exports = {
     settings: {
         'import/resolver': {
             node: { extensions: ['.tsx', '.ts', '.js', '.json'] },
+            typescript: {},
         },
     },
     rules: {
