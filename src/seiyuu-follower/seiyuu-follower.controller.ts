@@ -25,7 +25,7 @@ export class SeiyuuFollowerController {
         return this.service.findAll();
     }
 
-    @Get('/character_pixiv_tag')
+    @Get('/character__tag')
     @ApiQuery({ name: 'date', type: 'string' })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
     findOne(@Query() query: QuerySeiyuuFollowerDto) {

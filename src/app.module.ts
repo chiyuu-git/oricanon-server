@@ -4,9 +4,9 @@ import { Connection, EntityManager } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MemberListModule } from './member-list/member-list.module';
-import { CouplePixivTagModule } from './couple-pixiv-tag/couple-pixiv-tag.module';
+import { CoupleTagModule } from './couple-tag/couple-tag.module';
 import { WeeklyModule } from './weekly/weekly.module';
-import { CharacterPixivTagModule } from './character-pixiv-tag/character-pixiv-tag.module';
+import { CharacterTagModule } from './character-tag/character-tag.module';
 import { SeiyuuFollowerModule } from './seiyuu-follower/seiyuu-follower.module';
 
 @Module({
@@ -23,8 +23,8 @@ import { SeiyuuFollowerModule } from './seiyuu-follower/seiyuu-follower.module';
             logging: true,
         }),
         MemberListModule,
-        CouplePixivTagModule,
-        CharacterPixivTagModule,
+        CoupleTagModule,
+        CharacterTagModule,
         WeeklyModule,
         SeiyuuFollowerModule,
     ],

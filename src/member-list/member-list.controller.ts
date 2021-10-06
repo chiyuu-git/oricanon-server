@@ -61,23 +61,23 @@ export class MemberListController {
     }
 
     /**
-     * 获取所有角色的pixivTags
+     * 获取所有角色的Tags
      */
-    @Get('all_character_pixiv_tag')
-    async findAllCharacterPixivTags() {
-        const allCharacterPixivTags = await this.service.findAllCharacterPixivTags();
+    @Get('all_character__tag')
+    async findAllCharacterTags() {
+        const allCharacterTags = await this.service.findAllCharacterTags();
 
-        return allCharacterPixivTags;
+        return allCharacterTags;
     }
 
     /**
-     * 获取所有角色cp的pixivTags
+     * 获取所有角色cp的Tags
      */
-    @Get('all_couple_pixiv_tag')
-    async findAllCouplePixivTags() {
-        const allCouplePixivTags = await this.service.findAllCouplePixivTags();
+    @Get('all_couple__tag')
+    async findAllCoupleTags() {
+        const allCoupleTags = await this.service.findAllCoupleTags();
 
-        return allCouplePixivTags;
+        return allCoupleTags;
     }
 
     /**

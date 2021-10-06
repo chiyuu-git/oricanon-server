@@ -1,10 +1,10 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { ProjectName, CoupleTagType } from '../couple-pixiv-tag.type';
+import { ProjectName, CoupleTagType } from '../couple-tag.type';
 
 @Entity({
-    name: 'couple_pixiv_tag',
+    name: 'couple__tag',
 })
-export class CouplePixivTag {
+export class CoupleTag {
     @PrimaryColumn({
         type: 'date',
         // transformer: {

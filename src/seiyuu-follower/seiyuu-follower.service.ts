@@ -42,11 +42,11 @@ export class SeiyuuFollowerService implements DataService<SeiyuuFollower> {
 
     async update(
         { date, projectName }: QuerySeiyuuFollowerDto,
-        updateCharacterPixivTagDto: UpdateSeiyuuFollowerDto,
+        updateCharacterTagDto: UpdateSeiyuuFollowerDto,
     ) {
         const coupleTag = await this.repository.update(
             { date, projectName },
-            updateCharacterPixivTagDto,
+            updateCharacterTagDto,
         );
         return coupleTag;
     }

@@ -31,7 +31,7 @@ export interface CharacterCouple {
     romaName: string;
     pixivTag: string;
     pixivReverseTag: string;
-    // intersectionTag 由前两个字段计算得出即可
+    // pixivIntersectionTag 由前两个字段计算得出即可
     // pixivIntersectionTag: string;
 }
 export interface Seiyuu {

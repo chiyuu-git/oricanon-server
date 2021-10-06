@@ -63,26 +63,26 @@ export class MemberListService {
     }
 
     /**
-     * 获取所有角色的pixivTags
+     * 获取所有角色的Tags
      */
-    async findAllCharacterPixivTags() {
+    async findAllCharacterTags() {
         const characterLists = await this.findListByType(ListType.character);
-        const allCharacterPixivTags = characterLists.map(({ projectName, list }) => {
+        const allCharacterTags = characterLists.map(({ projectName, list }) => {
             const pixivTags = list.map(({ pixivTag }) => pixivTag);
             return {
                 projectName,
                 pixivTags,
             };
         });
-        return allCharacterPixivTags;
+        return allCharacterTags;
     }
 
     /**
-     * 获取所有角色cp的pixivTags
+     * 获取所有角色cp的Tags
      */
-    async findAllCouplePixivTags() {
+    async findAllCoupleTags() {
         const coupleLists = await this.findListByType(ListType.characterCouple);
-        const allCouplePixivTags = coupleLists.map(({ projectName, list }) => {
+        const allCoupleTags = coupleLists.map(({ projectName, list }) => {
             const tags: string[] = [];
             const reverseTags: string[] = [];
             const intersectionTags: string[] = [];
@@ -100,7 +100,7 @@ export class MemberListService {
                 pixivIntersectionTags: intersectionTags,
             };
         });
-        return allCouplePixivTags;
+        return allCoupleTags;
     }
 
     /**

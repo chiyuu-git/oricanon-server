@@ -1,10 +1,10 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { ProjectName, CharacterTagType } from '../character-pixiv-tag.type';
+import { ProjectName, CharacterTagType } from '../character-tag.type';
 
 @Entity({
-    name: 'character_pixiv_tag',
+    name: 'character__tag',
 })
-export class CharacterPixivTag {
+export class CharacterTag {
     @PrimaryColumn({
         type: 'date',
     })

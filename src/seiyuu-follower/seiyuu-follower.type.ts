@@ -1,5 +1,5 @@
 /**
- * @file CouplePixivTagsModule 下的公共类型
+ * @file CoupleTagsModule 下的公共类型
  */
 
 import { ProjectName } from '../canon.type';
