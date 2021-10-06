@@ -1,16 +1,17 @@
 import {
     Controller,
-    Get, Post, Body, Patch, Param, Delete,
+    Get, Post, Body, Patch, Delete,
     Query,
 } from '@nestjs/common';
-import { ApiBody, ApiQuery } from '@nestjs/swagger';
-import { CouplePixivTagService } from './couple-pixiv-tags.service';
-import { ProjectName, CoupleTagType } from './couple-pixiv-tags.type';
+import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { CouplePixivTagService } from './couple-pixiv-tag.service';
+import { ProjectName, CoupleTagType } from './couple-pixiv-tag.type';
 import { CreateCouplePixivTagDto } from './dto/create-couple-pixiv-tag.dto';
 import { QueryCouplePixivTagDto } from './dto/query-conpule-pixiv-tag.dto';
 import { UpdateCouplePixivTagDto } from './dto/update-couple-pixiv-tag.dto';
 
-@Controller('couple_pixiv_tags')
+@ApiTags('couple_pixiv_tag')
+@Controller('couple_pixiv_tag')
 export class CouplePixivTagController {
     constructor(private readonly couplePixivTagService: CouplePixivTagService) {}
 

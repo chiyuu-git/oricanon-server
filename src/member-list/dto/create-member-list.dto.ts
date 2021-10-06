@@ -1,5 +1,5 @@
 import { IsArray, IsString } from 'class-validator';
-import { ProjectName, List, ListType } from '../member-lists.type';
+import { ProjectName, List, ListType } from '../member-list.type';
 
 export class CreateMemberListDto {
     @IsString()

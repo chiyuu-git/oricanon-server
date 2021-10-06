@@ -3,8 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection, EntityManager } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MemberListsModule } from './member-lists/member-lists.module';
-import { CouplePixivTagModule } from './couple-pixiv-tags/couple-pixiv-tags.module';
+import { MemberListModule } from './member-list/member-list.module';
+import { CouplePixivTagModule } from './couple-pixiv-tag/couple-pixiv-tag.module';
+import { WeeklyModule } from './weekly/weekly.module';
+import { CharacterPixivTagModule } from './character-pixiv-tag/character-pixiv-tag.module';
+import { SeiyuuFollowerModule } from './seiyuu-follower/seiyuu-follower.module';
 
 @Module({
     imports: [
@@ -19,8 +22,11 @@ import { CouplePixivTagModule } from './couple-pixiv-tags/couple-pixiv-tags.modu
             synchronize: false,
             logging: true,
         }),
-        MemberListsModule,
+        MemberListModule,
         CouplePixivTagModule,
+        CharacterPixivTagModule,
+        WeeklyModule,
+        SeiyuuFollowerModule,
     ],
     controllers: [AppController],
     providers: [AppService],

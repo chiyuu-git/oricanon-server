@@ -1,21 +1,20 @@
 import { IsArray, IsDateString, IsString } from 'class-validator';
-import { Transform, Type } from 'class-transformer';
+import { Transform } from 'class-transformer';
 import { formatDate } from 'src/utils';
-import { ProjectName, CoupleTagType } from '../couple-pixiv-tags.type';
+import { ProjectName, CharacterTagType } from '../character-pixiv-tag.type';
 
-export class CreateCouplePixivTagDto {
-    // TODO: custom validator
+export class CreateCharacterPixivTagDto {
     @IsDateString()
     @Transform(({ value }) => formatDate(value))
-    @Type(() => Date)
-    date: Date;
+    date: string;
 
     @IsString()
     projectName: ProjectName;
 
     @IsString()
-    type: CoupleTagType;
+    type: CharacterTagType;
 
     @IsArray()
     tags: number[];
 }
+

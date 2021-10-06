@@ -3,7 +3,7 @@ import {
     ProjectName,
     List,
     ListType,
-} from '../member-lists.type';
+} from '../member-list.type';
 
 @Entity({
     name: 'member_list',

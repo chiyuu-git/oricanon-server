@@ -8,3 +8,12 @@ export enum ProjectName {
     llss = 'lovelive_superstar',
     lln = 'lovelive_nijigasaki_high_school_idol_club',
 }
+
+interface QueryDataDTO {
+    projectName: ProjectName;
+    date: string;
+}
+
+export interface DataService<entity> {
+    find(param: QueryDataDTO): Promise<entity[]>
+}

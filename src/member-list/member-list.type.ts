@@ -66,3 +66,15 @@ export interface MemberListMap {
         list: CharacterCouple[];
     };
 }
+
+/**
+* 以 projectName 为主要字段整合全部 memberList，其中
+* 1. ll 没有 seiyuus 字段
+*2.  couples 字段仅 llss 存在
+*/
+export interface ListFormatWithProject {
+   projectName: ProjectName;
+   characters: Character[];
+   characterCouples?: CharacterCouple[];
+   seiyuus?: Seiyuu[];
+}

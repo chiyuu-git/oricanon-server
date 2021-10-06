@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { ProjectName, CoupleTagType } from '../couple-pixiv-tags.type';
+import { ProjectName, CoupleTagType } from '../couple-pixiv-tag.type';
 
 @Entity({
     name: 'couple_pixiv_tag',
@@ -16,7 +16,8 @@ export class CouplePixivTag {
         //     },
         // },
     })
-    date: Date;
+    // TODO: dateString 类型如何更准确的描述
+    date: string;
 
     @PrimaryColumn({
         type: 'enum',
