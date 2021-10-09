@@ -10,8 +10,8 @@ import { CreateCoupleTagDto } from './dto/create-couple-tag.dto';
 import { QueryCoupleTagDto } from './dto/query-conpule-tag.dto';
 import { UpdateCoupleTagDto } from './dto/update-couple-tag.dto';
 
-@ApiTags('couple__tag')
-@Controller('couple__tag')
+@ApiTags('couple_tag')
+@Controller('couple_tag')
 export class CoupleTagController {
     constructor(private readonly coupleTagService: CoupleTagService) {}
 
@@ -25,7 +25,7 @@ export class CoupleTagController {
         return this.coupleTagService.findAll();
     }
 
-    @Get('/couple__tag')
+    @Get('/couple_tag')
     @ApiQuery({ name: 'date', type: 'string' })
     @ApiQuery({ name: 'type', enum: CoupleTagType })
     @ApiQuery({ name: 'projectName', enum: ProjectName })

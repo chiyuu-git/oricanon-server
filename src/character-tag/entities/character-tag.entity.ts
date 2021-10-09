@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { ProjectName, CharacterTagType } from '../character-tag.type';
 
 @Entity({
-    name: 'character__tag',
+    name: 'character_tag',
 })
 export class CharacterTag {
     @PrimaryColumn({
@@ -25,6 +25,6 @@ export class CharacterTag {
     })
     type: CharacterTagType;
 
-    @Column({ type: 'json' })
-    tags: number[];
+    @Column({ type: 'json', name: 'tags' })
+    records: number[];
 }

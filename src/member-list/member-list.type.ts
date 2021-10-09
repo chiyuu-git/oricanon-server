@@ -9,7 +9,7 @@ export { ProjectName } from '../canon.type';
 export enum ListType {
     character = 'character',
     seiyuu = 'seiyuu',
-    characterCouple = 'characterCouple',
+    couple = 'characterCouple',
 }
 
 export interface Character {
@@ -20,7 +20,7 @@ export interface Character {
     romaName: string;
     pixivTag: string;
 }
-export interface CharacterCouple {
+export interface Couple {
     /**
      * couple 元组由两名成员组成，按公式顺序开始排列组合
      */
@@ -47,7 +47,7 @@ export interface Seiyuu {
  * list是三选一类型的数组
  */
 
-export type List = Character[] | CharacterCouple[] | Seiyuu[];
+export type List = Character[] | Couple[] | Seiyuu[];
 
 export interface MemberListMap {
     [ListType.character]: {
@@ -60,10 +60,10 @@ export interface MemberListMap {
         listType: ListType.seiyuu;
         list: Seiyuu[];
     };
-    [ListType.characterCouple]: {
+    [ListType.couple]: {
         projectName: ProjectName;
-        listType: ListType.characterCouple;
-        list: CharacterCouple[];
+        listType: ListType.couple;
+        list: Couple[];
     };
 }
 
@@ -75,6 +75,6 @@ export interface MemberListMap {
 export interface ListFormatWithProject {
    projectName: ProjectName;
    characters: Character[];
-   characterCouples?: CharacterCouple[];
+   couples?: Couple[];
    seiyuus?: Seiyuu[];
 }

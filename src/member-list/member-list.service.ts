@@ -11,7 +11,7 @@ import type { ListFormatWithProject, ProjectName } from './member-list.type';
 /**
  * 中间变量，以 projectName 为属性名整合全部的list
  */
- type ProjectMap = Record<ProjectName, Partial<ListFormatWithProject>>;
+export type ProjectMap = Record<ProjectName, Partial<ListFormatWithProject>>;
 
 @Injectable()
 export class MemberListService {
@@ -81,7 +81,7 @@ export class MemberListService {
      * 获取所有角色cp的Tags
      */
     async findAllCoupleTags() {
-        const coupleLists = await this.findListByType(ListType.characterCouple);
+        const coupleLists = await this.findListByType(ListType.couple);
         const allCoupleTags = coupleLists.map(({ projectName, list }) => {
             const tags: string[] = [];
             const reverseTags: string[] = [];

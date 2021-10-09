@@ -12,6 +12,6 @@ export class CreateSeiyuuFollowerDto {
     projectName: ProjectName;
 
     @IsArray()
-    followers: number[];
+    records: number[];
 }
 

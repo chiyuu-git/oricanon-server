@@ -16,5 +16,5 @@ export class CreateCoupleTagDto {
     type: CoupleTagType;
 
     @IsArray()
-    tags: number[];
+    records: number[];
 }

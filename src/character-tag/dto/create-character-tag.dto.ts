@@ -15,6 +15,6 @@ export class CreateCharacterTagDto {
     type: CharacterTagType;
 
     @IsArray()
-    tags: number[];
+    records: number[];
 }
 

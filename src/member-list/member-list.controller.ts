@@ -63,7 +63,7 @@ export class MemberListController {
     /**
      * 获取所有角色的Tags
      */
-    @Get('all_character__tag')
+    @Get('all_character_tag')
     async findAllCharacterTags() {
         const allCharacterTags = await this.service.findAllCharacterTags();
 
@@ -73,7 +73,7 @@ export class MemberListController {
     /**
      * 获取所有角色cp的Tags
      */
-    @Get('all_couple__tag')
+    @Get('all_couple_tag')
     async findAllCoupleTags() {
         const allCoupleTags = await this.service.findAllCoupleTags();
 

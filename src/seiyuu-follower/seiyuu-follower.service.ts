@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataService } from 'src/canon.type';
+import { RecordService } from 'src/canon.type';
 import { Repository } from 'typeorm';
 import { CreateSeiyuuFollowerDto } from './dto/create-seiyuu-follower.dto';
 import { QuerySeiyuuFollowerDto } from './dto/query-seiyuu-follower.dto';
@@ -8,7 +8,7 @@ import { UpdateSeiyuuFollowerDto } from './dto/update-seiyuu-follower.dto';
 import { SeiyuuFollower } from './entities/seiyuu-follower.entity';
 
 @Injectable()
-export class SeiyuuFollowerService implements DataService<SeiyuuFollower> {
+export class SeiyuuFollowerService implements RecordService {
     constructor(
     @InjectRepository(SeiyuuFollower)
     private repository: Repository<SeiyuuFollower>,
@@ -23,11 +23,11 @@ export class SeiyuuFollowerService implements DataService<SeiyuuFollower> {
         return this.repository.find();
     }
 
-    async find(params: QuerySeiyuuFollowerDto) {
-        const characterTag = await this.repository.find({
+    async findWeekRecord(params: QuerySeiyuuFollowerDto) {
+        const seiyuuFollower = await this.repository.find({
             where: params,
         });
-        return characterTag;
+        return seiyuuFollower[0].records;
     }
 
     async findOne({ date, projectName }: QuerySeiyuuFollowerDto) {

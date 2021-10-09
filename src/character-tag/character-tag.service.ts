@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataService } from 'src/canon.type';
+import { RecordService } from 'src/canon.type';
 import { Repository } from 'typeorm';
 import { CreateCharacterTagDto } from './dto/create-character-tag.dto';
 import { QueryCharacterTagDto } from './dto/query-character-tag.dto';
@@ -8,7 +8,7 @@ import { UpdateCharacterTagDto } from './dto/update-character-tag.dto';
 import { CharacterTag } from './entities/character-tag.entity';
 
 @Injectable()
-export class CharacterTagService implements DataService<CharacterTag> {
+export class CharacterTagService implements RecordService {
     constructor(
         @InjectRepository(CharacterTag)
         private repository: Repository<CharacterTag>,
@@ -23,11 +23,11 @@ export class CharacterTagService implements DataService<CharacterTag> {
         return this.repository.find();
     }
 
-    async find(params: QueryCharacterTagDto) {
+    async findWeekRecord(params: QueryCharacterTagDto) {
         const characterTag = await this.repository.find({
             where: params,
         });
-        return characterTag;
+        return characterTag[0].records;
     }
 
     async findOne({ date, projectName, type }: QueryCharacterTagDto) {

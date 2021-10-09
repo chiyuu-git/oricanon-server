@@ -10,8 +10,8 @@ import { CreateCharacterTagDto } from './dto/create-character-tag.dto';
 import { QueryCharacterTagDto } from './dto/query-character-tag.dto';
 import { UpdateCharacterTagDto } from './dto/update-character-tag.dto';
 
-@ApiTags('character__tag')
-@Controller('character__tag')
+@ApiTags('character_tag')
+@Controller('character_tag')
 export class CharacterTagController {
     constructor(private readonly service: CharacterTagService) {}
 

@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import type { DataService } from 'src/canon.type';
+import type { RecordService } from 'src/canon.type';
 import { CreateCoupleTagDto } from './dto/create-couple-tag.dto';
 import { QueryCoupleTagDto } from './dto/query-conpule-tag.dto';
 import { UpdateCoupleTagDto } from './dto/update-couple-tag.dto';
 import { CoupleTag } from './entities/couple-tag.entity';
+import { CoupleTagType } from './couple-tag.type';
 
 @Injectable()
-export class CoupleTagService implements DataService<CoupleTag> {
+export class CoupleTagService implements RecordService {
     constructor(
         @InjectRepository(CoupleTag)
         private repository: Repository<CoupleTag>,
@@ -23,11 +24,34 @@ export class CoupleTagService implements DataService<CoupleTag> {
         return this.repository.find();
     }
 
-    async find(params: QueryCoupleTagDto) {
-        const coupleTag = await this.repository.find({
+    async findWeekRecord(params: QueryCoupleTagDto) {
+        const coupleTagArr = await this.repository.find({
             where: params,
         });
-        return coupleTag;
+        // coupleTag 类型有三种，需要去重之后返回，先整理成 map 形式
+        // default + reverse - intersection
+        let defaultRecord: number[] = [];
+        let reverseRecord: number[] = [];
+        let intersectionRecord: number[] = [];
+        for (const coupleTag of coupleTagArr) {
+            const { type, records } = coupleTag;
+
+            switch (type) {
+                case CoupleTagType.default:
+                    defaultRecord = records;
+                    break;
+                case CoupleTagType.reverse:
+                    reverseRecord = records;
+                    break;
+                case CoupleTagType.intersection:
+                    intersectionRecord = records;
+                    break;
+                default:
+            }
+        }
+
+        console.log('defaultRecord:', defaultRecord);
+        return defaultRecord.map((record, i) => record + reverseRecord[i] - intersectionRecord[i]);
     }
 
     async findOne({ date, projectName, type }: QueryCoupleTagDto) {

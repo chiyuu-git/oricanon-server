@@ -18,6 +18,6 @@ export class SeiyuuFollower {
     })
     projectName: ProjectName;
 
-    @Column({ type: 'json' })
-    followers: number[];
+    @Column({ type: 'json', name: 'followers' })
+    records: number[];
 }

@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { ProjectName, CoupleTagType } from '../couple-tag.type';
 
 @Entity({
-    name: 'couple__tag',
+    name: 'couple_tag',
 })
 export class CoupleTag {
     @PrimaryColumn({
@@ -34,6 +34,6 @@ export class CoupleTag {
     })
     type: CoupleTagType;
 
-    @Column({ type: 'json' })
-    tags: number[];
+    @Column({ type: 'json', name: 'tags' })
+    records: number[];
 }
