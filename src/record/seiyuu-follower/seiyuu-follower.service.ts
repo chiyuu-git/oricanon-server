@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RecordService } from 'src/canon.type';
 import { Repository } from 'typeorm';
+import { FindWeekRecord } from '../record.type';
 import { CreateSeiyuuFollowerDto } from './dto/create-seiyuu-follower.dto';
 import { QuerySeiyuuFollowerDto } from './dto/query-seiyuu-follower.dto';
 import { UpdateSeiyuuFollowerDto } from './dto/update-seiyuu-follower.dto';
 import { SeiyuuFollower } from './entities/seiyuu-follower.entity';
 
 @Injectable()
-export class SeiyuuFollowerService implements RecordService {
+export class SeiyuuFollowerService implements FindWeekRecord {
     constructor(
     @InjectRepository(SeiyuuFollower)
     private repository: Repository<SeiyuuFollower>,

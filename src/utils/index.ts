@@ -72,6 +72,6 @@ export const getRelativeDate = function (date: string) {
     const lastDate = getLastFetchDate(baseDate);
     const beforeLastDate = getLastFetchDate(lastDate);
 
-    return { baseDate, lastDate, beforeLastDate };
+    return [baseDate, lastDate, beforeLastDate];
 };
 

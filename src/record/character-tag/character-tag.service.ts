@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RecordService } from 'src/canon.type';
 import { Repository } from 'typeorm';
+import { FindWeekRecord } from '../record.type';
 import { CreateCharacterTagDto } from './dto/create-character-tag.dto';
 import { QueryCharacterTagDto } from './dto/query-character-tag.dto';
 import { UpdateCharacterTagDto } from './dto/update-character-tag.dto';
 import { CharacterTag } from './entities/character-tag.entity';
 
 @Injectable()
-export class CharacterTagService implements RecordService {
+export class CharacterTagService implements FindWeekRecord {
     constructor(
         @InjectRepository(CharacterTag)
         private repository: Repository<CharacterTag>,

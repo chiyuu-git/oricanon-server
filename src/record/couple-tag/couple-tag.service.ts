@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import type { RecordService } from 'src/canon.type';
 import { CreateCoupleTagDto } from './dto/create-couple-tag.dto';
 import { QueryCoupleTagDto } from './dto/query-conpule-tag.dto';
 import { UpdateCoupleTagDto } from './dto/update-couple-tag.dto';
 import { CoupleTag } from './entities/couple-tag.entity';
 import { CoupleTagType } from './couple-tag.type';
+import { FindWeekRecord } from '../record.type';
 
 @Injectable()
-export class CoupleTagService implements RecordService {
+export class CoupleTagService implements FindWeekRecord {
     constructor(
         @InjectRepository(CoupleTag)
         private repository: Repository<CoupleTag>,
@@ -50,7 +50,6 @@ export class CoupleTagService implements RecordService {
             }
         }
 
-        console.log('defaultRecord:', defaultRecord);
         return defaultRecord.map((record, i) => record + reverseRecord[i] - intersectionRecord[i]);
     }
 
@@ -82,12 +81,11 @@ export class CoupleTagService implements RecordService {
     }
 
     async findLastFetchDate() {
-        const coupleTag = await this.repository.find({
+        const coupleTag = await this.repository.findOne({
             order: {
                 date: 'DESC',
             },
-            take: 1,
         });
-        return coupleTag[0];
+        return coupleTag.date;
     }
 }

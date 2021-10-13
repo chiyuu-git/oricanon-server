@@ -4,10 +4,8 @@ import { Connection, EntityManager } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MemberListModule } from './member-list/member-list.module';
-import { CoupleTagModule } from './couple-tag/couple-tag.module';
 import { WeeklyModule } from './weekly/weekly.module';
-import { CharacterTagModule } from './character-tag/character-tag.module';
-import { SeiyuuFollowerModule } from './seiyuu-follower/seiyuu-follower.module';
+import { RecordModule } from './record/record.module';
 
 @Module({
     imports: [
@@ -23,10 +21,8 @@ import { SeiyuuFollowerModule } from './seiyuu-follower/seiyuu-follower.module';
             logging: true,
         }),
         MemberListModule,
-        CoupleTagModule,
-        CharacterTagModule,
         WeeklyModule,
-        SeiyuuFollowerModule,
+        RecordModule,
     ],
     controllers: [AppController],
     providers: [AppService],

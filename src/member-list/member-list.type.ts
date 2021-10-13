@@ -9,7 +9,7 @@ export { ProjectName } from '../canon.type';
 export enum ListType {
     character = 'character',
     seiyuu = 'seiyuu',
-    couple = 'characterCouple',
+    couple = 'couple',
 }
 
 export interface Character {
@@ -49,7 +49,7 @@ export interface Seiyuu {
 
 export type List = Character[] | Couple[] | Seiyuu[];
 
-export interface MemberListMap {
+export interface MemberListTypeMap {
     [ListType.character]: {
         projectName: ProjectName;
         listType: ListType.character;
@@ -72,9 +72,14 @@ export interface MemberListMap {
 * 1. ll 没有 seiyuus 字段
 *2.  couples 字段仅 llss 存在
 */
-export interface ListFormatWithProject {
+export interface ProjectMemberList {
    projectName: ProjectName;
    characters: Character[];
    couples?: Couple[];
    seiyuus?: Seiyuu[];
 }
+
+/**
+ * 以 projectName 为属性名整合全部的list
+ */
+export type ProjectMemberListMap = Record<ProjectName, Partial<ProjectMemberList>>;

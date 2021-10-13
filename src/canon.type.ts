@@ -9,11 +9,3 @@ export enum ProjectName {
     lln = 'lovelive_nijigasaki_high_school_idol_club',
 }
 
-interface QueryRecordDTO {
-    projectName: ProjectName;
-    date: string;
-}
-
-export interface RecordService {
-    findWeekRecord(param: QueryRecordDTO): Promise<number[]>
-}
