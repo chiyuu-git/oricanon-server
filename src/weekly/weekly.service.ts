@@ -1,8 +1,5 @@
 /**
  * TODO:
- * 1. 返回待projectName的数组，而不是projectName为key的4个对象
- * 2. 生成单个moduleWeekly再组合
- * 3. memberList 确认好type
  * 5. 两个script处理好，转换成server-next
  * 6. couple的处理好，转换成server-nest
  * 7. client处理好，转换成server-nest
@@ -84,7 +81,7 @@ export class WeeklyService {
         } = await this.recordService.findAllModuleRelativeRecord(projectMemberListMap, endDate);
 
         const [characterInfo, coupleInfo, seiyuuInfo] = allModuleRelativeRecord.map(
-            (moduleRelativeRecord, i) => this.processModuleRelativeRecord(
+            (moduleRelativeRecord) => this.processModuleRelativeRecord(
                 projectMemberListMap,
                 moduleRelativeRecord,
             ),

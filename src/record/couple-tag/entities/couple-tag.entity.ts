@@ -30,7 +30,7 @@ export class CoupleTag {
     @PrimaryColumn({
         type: 'enum',
         enum: CoupleTagType,
-        default: CoupleTagType.default,
+        default: CoupleTagType.illust,
     })
     type: CoupleTagType;
 

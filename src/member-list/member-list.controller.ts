@@ -12,6 +12,7 @@ export class MemberListController {
     constructor(private readonly service: MemberListService) {}
 
     @Post()
+    @ApiBody({ type: CreateMemberListDto })
     create(@Body() createMemberListDto: CreateMemberListDto) {
         return this.service.create(createMemberListDto);
     }

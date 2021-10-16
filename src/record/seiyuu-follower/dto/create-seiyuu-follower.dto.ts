@@ -12,6 +12,7 @@ export class CreateSeiyuuFollowerDto {
     projectName: ProjectName;
 
     @IsArray()
+    @Transform(({ value }) => JSON.parse(value))
     records: number[];
 }
 

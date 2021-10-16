@@ -21,7 +21,7 @@ export class CharacterTag {
     @PrimaryColumn({
         type: 'enum',
         enum: CharacterTagType,
-        default: CharacterTagType.default,
+        default: CharacterTagType.illust,
     })
     type: CharacterTagType;
 

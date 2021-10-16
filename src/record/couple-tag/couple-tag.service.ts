@@ -37,7 +37,7 @@ export class CoupleTagService implements FindWeekRecord {
             const { type, records } = coupleTag;
 
             switch (type) {
-                case CoupleTagType.default:
+                case CoupleTagType.illust:
                     defaultRecord = records;
                     break;
                 case CoupleTagType.reverse:

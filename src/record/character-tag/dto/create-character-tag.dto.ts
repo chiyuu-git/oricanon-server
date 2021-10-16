@@ -1,4 +1,4 @@
-import { IsArray, IsDateString, IsString } from 'class-validator';
+import { IsArray, IsDateString, IsOptional, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { formatDate } from 'src/utils';
 import { ProjectName, CharacterTagType } from '../character-tag.type';
@@ -12,9 +12,11 @@ export class CreateCharacterTagDto {
     projectName: ProjectName;
 
     @IsString()
+    @IsOptional()
     type: CharacterTagType;
 
     @IsArray()
+    @Transform(({ value }) => JSON.parse(value))
     records: number[];
 }
 

@@ -10,14 +10,14 @@ export { ProjectName } from '../../canon.type';
   * CoupleTagType
   */
 export enum CharacterTagType {
-    default = 'default',
-    hundred = '100',
-    thousand = '1000',
-    tenThousand = '10000',
-    fifty = '50',
-    fiveHundred = '500',
-    fiveThousand = '5000',
-    novel = 'novel',
-    r18 = 'R18'
+    illust = 'pixiv_illust',
+    hundred = 'pixiv_100',
+    thousand = 'pixiv_1000',
+    tenThousand = 'pixiv_10000',
+    fifty = 'pixiv_50',
+    fiveHundred = 'pixiv_500',
+    fiveThousand = 'pixiv_5000',
+    novel = 'pixiv_novel',
+    r18 = 'pixiv_r18'
 }
 

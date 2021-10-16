@@ -2,6 +2,7 @@ import {
     Controller,
     Get, Post, Body, Patch, Delete,
     Query,
+    ParseArrayPipe,
 } from '@nestjs/common';
 import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CharacterTagService } from './character-tag.service';

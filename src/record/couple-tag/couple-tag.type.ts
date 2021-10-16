@@ -10,7 +10,7 @@ export { ProjectName } from '../../canon.type';
  * CoupleTagType
  */
 export enum CoupleTagType {
-    default = 'default',
-    reverse = 'reverse',
-    intersection = 'intersection',
+    illust = 'pixiv_illust',
+    reverse = 'pixiv_illust_reverse',
+    intersection = 'pixiv_illust_intersection',
 }
