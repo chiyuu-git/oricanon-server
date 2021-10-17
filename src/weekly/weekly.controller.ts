@@ -12,9 +12,9 @@ export class WeeklyController {
      *
      * @returns
      */
-    @Get()
-    findLatestWeekly() {
-        return this.service.generateWeekly();
+    @Get('/weekly_info')
+    findLatestWeeklyInfo() {
+        return this.service.getWeeklyInfo();
     }
 
     /**
@@ -23,8 +23,8 @@ export class WeeklyController {
      * @param id
      * @returns
      */
-    @Get(':endDate')
+    @Get('/weekly_info/:endDate')
     findOne(@Param('endDate') endDate: string) {
-        return this.service.generateWeekly(endDate);
+        return this.service.getWeeklyInfo(endDate);
     }
 }

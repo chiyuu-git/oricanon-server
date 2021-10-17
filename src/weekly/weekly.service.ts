@@ -1,10 +1,3 @@
-/**
- * TODO:
- * 5. 两个script处理好，转换成server-next
- * 6. couple的处理好，转换成server-nest
- * 7. client处理好，转换成server-nest
- */
-
 import { Injectable } from '@nestjs/common';
 import { ProjectName } from 'src/canon.type';
 // service
@@ -12,7 +5,7 @@ import { MemberListService } from 'src/member-list/member-list.service';
 import { RecordService, RecordType } from 'src/record/record.service';
 
 import type { Character, Couple, ProjectMemberListMap, Seiyuu } from 'src/member-list/member-list.type';
-import { CoupleTagType } from 'src/record/couple-tag/couple-tag.type';
+import { ModuleInfo } from '@chiyu-bit/canon.weekly';
 
 interface ProjectRelativeRecord {
     recordType: RecordType;
@@ -31,38 +24,12 @@ interface ProjectRecord {
     weekIncreaseRateArr: string[];
 }
 
-interface MemberWeekInfo {
-    projectName: ProjectName;
-    record: number;
-    weekIncrease: number;
-    weekIncreaseRate: string;
-}
-
-interface CharacterInfo extends Character, MemberWeekInfo {}
-
-type CoupleTypeRecord = Partial<Record<CoupleTagType, number>>;
-interface CoupleInfo extends Couple, MemberWeekInfo, CoupleTypeRecord { }
-
-interface SeiyuuInfo extends Seiyuu, MemberWeekInfo { }
-
-interface ProjectInfo {
-    projectName: ProjectName;
-    projectTotal: number;
-    projectWeekIncrease: number;
-    projectIncreaseRate: string;
-}
 interface MemberInfoMap {
-    [RecordType.character]: Character,
+    [RecordType.character]: Character;
 
-    [RecordType.couple]: Couple,
+    [RecordType.couple]: Couple;
 
-    [RecordType.seiyuu]: Seiyuu,
-}
-
-interface ModuleInfo {
-    projectInfo: ProjectInfo[];
-    // TODO: 更准确的类型，难点在于处理函数返回值是联合类型
-    memberInfo: MemberWeekInfo[];
+    [RecordType.seiyuu]: Seiyuu;
 }
 
 @Injectable()
@@ -73,7 +40,7 @@ export class WeeklyService {
         private readonly memberListService: MemberListService,
     ) {}
 
-    async generateWeekly(endDate?: string) {
+    async getWeeklyInfo(endDate?: string) {
         const projectMemberListMap = await this.memberListService.formatListWithProject();
         const {
             weekRange,
@@ -87,7 +54,7 @@ export class WeeklyService {
             ),
         );
 
-        // 处理集计范围，处理一下日期
+        // 处理集计范围
         const from = new Date(weekRange.from);
         const to = new Date(weekRange.to);
         const range = `${from.getMonth() + 1}/${from.getDate() + 1}至${to.getMonth() + 1}/${to.getDate()}`;

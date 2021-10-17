@@ -1,0 +1,1 @@
+export { ModuleInfo } from './weekly';
