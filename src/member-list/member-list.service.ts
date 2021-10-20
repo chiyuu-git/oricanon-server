@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ListType, MemberListTypeMap, ProjectMemberListMap } from './member-list.type';
+import { BasicType } from '@chiyu-bit/canon.root';
+import { MemberListTypeMap, ProjectMemberListMap } from './member-list.type';
 import { CreateMemberListDto } from './dto/create-member-list.dto';
 import { QueryMemberListDto } from './dto/query-member-list-dto';
 import { UpdateMemberListDto } from './dto/update-member-list.dto';
@@ -60,7 +61,7 @@ export class MemberListService {
      * 获取所有角色的Tags
      */
     async findAllCharacterTags() {
-        const characterLists = await this.findListByType(ListType.character);
+        const characterLists = await this.findListByType(BasicType.character);
         const allCharacterTags = characterLists.map(({ projectName, list }) => {
             const pixivTags = list.map(({ pixivTag }) => pixivTag);
             return {
@@ -75,7 +76,7 @@ export class MemberListService {
      * 获取所有角色cp的Tags
      */
     async findAllCoupleTags() {
-        const coupleLists = await this.findListByType(ListType.couple);
+        const coupleLists = await this.findListByType(BasicType.couple);
         const allCoupleTags = coupleLists.map(({ projectName, list }) => {
             const tags: string[] = [];
             const reverseTags: string[] = [];

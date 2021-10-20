@@ -2,68 +2,29 @@
  * @file MemberListsModule 下的公共类型
  */
 
-import { ProjectName } from '../canon.type';
-
-export { ProjectName } from '../canon.type';
-
-export enum ListType {
-    character = 'character',
-    seiyuu = 'seiyuu',
-    couple = 'couple',
-}
-
-export interface Character {
-    name: string;
-    /**
-     * 角色的罗马音简称 e.g: honoka
-     */
-    romaName: string;
-    pixivTag: string;
-}
-export interface Couple {
-    /**
-     * couple 元组由两名成员组成，按公式顺序开始排列组合
-     */
-    couple: [string, string];
-    /**
-     * couple romaName 由上述元组拼串组成 e.g: kanon-keke
-     */
-    romaName: string;
-    pixivTag: string;
-    pixivReverseTag: string;
-    // pixivIntersectionTag 由前两个字段计算得出即可
-    // pixivIntersectionTag: string;
-}
-export interface Seiyuu {
-    name: string;
-    /**
-     * 声优的罗马音简称 e.g: emi
-     */
-    romaName: string;
-    twitterAccount: string;
-}
+import { ProjectName, BasicType } from '@chiyu-bit/canon.root';
+import { CharacterInfo, CoupleInfo, SeiyuuInfo } from '@chiyu-bit/canon.root/member-list';
 
 /**
- * list是三选一类型的数组
+ * List 是三选一类型的数组，使用泛型捕获，获取 BasicType 用于索引 List
  */
-
-export type List = Character[] | Couple[] | Seiyuu[];
+export type List = CharacterInfo[] | CoupleInfo[] | SeiyuuInfo[];
 
 export interface MemberListTypeMap {
-    [ListType.character]: {
+    [BasicType.character]: {
         projectName: ProjectName;
-        listType: ListType.character;
-        list: Character[];
+        listType: BasicType.character;
+        list: CharacterInfo[];
     };
-    [ListType.seiyuu]: {
+    [BasicType.seiyuu]: {
         projectName: ProjectName;
-        listType: ListType.seiyuu;
-        list: Seiyuu[];
+        listType: BasicType.seiyuu;
+        list: SeiyuuInfo[];
     };
-    [ListType.couple]: {
+    [BasicType.couple]: {
         projectName: ProjectName;
-        listType: ListType.couple;
-        list: Couple[];
+        listType: BasicType.couple;
+        list: CoupleInfo[];
     };
 }
 
@@ -73,10 +34,10 @@ export interface MemberListTypeMap {
 *2.  couples 字段仅 llss 存在
 */
 export interface ProjectMemberList {
-   projectName: ProjectName;
-   characters: Character[];
-   couples?: Couple[];
-   seiyuus?: Seiyuu[];
+    projectName: ProjectName;
+    characters: CharacterInfo[];
+    couples?: CoupleInfo[];
+    seiyuus?: SeiyuuInfo[];
 }
 
 /**

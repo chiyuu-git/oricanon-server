@@ -14,7 +14,7 @@ import { RecordModule } from './record/record.module';
             host: 'localhost',
             port: 3306,
             username: 'root',
-            password: '123456',
+            password: '',
             database: 'canon',
             autoLoadEntities: true,
             synchronize: false,

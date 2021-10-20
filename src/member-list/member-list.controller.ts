@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Delete, Query, Param } from '@nestjs/common';
 import { ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ProjectName, BasicType } from '@chiyu-bit/canon.root';
 import { MemberListService } from './member-list.service';
 import { CreateMemberListDto } from './dto/create-member-list.dto';
 import { UpdateMemberListDto } from './dto/update-member-list.dto';
 import { QueryMemberListDto } from './dto/query-member-list-dto';
-import { ListType, ProjectName } from './member-list.type';
 
 @ApiTags('member_list')
 @Controller('member_list')
@@ -24,7 +24,7 @@ export class MemberListController {
     // }
 
     @Get('/member_list')
-    @ApiQuery({ name: 'type', enum: ListType })
+    @ApiQuery({ name: 'type', enum: BasicType })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
     findOne(@Query() query: QueryMemberListDto) {
         const { projectName, type } = query;
@@ -48,12 +48,12 @@ export class MemberListController {
     }
 
     /**
-     * 返回所有listType类型的list
+     * 返回所有 type 类型的list
      */
     @Get('list_of_type/:type')
-    @ApiParam({ name: 'type', enum: ListType })
-    async findListOfType(@Param('type') type: ListType) {
-        if (ListType[type]) {
+    @ApiParam({ name: 'type', enum: BasicType })
+    async findListOfType(@Param('type') type: BasicType) {
+        if (BasicType[type]) {
             const MemberListsOfType = await this.service.findListByType(type);
             return MemberListsOfType;
         }

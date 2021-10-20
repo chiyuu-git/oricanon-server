@@ -1,9 +1,6 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
-import {
-    ProjectName,
-    List,
-    ListType,
-} from '../member-list.type';
+import { ProjectName, BasicType } from '@chiyu-bit/canon.root';
+import { List } from '../member-list.type';
 
 @Entity({
     name: 'member_list',
@@ -19,10 +16,10 @@ export class MemberList {
 
     @PrimaryColumn({
         type: 'enum',
-        enum: ListType,
-        default: ListType.character,
+        enum: BasicType,
+        default: BasicType.character,
     })
-    type: ListType;
+    type: BasicType;
 
     @Column({ type: 'json' })
     list: List;

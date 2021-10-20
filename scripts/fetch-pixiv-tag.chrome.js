@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
 /* eslint-disable no-await-in-loop */
@@ -115,11 +116,15 @@ async function fetchPixivCoupleTag() {
 
     for (const { projectName, pixivReverseTags } of coupleTagLists) {
         const records = await fetchPixivTagsInOrder({ pixivTags: pixivReverseTags });
+        // 填充 0
+        const fillRecords = Array.from({ length: 10 }).fill(0);
+        fillRecords[0] = records[0];
+        fillRecords[5] = records[6];
+        console.log(projectName, fillRecords);
 
-        console.log(projectName, records);
         postNewRecord({
             projectName,
-            records,
+            records: fillRecords,
             type: 'pixiv_illust_reverse',
             route,
         });
@@ -130,6 +135,11 @@ async function fetchPixivCoupleTag() {
             pixivTags: pixivIntersectionTags,
             searchMode: 's_tag',
         });
+        // 填充 0
+        const fillRecords = Array.from({ length: 10 }).fill(0);
+        fillRecords[0] = records[0];
+        fillRecords[5] = records[6];
+        console.log(projectName, fillRecords);
 
         console.log(projectName, records);
         postNewRecord({

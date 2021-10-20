@@ -9,11 +9,11 @@
  */
 
 {
-    "weekly": {
+    "root": {
         "scope": "chiyu-bit.canon",
-        "version": "0.0.1",
+        "version": "0.0.3",
         "mainFile": "index.ts",
-        "rootDir": "canon/weekly"
+        "rootDir": "canon/root"
     },
     "$schema-version": "14.9.0"
 }

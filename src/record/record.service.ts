@@ -1,23 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { ProjectMemberListMap, ProjectName } from 'src/member-list/member-list.type';
+import { ProjectMemberListMap } from 'src/member-list/member-list.type';
+import { ProjectName, BasicType } from '@chiyu-bit/canon.root';
 import { getRelativeDate } from 'src/utils';
 import { CharacterTagService } from './character-tag/character-tag.service';
 import { CoupleTagService } from './couple-tag/couple-tag.service';
 import { FindWeekRecord } from './record.type';
 import { SeiyuuFollowerService } from './seiyuu-follower/seiyuu-follower.service';
 
-export enum RecordType {
-    character= 'character',
-    couple= 'couple',
-    seiyuu= 'seiyuu',
-}
-
 const module2Service = {
-    [RecordType.character]: 'characterTagService',
+    [BasicType.character]: 'characterTagService',
 
-    [RecordType.couple]: 'coupleTagService',
+    [BasicType.couple]: 'coupleTagService',
 
-    [RecordType.seiyuu]: 'seiyuuFollowService',
+    [BasicType.seiyuu]: 'seiyuuFollowService',
 };
 
 type DataString = string;
@@ -42,7 +37,7 @@ export class RecordService {
         };
 
         const allModuleRelativeRecord = await Promise.all(
-            Object.values(RecordType).map((recordType) => this.findModuleRelativeRecord(
+            Object.values(BasicType).map((recordType) => this.findModuleRelativeRecord(
                 recordType, projectMemberListMap, relativeDate,
             )),
         );
@@ -59,22 +54,21 @@ export class RecordService {
      * 1. 智能提示为什么消失了
      */
     async findModuleRelativeRecord(
-        recordType: RecordType,
+        listType: BasicType,
         projectMemberList: ProjectMemberListMap,
         relativeDate: RelativeDate,
     ) {
         return Promise.all(
             Object.values(projectMemberList).map(async (memberList) => {
-                const list = memberList[`${recordType}s`];
+                const list = memberList[`${listType}s`];
                 if (list?.length > 0) {
                     const { projectName } = memberList;
                     const [baseRecord, lastRecord, beforeLastRecord] = await this.findProjectRelativeRecord(
-                        this[module2Service[recordType]],
+                        this[module2Service[listType]],
                         projectName,
                         relativeDate,
                     );
                     return {
-                        recordType,
                         projectName,
                         baseRecord,
                         lastRecord,

@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { ProjectName } from 'src/canon.type';
 // service
 import { MemberListService } from 'src/member-list/member-list.service';
-import { RecordService, RecordType } from 'src/record/record.service';
-
-import type { Character, Couple, ProjectMemberListMap, Seiyuu } from 'src/member-list/member-list.type';
-import { ModuleInfo } from '@chiyu-bit/canon.weekly';
+import { RecordService } from 'src/record/record.service';
+import { ProjectName, BasicType } from '@chiyu-bit/canon.root';
+import { ModuleInfo, GetMemberInfo } from '@chiyu-bit/canon.root/weekly';
+import type { ProjectMemberListMap } from 'src/member-list/member-list.type';
 
 interface ProjectRelativeRecord {
-    recordType: RecordType;
     projectName: ProjectName;
     baseRecord: number[];
     lastRecord: number[];
@@ -22,14 +20,6 @@ interface ProjectRecord {
     records: number[];
     weekIncreaseArr: number[];
     weekIncreaseRateArr: string[];
-}
-
-interface MemberInfoMap {
-    [RecordType.character]: Character;
-
-    [RecordType.couple]: Couple;
-
-    [RecordType.seiyuu]: Seiyuu;
 }
 
 @Injectable()
@@ -48,7 +38,8 @@ export class WeeklyService {
         } = await this.recordService.findAllModuleRelativeRecord(projectMemberListMap, endDate);
 
         const [characterInfo, coupleInfo, seiyuuInfo] = allModuleRelativeRecord.map(
-            (moduleRelativeRecord) => this.processModuleRelativeRecord(
+            (moduleRelativeRecord, i) => this.processModuleRelativeRecord(
+                Object.values(BasicType)[i],
                 projectMemberListMap,
                 moduleRelativeRecord,
             ),
@@ -70,14 +61,15 @@ export class WeeklyService {
     /**
      * 处理周报相关的数据，接受 ModuleRelativeRecord ，返回
      */
-    processModuleRelativeRecord(
+    processModuleRelativeRecord<Type extends BasicType>(
+        listType: Type,
         projectMemberListMap: ProjectMemberListMap,
         moduleRelativeRecord: ModuleRelativeRecord,
     ) {
         const moduleTotal = 0;
         const moduleWeekIncrease = 0;
         const moduleLastWeekIncrease = 0;
-        const moduleInfo: ModuleInfo = {
+        const moduleInfo: ModuleInfo<Type> = {
             projectInfo: [],
             memberInfo: [],
         };
@@ -85,14 +77,12 @@ export class WeeklyService {
         // moduleRelativeRecord = [llRecords, llsRecords, llssRecords, llnRecords]
         for (const projectRelativeRecord of moduleRelativeRecord) {
             if (projectRelativeRecord) {
-                const { projectName, recordType } = projectRelativeRecord;
+                const { projectName } = projectRelativeRecord;
                 const { projectRecord, projectInfo } = this.processProjectRelativeRecord(projectRelativeRecord);
                 const memberList = projectMemberListMap[projectName];
-                // 即使通过 recordType 明确了返回的类型，但是一定是联合类型
-                const memberInfo = this.formatRecordWithMemberList(
-                    recordType,
+                const memberInfo = this.formatRecordWithMemberList<Type>(
                     projectRecord,
-                    memberList[`${recordType}s`],
+                    memberList[`${listType}s`],
                 );
                 moduleInfo.projectInfo.push(projectInfo);
                 moduleInfo.memberInfo.push(...memberInfo);
@@ -109,10 +99,9 @@ export class WeeklyService {
      * moduleInfo 已经有每个企划的信息了，直接返回给前端即可
      * memberInfo 是全部企划的也属于 moduleInfo 的一部分，整理后返回
      */
-    formatRecordWithMemberList<Type extends RecordType>(
-        recordType: Type,
+    formatRecordWithMemberList<Type extends BasicType>(
         projectRecord: ProjectRecord,
-        memberList: MemberInfoMap[Type][],
+        memberList: GetMemberInfo<Type>[],
     ) {
         if (!projectRecord) {
             return null;

@@ -1,12 +1,13 @@
 import { IsArray, IsString } from 'class-validator';
-import { ProjectName, List, ListType } from '../member-list.type';
+import { ProjectName, BasicType } from '@chiyu-bit/canon.root';
+import { List } from '../member-list.type';
 
 export class CreateMemberListDto {
     @IsString()
     projectName: ProjectName;
 
     @IsString()
-    type: ListType;
+    type: BasicType;
 
     @IsArray()
     list: List;
