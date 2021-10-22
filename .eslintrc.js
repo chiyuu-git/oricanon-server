@@ -10,6 +10,7 @@ module.exports = {
         // 因为 nestjs 的设计问题 空的 constructor 存在依赖注入，无法去除
         'no-useless-constructor': OFF,
         'max-classes-per-file': OFF,
-
+        // 这个建议太超前了， node 16 版本才可以使用
+        'unicorn/prefer-node-protocol': OFF,
     },
 };

@@ -37,7 +37,7 @@ export class WeeklyService {
             allModuleRelativeRecord,
         } = await this.recordService.findAllModuleRelativeRecord(projectMemberListMap, endDate);
 
-        const [characterInfo, coupleInfo, seiyuuInfo] = allModuleRelativeRecord.map(
+        const [characterInfo, seiyuuInfo, coupleInfo] = allModuleRelativeRecord.map(
             (moduleRelativeRecord, i) => this.processModuleRelativeRecord(
                 Object.values(BasicType)[i],
                 projectMemberListMap,

@@ -1,12 +1,15 @@
 {
   "compilerOptions": {
+    // 这是这个才可以使用 import.meta.url 代替 __dirname
     "module": "commonjs",
+    // 设置这个才可以找到 @nestjs
+    // "moduleResolution": "node",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2017",
+    "target": "esnext",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
