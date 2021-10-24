@@ -1,5 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { RecordType } from '@chiyu-bit/canon.root';
+import { QueryWeeklyInfoDto } from './query-weekly-info.dto';
 import { WeeklyService } from './weekly.service';
 
 @ApiTags('weekly')
@@ -7,17 +9,9 @@ import { WeeklyService } from './weekly.service';
 export class WeeklyController {
     constructor(private readonly service: WeeklyService) {}
 
-    /**
-     * 返回指定截止日期当周的周报, 默认返回最新一期的周报
-     *
-     * @returns
-     */
-    @Get('/weekly_info')
-    @ApiQuery({
-        name: 'endDate',
-        required: false,
-    })
-    findLatestWeeklyInfo(@Query('endDate') endDate?: string) {
-        return this.service.getWeeklyInfo(endDate);
+    @Get('/weekly_info_of_record_type')
+    findRecordTypeWeeklyInfo(@Query() query: QueryWeeklyInfoDto) {
+        const { basicType, recordType, endDate } = query;
+        return this.service.getRecordTypeWeeklyInfo({ basicType, recordType, endDate });
     }
 }

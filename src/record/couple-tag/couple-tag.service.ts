@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CharacterRecordType } from '@chiyu-bit/canon.root';
 import { CreateCoupleTagDto } from './dto/create-couple-tag.dto';
 import { QueryCoupleTagDto } from './dto/query-conpule-tag.dto';
 import { UpdateCoupleTagDto } from './dto/update-couple-tag.dto';
 import { CoupleTag } from './entities/couple-tag.entity';
-import { CoupleTagType } from './couple-tag.type';
-import { FindWeekRecord } from '../record.type';
+import { FindRecord, FindWeekRecord, QueryRecordDTO } from '../record.type';
 
 @Injectable()
-export class CoupleTagService implements FindWeekRecord {
+export class CoupleTagService implements FindWeekRecord, FindRecord {
     constructor(
         @InjectRepository(CoupleTag)
         private repository: Repository<CoupleTag>,
@@ -22,6 +22,16 @@ export class CoupleTagService implements FindWeekRecord {
 
     findAll() {
         return this.repository.find();
+    }
+
+    async findRecord(params: QueryRecordDTO) {
+        const coupleTag = await this.repository.find({
+            where: params,
+        });
+        if (coupleTag.length === 0) {
+            return false;
+        }
+        return coupleTag[0].records;
     }
 
     async findWeekRecord(params: QueryCoupleTagDto) {
@@ -37,13 +47,13 @@ export class CoupleTagService implements FindWeekRecord {
             const { type, records } = coupleTag;
 
             switch (type) {
-                case CoupleTagType.illust:
+                case CharacterRecordType.illust:
                     defaultRecord = records;
                     break;
-                case CoupleTagType.illustReverse:
+                case CharacterRecordType.illustReverse:
                     reverseRecord = records;
                     break;
-                case CoupleTagType.illustIntersection:
+                case CharacterRecordType.illustIntersection:
                     intersectionRecord = records;
                     break;
                 default:

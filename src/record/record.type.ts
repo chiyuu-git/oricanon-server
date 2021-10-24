@@ -1,10 +1,20 @@
-import { ProjectName } from 'src/canon.type';
+import { RecordType, ProjectName } from '@chiyu-bit/canon.root';
 
-interface QueryRecordDTO {
+interface QueryWeekRecordDTO {
     projectName: ProjectName;
     date: string;
 }
 
 export interface FindWeekRecord {
-    findWeekRecord(param: QueryRecordDTO): Promise<false | number[]>;
+    findWeekRecord(param: QueryWeekRecordDTO): Promise<false | number[]>;
+}
+
+export interface QueryRecordDTO {
+    projectName: ProjectName;
+    type: RecordType;
+    date: string;
+}
+
+export interface FindRecord {
+    findRecord(params: QueryRecordDTO): Promise<false | number[]>;
 }

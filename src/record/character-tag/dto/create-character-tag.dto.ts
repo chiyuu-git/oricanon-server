@@ -1,7 +1,7 @@
 import { IsArray, IsDateString, IsOptional, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { formatDate } from 'src/utils';
-import { ProjectName, CharacterTagType } from '../character-tag.type';
+import { ProjectName, CharacterRecordType } from '@chiyu-bit/canon.root';
 
 export class CreateCharacterTagDto {
     @IsDateString()
@@ -13,7 +13,7 @@ export class CreateCharacterTagDto {
 
     @IsString()
     @IsOptional()
-    type: CharacterTagType;
+    type: CharacterRecordType;
 
     @IsArray()
     @Transform(({ value }) => JSON.parse(value))

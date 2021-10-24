@@ -5,6 +5,7 @@ import { RecordService } from 'src/record/record.service';
 import { ProjectName, BasicType } from '@chiyu-bit/canon.root';
 import { ModuleInfo, GetMemberInfo } from '@chiyu-bit/canon.root/weekly';
 import type { ProjectMemberListMap } from 'src/member-list/member-list.type';
+import { QueryWeeklyInfoDto } from './query-weekly-info.dto';
 
 interface ProjectRelativeRecord {
     projectName: ProjectName;
@@ -31,34 +32,35 @@ export class WeeklyService implements OnApplicationBootstrap {
         private readonly memberListService: MemberListService,
     ) {}
 
+    /**
+     * 生命周期 初始化
+     */
     async onApplicationBootstrap() {
         this.projectMemberListMap = await this.memberListService.formatListWithProject();
     }
 
-    async getWeeklyInfo(endDate?: string) {
-        const {
-            weekRange,
-            allModuleRelativeRecord,
-        } = await this.recordService.findAllModuleRelativeRecord(this.projectMemberListMap, endDate);
-
-        const [characterInfo, seiyuuInfo, coupleInfo] = allModuleRelativeRecord.map(
-            (moduleRelativeRecord, i) => this.processModuleRelativeRecord(
-                Object.values(BasicType)[i],
-                this.projectMemberListMap,
-                moduleRelativeRecord,
-            ),
+    async getRecordTypeWeeklyInfo({ basicType, recordType, endDate }: QueryWeeklyInfoDto) {
+        const result = await this.recordService.findRelativeRecordOfType(
+            basicType,
+            recordType,
+            endDate,
         );
 
-        // 处理集计范围
-        const from = new Date(weekRange.from);
-        const to = new Date(weekRange.to);
-        const range = `${from.getMonth() + 1}/${from.getDate() + 1}至${to.getMonth() + 1}/${to.getDate()}`;
+        if (!result) {
+            return `record of ${recordType} not fonud`;
+        }
+
+        const { weekRange, relativeRecordOfType } = result;
+
+        const recordWeekInfo = this.processModuleRelativeRecord(
+            basicType,
+            this.projectMemberListMap,
+            relativeRecordOfType,
+        );
 
         return {
-            range,
-            characterInfo,
-            coupleInfo,
-            seiyuuInfo,
+            weekRange,
+            recordWeekInfo,
         };
     }
 

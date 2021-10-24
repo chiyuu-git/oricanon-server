@@ -1,5 +1,5 @@
+import { ProjectName, CharacterRecordType } from '@chiyu-bit/canon.root';
 import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { ProjectName, CharacterTagType } from '../character-tag.type';
 
 @Entity({
     name: 'character_tag',
@@ -20,10 +20,10 @@ export class CharacterTag {
 
     @PrimaryColumn({
         type: 'enum',
-        enum: CharacterTagType,
-        default: CharacterTagType.illust,
+        enum: CharacterRecordType,
+        default: CharacterRecordType.illust,
     })
-    type: CharacterTagType;
+    type: CharacterRecordType;
 
     @Column({ type: 'json', name: 'tags' })
     records: number[];

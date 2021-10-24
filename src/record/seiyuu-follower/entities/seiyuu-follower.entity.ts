@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { ProjectName } from '../seiyuu-follower.type';
+import { ProjectName } from '@chiyu-bit/canon.root';
 
 @Entity({
     name: 'seiyuu_follower',

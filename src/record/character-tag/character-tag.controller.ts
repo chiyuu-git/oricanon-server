@@ -5,8 +5,8 @@ import {
     ParseArrayPipe,
 } from '@nestjs/common';
 import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { CharacterRecordType, ProjectName } from '@chiyu-bit/canon.root';
 import { CharacterTagService } from './character-tag.service';
-import { CharacterTagType, ProjectName } from './character-tag.type';
 import { CreateCharacterTagDto } from './dto/create-character-tag.dto';
 import { QueryCharacterTagDto } from './dto/query-character-tag.dto';
 import { UpdateCharacterTagDto } from './dto/update-character-tag.dto';
@@ -28,7 +28,7 @@ export class CharacterTagController {
 
     @Get('/seiyuu_follower')
     @ApiQuery({ name: 'date', type: 'string' })
-    @ApiQuery({ name: 'type', enum: CharacterTagType })
+    @ApiQuery({ name: 'type', enum: CharacterRecordType })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
     findOne(@Query() query: QueryCharacterTagDto) {
         const { date, projectName, type } = query;
@@ -46,7 +46,7 @@ export class CharacterTagController {
 
     @Delete()
     @ApiQuery({ name: 'date', type: 'string' })
-    @ApiQuery({ name: 'type', enum: CharacterTagType })
+    @ApiQuery({ name: 'type', enum: CharacterRecordType })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
     remove(@Query() query: QueryCharacterTagDto) {
         const { date, projectName, type } = query;

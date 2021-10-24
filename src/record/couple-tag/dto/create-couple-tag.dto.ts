@@ -1,7 +1,7 @@
 import { IsArray, IsDateString, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { formatDate } from 'src/utils';
-import { ProjectName, CoupleTagType } from '../couple-tag.type';
+import { ProjectName, CharacterRecordType } from '@chiyu-bit/canon.root';
 
 export class CreateCoupleTagDto {
     // TODO: custom validator
@@ -13,7 +13,7 @@ export class CreateCoupleTagDto {
     projectName: ProjectName;
 
     @IsString()
-    type: CoupleTagType;
+    type: CharacterRecordType;
 
     @IsArray()
     @Transform(({ value }) => JSON.parse(value))

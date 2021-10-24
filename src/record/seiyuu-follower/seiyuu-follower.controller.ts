@@ -4,7 +4,7 @@ import {
     Query,
 } from '@nestjs/common';
 import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { ProjectName } from 'src/canon.type';
+import { ProjectName } from '@chiyu-bit/canon.root';
 import { SeiyuuFollowerService } from './seiyuu-follower.service';
 import { CreateSeiyuuFollowerDto } from './dto/create-seiyuu-follower.dto';
 import { QuerySeiyuuFollowerDto } from './dto/query-seiyuu-follower.dto';

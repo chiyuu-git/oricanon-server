@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { FindWeekRecord } from '../record.type';
+import { FindRecord, FindWeekRecord, QueryRecordDTO } from '../record.type';
 import { CreateCharacterTagDto } from './dto/create-character-tag.dto';
 import { QueryCharacterTagDto } from './dto/query-character-tag.dto';
 import { UpdateCharacterTagDto } from './dto/update-character-tag.dto';
 import { CharacterTag } from './entities/character-tag.entity';
 
 @Injectable()
-export class CharacterTagService implements FindWeekRecord {
+export class CharacterTagService implements FindWeekRecord, FindRecord {
     constructor(
         @InjectRepository(CharacterTag)
         private repository: Repository<CharacterTag>,
@@ -21,6 +21,16 @@ export class CharacterTagService implements FindWeekRecord {
 
     findAll() {
         return this.repository.find();
+    }
+
+    async findRecord(params: QueryRecordDTO) {
+        const characterTag = await this.repository.find({
+            where: params,
+        });
+        if (characterTag.length === 0) {
+            return false;
+        }
+        return characterTag[0].records;
     }
 
     async findWeekRecord(params: QueryCharacterTagDto) {

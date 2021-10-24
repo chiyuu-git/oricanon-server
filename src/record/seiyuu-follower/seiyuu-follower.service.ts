@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { FindWeekRecord } from '../record.type';
+import { FindRecord, FindWeekRecord } from '../record.type';
 import { CreateSeiyuuFollowerDto } from './dto/create-seiyuu-follower.dto';
 import { QuerySeiyuuFollowerDto } from './dto/query-seiyuu-follower.dto';
 import { UpdateSeiyuuFollowerDto } from './dto/update-seiyuu-follower.dto';
 import { SeiyuuFollower } from './entities/seiyuu-follower.entity';
 
 @Injectable()
-export class SeiyuuFollowerService implements FindWeekRecord {
+export class SeiyuuFollowerService implements FindWeekRecord, FindRecord {
     constructor(
         @InjectRepository(SeiyuuFollower)
         private repository: Repository<SeiyuuFollower>,
@@ -21,6 +21,18 @@ export class SeiyuuFollowerService implements FindWeekRecord {
 
     findAll() {
         return this.repository.find();
+    }
+
+    async findRecord(params: QuerySeiyuuFollowerDto) {
+        // TODO: 过滤掉 recordType seiyuu 目前只有一种
+        const { projectName, date } = params;
+        const seiyuuFollower = await this.repository.find({
+            where: { projectName, date },
+        });
+        if (seiyuuFollower.length === 0) {
+            return false;
+        }
+        return seiyuuFollower[0].records;
     }
 
     async findWeekRecord(params: QuerySeiyuuFollowerDto) {

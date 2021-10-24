@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { ProjectName, CoupleTagType } from '../couple-tag.type';
+import { ProjectName, CharacterRecordType } from '@chiyu-bit/canon.root';
 
 @Entity({
     name: 'couple_tag',
@@ -29,10 +29,10 @@ export class CoupleTag {
 
     @PrimaryColumn({
         type: 'enum',
-        enum: CoupleTagType,
-        default: CoupleTagType.illust,
+        enum: CharacterRecordType,
+        default: CharacterRecordType.illust,
     })
-    type: CoupleTagType;
+    type: CharacterRecordType;
 
     @Column({ type: 'json', name: 'tags' })
     records: number[];
