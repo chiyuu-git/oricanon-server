@@ -40,17 +40,22 @@ export class CoupleTagService implements FindWeekRecord {
                 case CoupleTagType.illust:
                     defaultRecord = records;
                     break;
-                case CoupleTagType.reverse:
+                case CoupleTagType.illustReverse:
                     reverseRecord = records;
                     break;
-                case CoupleTagType.intersection:
+                case CoupleTagType.illustIntersection:
                     intersectionRecord = records;
                     break;
                 default:
             }
         }
 
-        return defaultRecord.map((record, i) => record + reverseRecord[i] - intersectionRecord[i]);
+        const res = defaultRecord.map((record, i) => record + reverseRecord[i] - intersectionRecord[i]);
+        if (res.length > 0) {
+            return res;
+        }
+        // return null 相当于 return any，还是用 false 比较好
+        return false;
     }
 
     async findOne({ date, projectName, type }: QueryCoupleTagDto) {
@@ -78,14 +83,5 @@ export class CoupleTagService implements FindWeekRecord {
     remove({ date, projectName, type }: QueryCoupleTagDto) {
         // TODO: 添加废除标记
         return `This action removes a ${date}, ${projectName}, ${type} coupleTag`;
-    }
-
-    async findLastFetchDate() {
-        const coupleTag = await this.repository.findOne({
-            order: {
-                date: 'DESC',
-            },
-        });
-        return coupleTag.date;
     }
 }

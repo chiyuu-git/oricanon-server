@@ -27,7 +27,11 @@ export class CharacterTagService implements FindWeekRecord {
         const characterTag = await this.repository.find({
             where: params,
         });
-        return characterTag[0].records;
+        const res = characterTag[0].records;
+        if (res.length > 0) {
+            return res;
+        }
+        return false;
     }
 
     async findOne({ date, projectName, type }: QueryCharacterTagDto) {
@@ -55,5 +59,14 @@ export class CharacterTagService implements FindWeekRecord {
     remove({ date, projectName, type }: QueryCharacterTagDto) {
         // TODO: 添加废除标记
         return `This action removes a ${date}, ${projectName}, ${type} characterTag`;
+    }
+
+    async findLastFetchDate() {
+        const coupleTag = await this.repository.findOne({
+            order: {
+                date: 'DESC',
+            },
+        });
+        return coupleTag.date;
     }
 }

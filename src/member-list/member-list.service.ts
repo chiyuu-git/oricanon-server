@@ -100,7 +100,6 @@ export class MemberListService {
 
     /**
      * 以 projectName 为主要字段整合全部 memberList
-     * TODO: 这里第二个 as 断言， 是否有更好的处理方法
      */
     async formatListWithProject() {
         const memberLists = await this.findAll();

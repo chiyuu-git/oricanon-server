@@ -10,7 +10,7 @@ export { ProjectName } from '../../canon.type';
   * SeiyuuFollowerType 预留类型字段，目前仅有 twitter一 种类型
   */
 export enum SeiyuuFollowerType {
-    default = 'twitter',
+    twitter = 'twitter',
     youtube = 'youtube',
     ins = 'ins'
 }

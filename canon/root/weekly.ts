@@ -5,7 +5,7 @@ interface ProjectInfo {
     projectName: ProjectName;
     projectTotal: number;
     projectWeekIncrease: number;
-    projectIncreaseRate: string;
+    projectWeekIncreaseRate: string;
 }
 
 interface MemberWeekInfo {

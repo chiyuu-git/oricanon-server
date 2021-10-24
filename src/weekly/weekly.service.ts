@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 // service
 import { MemberListService } from 'src/member-list/member-list.service';
 import { RecordService } from 'src/record/record.service';
@@ -23,24 +23,28 @@ interface ProjectRecord {
 }
 
 @Injectable()
-export class WeeklyService {
-    constructor(
+export class WeeklyService implements OnApplicationBootstrap {
+    projectMemberListMap: ProjectMemberListMap;
 
+    constructor(
         private readonly recordService: RecordService,
         private readonly memberListService: MemberListService,
     ) {}
 
+    async onApplicationBootstrap() {
+        this.projectMemberListMap = await this.memberListService.formatListWithProject();
+    }
+
     async getWeeklyInfo(endDate?: string) {
-        const projectMemberListMap = await this.memberListService.formatListWithProject();
         const {
             weekRange,
             allModuleRelativeRecord,
-        } = await this.recordService.findAllModuleRelativeRecord(projectMemberListMap, endDate);
+        } = await this.recordService.findAllModuleRelativeRecord(this.projectMemberListMap, endDate);
 
         const [characterInfo, seiyuuInfo, coupleInfo] = allModuleRelativeRecord.map(
             (moduleRelativeRecord, i) => this.processModuleRelativeRecord(
                 Object.values(BasicType)[i],
-                projectMemberListMap,
+                this.projectMemberListMap,
                 moduleRelativeRecord,
             ),
         );
@@ -144,7 +148,7 @@ export class WeeklyService {
             }
             return null;
         });
-            // 3.
+        // 3.
         const projectWeekIncrease = weekIncreaseArr.reduce((acc, val) => {
             const positiveVal = val > 0
                 ? val
@@ -158,10 +162,10 @@ export class WeeklyService {
                 : 0;
             return acc + positiveVal;
         });
-            // 4.
-        let projectIncreaseRate = '';
+        // 4.
+        let projectWeekIncreaseRate = '';
         if (projectWeekIncrease > 0 && projectLastWeekIncrease > 0) {
-            projectIncreaseRate = `${((projectWeekIncrease / projectLastWeekIncrease) * 100).toFixed(0)}%`;
+            projectWeekIncreaseRate = `${((projectWeekIncrease / projectLastWeekIncrease) * 100).toFixed(0)}%`;
         }
 
         return {
@@ -175,7 +179,7 @@ export class WeeklyService {
                 projectName,
                 projectTotal,
                 projectWeekIncrease,
-                projectIncreaseRate,
+                projectWeekIncreaseRate,
             },
         };
     }

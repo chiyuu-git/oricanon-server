@@ -17,11 +17,11 @@ import { RecordModule } from './record/record.module';
             host: 'localhost',
             port: 3306,
             username: 'root',
-            password: '',
+            password: '123456',
             database: 'canon',
             autoLoadEntities: true,
             synchronize: false,
-            logging: true,
+            logging: false,
         }),
         ServeStaticModule.forRoot({
             // 相对于打包后的dist目录

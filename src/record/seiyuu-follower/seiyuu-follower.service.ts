@@ -10,8 +10,8 @@ import { SeiyuuFollower } from './entities/seiyuu-follower.entity';
 @Injectable()
 export class SeiyuuFollowerService implements FindWeekRecord {
     constructor(
-    @InjectRepository(SeiyuuFollower)
-    private repository: Repository<SeiyuuFollower>,
+        @InjectRepository(SeiyuuFollower)
+        private repository: Repository<SeiyuuFollower>,
     ) {}
 
     async create(createSeiyuuFollowerDto: CreateSeiyuuFollowerDto) {
@@ -27,28 +27,33 @@ export class SeiyuuFollowerService implements FindWeekRecord {
         const seiyuuFollower = await this.repository.find({
             where: params,
         });
-        return seiyuuFollower[0].records;
+        const res = seiyuuFollower[0].records;
+        if (res.length > 0) {
+            return res;
+        }
+
+        return false;
     }
 
     async findOne({ date, projectName }: QuerySeiyuuFollowerDto) {
-        const characterTag = await this.repository.findOne({
+        const seiyuuFollower = await this.repository.findOne({
             where: {
                 date,
                 projectName,
             },
         });
-        return characterTag;
+        return seiyuuFollower;
     }
 
     async update(
         { date, projectName }: QuerySeiyuuFollowerDto,
         updateCharacterTagDto: UpdateSeiyuuFollowerDto,
     ) {
-        const coupleTag = await this.repository.update(
+        const seiyuuFollower = await this.repository.update(
             { date, projectName },
             updateCharacterTagDto,
         );
-        return coupleTag;
+        return seiyuuFollower;
     }
 
     remove({ date, projectName }: QuerySeiyuuFollowerDto) {

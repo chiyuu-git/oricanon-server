@@ -6,5 +6,5 @@ interface QueryRecordDTO {
 }
 
 export interface FindWeekRecord {
-    findWeekRecord(param: QueryRecordDTO): Promise<number[]>
+    findWeekRecord(param: QueryRecordDTO): Promise<false | number[]>;
 }

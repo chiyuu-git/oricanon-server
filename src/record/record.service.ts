@@ -6,14 +6,34 @@ import { CharacterTagService } from './character-tag/character-tag.service';
 import { CoupleTagService } from './couple-tag/couple-tag.service';
 import { FindWeekRecord } from './record.type';
 import { SeiyuuFollowerService } from './seiyuu-follower/seiyuu-follower.service';
+import { CharacterTagType } from './character-tag/character-tag.type';
+import { CoupleTagType } from './couple-tag/couple-tag.type';
+import { SeiyuuFollowerType } from './seiyuu-follower/seiyuu-follower.type';
 
-const module2Service = {
+const type2Service = {
     [BasicType.character]: 'characterTagService',
 
     [BasicType.couple]: 'coupleTagService',
 
     [BasicType.seiyuu]: 'seiyuuFollowService',
 };
+
+const recordTypeMap = {
+    [BasicType.character]: [CharacterTagType.illust, CharacterTagType.novel],
+
+    [BasicType.couple]: [
+        CoupleTagType.illust,
+        CoupleTagType.illustReverse,
+        CoupleTagType.illustIntersection,
+        CoupleTagType.novel,
+        CoupleTagType.novelReverse,
+        CoupleTagType.novelIntersection,
+    ],
+    // seiyuu 目前还没有真正的 type
+    [BasicType.seiyuu]: [SeiyuuFollowerType.twitter],
+};
+
+type RecordTypeMap = typeof recordTypeMap;
 
 type DataString = string;
 
@@ -42,6 +62,12 @@ export class RecordService {
             )),
         );
 
+        const recordTypeList = recordTypeMap[BasicType.character];
+
+        recordTypeList.map((recordType) => this.findModuleRelativeRecord(
+            BasicType.character, projectMemberListMap, relativeDate,
+        ));
+
         return {
             weekRange,
             allModuleRelativeRecord,
@@ -54,29 +80,37 @@ export class RecordService {
      * 1. 智能提示为什么消失了
      */
     async findModuleRelativeRecord(
-        listType: BasicType,
+        moduleType: BasicType,
         projectMemberList: ProjectMemberListMap,
         relativeDate: RelativeDate,
     ) {
         return Promise.all(
-            Object.values(projectMemberList).map(async (memberList) => {
-                const list = memberList[`${listType}s`];
-                if (list?.length > 0) {
-                    const { projectName } = memberList;
-                    const [baseRecord, lastRecord, beforeLastRecord] = await this.findProjectRelativeRecord(
-                        this[module2Service[listType]],
-                        projectName,
-                        relativeDate,
-                    );
-                    return {
-                        projectName,
-                        baseRecord,
-                        lastRecord,
-                        beforeLastRecord,
-                    };
-                }
-                return null;
-            }),
+            Object.values(projectMemberList)
+                .map(async (memberList) => {
+                    const list = memberList[`${moduleType}s`];
+                    if (list?.length > 0) {
+                        const { projectName } = memberList;
+                        const [baseRecord, lastRecord, beforeLastRecord] = await this.findProjectRelativeRecord(
+                            this[type2Service[moduleType]],
+                            projectName,
+                            relativeDate,
+                        );
+                        // ts 4.4 支持
+                        // const legalRecord = baseRecord && lastRecord && beforeLastRecord;
+                        // record 为 false， 至 project 为空
+                        if (baseRecord && lastRecord && beforeLastRecord) {
+                            return {
+                                projectName,
+                                baseRecord,
+                                lastRecord,
+                                beforeLastRecord,
+                            };
+                        }
+                        return null;
+                    }
+                    return null;
+                }),
+
         );
     }
 
@@ -101,7 +135,7 @@ export class RecordService {
 
         if (!baseDate) {
             // 如果 baseDate 为空，默认获取最后一条作为 baseDate
-            baseDate = await this.coupleTagService.findLastFetchDate();
+            baseDate = await this.characterTagService.findLastFetchDate();
         }
 
         return getRelativeDate(baseDate);

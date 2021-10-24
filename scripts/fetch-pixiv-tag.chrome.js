@@ -7,14 +7,6 @@
  */
 
 /**
- * encode 字段 获取users入り时需要修改
- *
- * @param users入り 50 | 100 | 500 | 1000 | 5000 | 10000
- */
-// const encode = encodeURI(members[i] + ' 10000users入り');
-const PIXIV_HOME_PAGE = 'https://www.pixiv.net/ajax/search';
-
-/**
  * search_type有两种情况, artworks | novels
  * artworks 获取的是插画及漫画，不包括小说
  */
@@ -25,40 +17,53 @@ const RANGE_END = '2021-04-09';
 const range = `&scd=${RANGE_START}&ecd=${RANGE_END}`;
 
 /**
- * @param model 可以为r18
- * @param type 统一为全部，包括插画、漫画、动图
- * @param lang 语言参数不影响返回值
- */
+  * @param model 可以为r18
+  * @param type 统一为全部，包括插画、漫画、动图
+  * @param lang 语言参数不影响返回值
+  */
 const others = '&order=date_d&mode=all&p=1&type=all&lang=ja';
+
+/**
+ * encode 字段 获取users入り时需要修改
+ *
+ * @param users入り 50 | 100 | 500 | 1000 | 5000 | 10000
+ */
+// const encode = encodeURI(members[i] + ' 10000users入り');
+const PIXIV_HOME_PAGE = 'https://www.pixiv.net/ajax/search';
 
 async function fetchPixivTagsInOrder({
     pixivTags,
     // search_mode有两种情况, s_tag_full | s_tag
     searchMode = 's_tag_full',
 }) {
-    const tags = [];
+    const illusts = [];
+    const novels = [];
     try {
         for (const pixivTag of pixivTags) {
             const encode = encodeURI(pixivTag);
 
-            const url = `${PIXIV_HOME_PAGE}/artworks/${encode}?word=${encode}&s_mode=${searchMode}${others}`;
+            // top url 可以同时 fetch illust 和 novel，默认为 full_tag
+            const url = `${PIXIV_HOME_PAGE}/top/${encode}?lang=ja`;
+            // const url = `${PIXIV_HOME_PAGE}/artworks/${encode}?word=${encode}&s_mode=${searchMode}${others}`;
             // rangeUrl，其余与普通url一致
             // const url = `${pixivHomePage}/artworks/${encode}?word=${encode}&s_mode=${s_mode}${range}${others}`;
             // r18;
             // const url = `${pixivHomePage}/artworks/${encode}?word=${encode}&order=date_d&mode=r18&p=1&s_mode=s_tag_full&type=all&lang=ja`;
             // novel
             // const url = `${pixivHomePage}/novels/${encode}?word=${encode}&order=date_d&mode=all&p=1&s_mode=s_tag_full&lang=ja`;
-            console.log(`${pixivTag} ${searchMode} fetch start `);
+            console.log(`${pixivTag}fetch start：${PIXIV_HOME_PAGE}/top/${pixivTag}?lang=ja`);
             const data = await fetch(url);
             const result = await data.json();
-            tags.push(result.body.illustManga.total);
+            // pixiv 默认也会返回 0，还是别保险了，报错发现问题
+            illusts.push(result.body.illustManga.total);
+            novels.push(result.body.novel.total);
             // tags.push(result.body.novel.total)
         }
     }
     catch (error) {
         console.log(error);
     }
-    return tags;
+    return { illusts, novels };
 }
 
 async function postNewRecord({
@@ -87,9 +92,18 @@ async function fetchPixivCharacterTag() {
     console.log('characterTagLists:', characterTagLists);
 
     for (const { projectName, pixivTags } of characterTagLists) {
-        const records = await fetchPixivTagsInOrder({ pixivTags });
-        console.log(projectName, records);
-        postNewRecord({ projectName, records });
+        const { illusts, novels } = await fetchPixivTagsInOrder({ pixivTags });
+        console.log(projectName, 'illust', illusts);
+        console.log(projectName, 'novel', novels);
+        postNewRecord({
+            projectName,
+            records: illusts,
+        });
+        postNewRecord({
+            projectName,
+            records: novels,
+            type: 'pixiv_novel',
+        });
     }
     console.log('==== fetch character end');
 }
@@ -104,49 +118,62 @@ async function fetchPixivCoupleTag() {
     const route = 'couple_tag';
 
     for (const { projectName, pixivTags } of coupleTagLists) {
-        const records = await fetchPixivTagsInOrder({ pixivTags });
-        console.log(projectName, records);
+        const { illusts, novels } = await fetchPixivTagsInOrder({ pixivTags });
+        console.log(projectName, 'illust', illusts);
+        console.log(projectName, 'novel', novels);
 
         postNewRecord({
             projectName,
-            records,
+            records: illusts,
             route,
+        });
+        postNewRecord({
+            projectName,
+            route,
+            records: novels,
+            type: 'pixiv_novel',
         });
     }
 
     for (const { projectName, pixivReverseTags } of coupleTagLists) {
-        const records = await fetchPixivTagsInOrder({ pixivTags: pixivReverseTags });
-        // 填充 0
-        const fillRecords = Array.from({ length: 10 }).fill(0);
-        fillRecords[0] = records[0];
-        fillRecords[5] = records[6];
-        console.log(projectName, fillRecords);
+        const { illusts, novels } = await fetchPixivTagsInOrder({ pixivTags: pixivReverseTags });
+
+        console.log(projectName, 'illust', illusts);
+        console.log(projectName, 'novel', novels);
 
         postNewRecord({
             projectName,
-            records: fillRecords,
-            type: 'pixiv_illust_reverse',
             route,
+            records: illusts,
+            type: 'pixiv_illust_reverse',
+        });
+        postNewRecord({
+            projectName,
+            route,
+            records: novels,
+            type: 'pixiv_novel_reverse',
         });
     }
 
     for (const { projectName, pixivIntersectionTags } of coupleTagLists) {
-        const records = await fetchPixivTagsInOrder({
+        const { illusts, novels } = await fetchPixivTagsInOrder({
             pixivTags: pixivIntersectionTags,
-            searchMode: 's_tag',
         });
-        // 填充 0
-        const fillRecords = Array.from({ length: 10 }).fill(0);
-        fillRecords[0] = records[0];
-        fillRecords[5] = records[6];
-        console.log(projectName, fillRecords);
+        console.log(projectName, 'illust', illusts);
+        console.log(projectName, 'novel', novels);
 
-        console.log(projectName, records);
         postNewRecord({
             projectName,
-            records,
-            type: 'pixiv_illust_intersection',
             route,
+            records: illusts,
+            type: 'pixiv_illust_intersection',
+        });
+
+        postNewRecord({
+            projectName,
+            route,
+            records: novels,
+            type: 'pixiv_novel_intersection',
         });
     }
     console.log('==== fetch couple end');
