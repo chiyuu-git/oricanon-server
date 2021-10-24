@@ -1,7 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiQuery, ApiTags } from '@nestjs/swagger';
-import { RecordType } from '@chiyu-bit/canon.root';
-import { QueryWeeklyInfoDto } from './query-weekly-info.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { QueryRecordTypeWeeklyInfo, QueryAggregationTypeWeeklyInfo } from './query-weekly-info.dto';
 import { WeeklyService } from './weekly.service';
 
 @ApiTags('weekly')
@@ -10,8 +9,14 @@ export class WeeklyController {
     constructor(private readonly service: WeeklyService) {}
 
     @Get('/weekly_info_of_record_type')
-    findRecordTypeWeeklyInfo(@Query() query: QueryWeeklyInfoDto) {
+    findRecordTypeWeeklyInfo(@Query() query: QueryRecordTypeWeeklyInfo) {
         const { basicType, recordType, endDate } = query;
-        return this.service.getRecordTypeWeeklyInfo({ basicType, recordType, endDate });
+        return this.service.getTypeWeeklyInfo({ basicType, endDate, infoType: recordType });
+    }
+
+    @Get('/weekly_info_of_aggregation_type')
+    findAggregationTypeWeeklyInfo(@Query() query: QueryAggregationTypeWeeklyInfo) {
+        const { basicType, aggregationType, endDate } = query;
+        return this.service.getTypeWeeklyInfo({ basicType, endDate, infoType: aggregationType });
     }
 }

@@ -1,17 +1,27 @@
 import { IsDateString, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { formatDate } from 'src/utils';
-import { BasicType, RecordType } from '@chiyu-bit/canon.root';
+import { AggregationType, BasicType, InfoType, RecordType } from '@chiyu-bit/canon.root';
 
-export class QueryWeeklyInfoDto {
+abstract class BaseQuery {
     @IsString()
     basicType: BasicType;
-
-    @IsString()
-    recordType: RecordType;
 
     // TODO: custom validator
     // @IsDateString()
     // @Transform(({ value }) => formatDate(value))
     endDate?: string;
+}
+
+export class QueryRecordTypeWeeklyInfo extends BaseQuery {
+    @IsString()
+    recordType: RecordType;
+}
+export class QueryAggregationTypeWeeklyInfo extends BaseQuery {
+    @IsString()
+    aggregationType: AggregationType;
+}
+
+export class QueryTypeWeeklyInfo extends BaseQuery {
+    infoType: InfoType
 }

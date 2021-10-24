@@ -54,3 +54,16 @@ export enum RecordType {
     ins = 'ins'
 }
 
+export enum AggregationType {
+    // couple 的默认是 union 之后相加，不想专门新增一个类型了
+    illustWithNovel = 'pixiv_illust_with_novel',
+    coupleUnionIllust = 'pixiv_couple_union_illust',
+    coupleUnionNovel = 'pixiv_couple_union_novel'
+}
+
+export type InfoType = RecordType | AggregationType;
+
+export function isRecordType(infoType: InfoType): infoType is RecordType {
+    return Object.values(RecordType).includes(infoType as RecordType);
+}
+

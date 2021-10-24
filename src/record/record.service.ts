@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { ProjectMemberListMap } from 'src/member-list/member-list.type';
-import { ProjectName, BasicType, RecordType } from '@chiyu-bit/canon.root';
+import { ProjectName, BasicType, RecordType, InfoType, isRecordType } from '@chiyu-bit/canon.root';
 import { getRelativeDate } from 'src/utils';
 import { CharacterTagService } from './character-tag/character-tag.service';
 import { CoupleTagService } from './couple-tag/couple-tag.service';
-import { FindRecord, FindWeekRecord } from './record.type';
+import { FindAggregationRecord, FindRecord } from './record.type';
 import { SeiyuuFollowerService } from './seiyuu-follower/seiyuu-follower.service';
 
 const serviceMap = {
@@ -33,7 +32,7 @@ export class RecordService {
      */
     async findRelativeRecordOfType(
         basicType: BasicType,
-        recordType: RecordType,
+        infoType: InfoType,
         endDate?: string,
     ) {
         const service = serviceMap[basicType];
@@ -50,19 +49,19 @@ export class RecordService {
 
         const relativeRecordOfType = await Promise.all(
             Object.values(ProjectName).map(async (projectName) => {
-                const [baseRecord, lastRecord, beforeLastRecord] = await this.findProjectRelativeRecordNew(
+                const [baseRecord, lastRecord, beforeLastRecord] = await this.findProjectRelativeRecord(
+                    infoType,
                     this[service],
                     projectName,
-                    recordType,
                     relativeDate,
                 );
-                // ts 4.4 支持
-                // const legalRecord = baseRecord && lastRecord && beforeLastRecord;
-                // record 为 false， 则 project 为空
+                    // ts 4.4 支持
+                    // const legalRecord = baseRecord && lastRecord && beforeLastRecord;
+                    // record 为 false， 则 project 为空
                 if (baseRecord && lastRecord && beforeLastRecord) {
                     return {
                         projectName,
-                        recordType,
+                        recordType: infoType,
                         baseRecord,
                         lastRecord,
                         beforeLastRecord,
@@ -71,6 +70,7 @@ export class RecordService {
                 return null;
             }),
         );
+
         return {
             weekRange,
             relativeRecordOfType,
@@ -79,17 +79,28 @@ export class RecordService {
 
     /**
      * 去 service 获取单个企划的数据
+     * TODO: 最好是把 aggregation 的差异在此处解决吧，此处做区分，前面的逻辑全都复用
      */
-    async findProjectRelativeRecordNew(
-        service: FindRecord,
+    async findProjectRelativeRecord(
+        infoType: InfoType,
+        service: FindRecord & FindAggregationRecord,
         projectName: ProjectName,
-        recordType: RecordType,
         relativeDate: RelativeDate,
     ) {
+        if (isRecordType(infoType)) {
+            return Promise.all(
+                relativeDate.map((date) => service.findRecord({
+                    projectName,
+                    infoType,
+                    date,
+                })),
+            );
+        }
+
         return Promise.all(
-            relativeDate.map((date) => service.findRecord({
+            relativeDate.map((date, index) => index === 0 && service.findAggregationRecord({
                 projectName,
-                type: recordType,
+                infoType,
                 date,
             })),
         );

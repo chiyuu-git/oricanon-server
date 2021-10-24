@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { FindRecord, FindWeekRecord } from '../record.type';
+import { FindAggregationRecord, FindRecord, QueryAggregationRecordDTO } from '../record.type';
 import { CreateSeiyuuFollowerDto } from './dto/create-seiyuu-follower.dto';
 import { QuerySeiyuuFollowerDto } from './dto/query-seiyuu-follower.dto';
 import { UpdateSeiyuuFollowerDto } from './dto/update-seiyuu-follower.dto';
 import { SeiyuuFollower } from './entities/seiyuu-follower.entity';
 
 @Injectable()
-export class SeiyuuFollowerService implements FindWeekRecord, FindRecord {
+export class SeiyuuFollowerService implements FindRecord, FindAggregationRecord {
     constructor(
         @InjectRepository(SeiyuuFollower)
         private repository: Repository<SeiyuuFollower>,
@@ -35,16 +35,8 @@ export class SeiyuuFollowerService implements FindWeekRecord, FindRecord {
         return seiyuuFollower[0].records;
     }
 
-    async findWeekRecord(params: QuerySeiyuuFollowerDto) {
-        const seiyuuFollower = await this.repository.find({
-            where: params,
-        });
-        const res = seiyuuFollower[0].records;
-        if (res.length > 0) {
-            return res;
-        }
-
-        return false;
+    findAggregationRecord(params: QueryAggregationRecordDTO): Promise<false | number[]> {
+        throw new Error('Method not implemented.');
     }
 
     async findOne({ date, projectName }: QuerySeiyuuFollowerDto) {

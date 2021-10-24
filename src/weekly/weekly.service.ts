@@ -5,7 +5,7 @@ import { RecordService } from 'src/record/record.service';
 import { ProjectName, BasicType } from '@chiyu-bit/canon.root';
 import { ModuleInfo, GetMemberInfo } from '@chiyu-bit/canon.root/weekly';
 import type { ProjectMemberListMap } from 'src/member-list/member-list.type';
-import { QueryWeeklyInfoDto } from './query-weekly-info.dto';
+import { QueryTypeWeeklyInfo } from './query-weekly-info.dto';
 
 interface ProjectRelativeRecord {
     projectName: ProjectName;
@@ -39,15 +39,15 @@ export class WeeklyService implements OnApplicationBootstrap {
         this.projectMemberListMap = await this.memberListService.formatListWithProject();
     }
 
-    async getRecordTypeWeeklyInfo({ basicType, recordType, endDate }: QueryWeeklyInfoDto) {
+    async getTypeWeeklyInfo({ basicType, infoType, endDate }: QueryTypeWeeklyInfo) {
         const result = await this.recordService.findRelativeRecordOfType(
             basicType,
-            recordType,
+            infoType,
             endDate,
         );
 
         if (!result) {
-            return `record of ${recordType} not fonud`;
+            return `infoType ${infoType} not found`;
         }
 
         const { weekRange, relativeRecordOfType } = result;
