@@ -79,7 +79,6 @@ export class RecordService {
 
     /**
      * 去 service 获取单个企划的数据
-     * TODO: 最好是把 aggregation 的差异在此处解决吧，此处做区分，前面的逻辑全都复用
      */
     async findProjectRelativeRecord(
         infoType: InfoType,

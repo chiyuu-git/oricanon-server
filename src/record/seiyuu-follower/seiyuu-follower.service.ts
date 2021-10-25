@@ -24,7 +24,7 @@ export class SeiyuuFollowerService implements FindRecord, FindAggregationRecord 
     }
 
     async findRecord(params: QuerySeiyuuFollowerDto) {
-        // TODO: 过滤掉 recordType seiyuu 目前只有一种
+        // 过滤掉 recordType seiyuu 目前只有一种
         const { projectName, date } = params;
         const seiyuuFollower = await this.repository.find({
             where: { projectName, date },
@@ -61,7 +61,6 @@ export class SeiyuuFollowerService implements FindRecord, FindAggregationRecord 
     }
 
     remove({ date, projectName }: QuerySeiyuuFollowerDto) {
-    // TODO: 添加废除标记
         return `This action removes a ${date}, ${projectName} seiyuuFollower`;
     }
 }

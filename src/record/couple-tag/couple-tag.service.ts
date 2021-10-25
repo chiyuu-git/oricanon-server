@@ -158,7 +158,6 @@ export class CoupleTagService implements FindRecord, FindAggregationRecord {
     }
 
     remove({ date, projectName, type }: QueryCoupleTagDto) {
-        // TODO: 添加废除标记
         return `This action removes a ${date}, ${projectName}, ${type} coupleTag`;
     }
 }

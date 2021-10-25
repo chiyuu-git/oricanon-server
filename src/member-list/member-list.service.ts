@@ -42,7 +42,6 @@ export class MemberListService {
     }
 
     remove({ projectName, type }: QueryMemberListDto) {
-        // TODO: 添加废除标记
         return `This action removes a #${projectName} ${type} memberList`;
     }
 

@@ -16,7 +16,6 @@ export class CoupleTag {
         //     },
         // },
     })
-    // TODO: dateString 类型如何更准确的描述
     date: string;
 
     @PrimaryColumn({
