@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ProjectName, BasicType, RecordType, InfoType, isRecordType } from '@chiyu-bit/canon.root';
+import { ProjectName, BasicType, InfoType, isRecordType } from '@chiyu-bit/canon.root';
 import { getRelativeDate } from 'src/utils';
 import { CharacterTagService } from './character-tag/character-tag.service';
 import { CoupleTagService } from './couple-tag/couple-tag.service';
@@ -90,7 +90,7 @@ export class RecordService {
             return Promise.all(
                 relativeDate.map((date) => service.findRecord({
                     projectName,
-                    infoType,
+                    type: infoType,
                     date,
                 })),
             );
@@ -99,7 +99,7 @@ export class RecordService {
         return Promise.all(
             relativeDate.map((date, index) => index === 0 && service.findAggregationRecord({
                 projectName,
-                infoType,
+                type: infoType,
                 date,
             })),
         );

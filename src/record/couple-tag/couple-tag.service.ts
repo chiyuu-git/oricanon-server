@@ -56,8 +56,8 @@ export class CoupleTagService implements FindRecord, FindAggregationRecord {
      * couple 聚合入口，根据 aggregationType 调用不同的聚合方法
      */
     async findAggregationRecord(params: QueryAggregationRecordDTO): Promise<false | number[]> {
-        const { projectName, infoType, date } = params;
-        switch (infoType) {
+        const { projectName, type, date } = params;
+        switch (type) {
             case AggregationType.coupleUnionIllust:
                 return this.findUnionIllust({ projectName, date });
             case AggregationType.coupleUnionNovel:

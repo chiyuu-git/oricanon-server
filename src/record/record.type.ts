@@ -3,12 +3,12 @@ import { RecordType, ProjectName, InfoType, AggregationType } from '@chiyu-bit/c
 export interface QueryRecordDTO {
     projectName: ProjectName;
     date: string;
-    infoType: RecordType;
+    type: RecordType;
 }
 export interface QueryAggregationRecordDTO {
     projectName: ProjectName;
     date: string;
-    infoType?: AggregationType;
+    type?: AggregationType;
 }
 
 export interface FindRecord {
