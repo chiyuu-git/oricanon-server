@@ -3,9 +3,9 @@ import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { MemberListService } from 'src/member-list/member-list.service';
 import { RecordService } from 'src/record/record.service';
 import { ProjectName, BasicType } from '@chiyu-bit/canon.root';
-import { ModuleInfo, GetMemberInfo } from '@chiyu-bit/canon.root/weekly';
+import { RecordWeeklyInfo, GetMemberInfo } from '@chiyu-bit/canon.root/weekly';
 import type { ProjectMemberListMap } from 'src/member-list/member-list.type';
-import { QueryTypeWeeklyInfo } from './query-weekly-info.dto';
+import { QueryRecordWeeklyInfo } from './query-weekly-info.dto';
 
 interface ProjectRelativeRecord {
     projectName: ProjectName;
@@ -39,7 +39,7 @@ export class WeeklyService implements OnApplicationBootstrap {
         this.projectMemberListMap = await this.memberListService.formatListWithProject();
     }
 
-    async getTypeWeeklyInfo({ basicType, infoType, endDate }: QueryTypeWeeklyInfo) {
+    async getRecordTypeWeeklyInfo({ basicType, infoType, endDate }: QueryRecordWeeklyInfo) {
         const result = await this.recordService.findRelativeRecordOfType(
             basicType,
             infoType,
@@ -52,7 +52,7 @@ export class WeeklyService implements OnApplicationBootstrap {
 
         const { weekRange, relativeRecordOfType } = result;
 
-        const recordWeekInfo = this.processModuleRelativeRecord(
+        const recordWeeklyInfo = this.processModuleRelativeRecord(
             basicType,
             this.projectMemberListMap,
             relativeRecordOfType,
@@ -63,24 +63,24 @@ export class WeeklyService implements OnApplicationBootstrap {
         const to = new Date(weekRange.to);
         const range = `${from.getMonth() + 1}/${from.getDate() + 1}至${to.getMonth() + 1}/${to.getDate()}`;
 
-        return {
-            range,
-            recordWeekInfo,
-        };
+        recordWeeklyInfo.range = range;
+
+        return recordWeeklyInfo;
     }
 
     /**
      * 处理周报相关的数据，接受 ModuleRelativeRecord ，返回
      */
     processModuleRelativeRecord<Type extends BasicType>(
-        listType: Type,
+        moduleType: Type,
         projectMemberListMap: ProjectMemberListMap,
         moduleRelativeRecord: ModuleRelativeRecord,
     ) {
         const moduleTotal = 0;
         const moduleWeekIncrease = 0;
         const moduleLastWeekIncrease = 0;
-        const moduleInfo: ModuleInfo<Type> = {
+        const moduleInfo: RecordWeeklyInfo<Type> = {
+            range: '',
             projectInfo: [],
             memberInfo: [],
         };
@@ -93,7 +93,7 @@ export class WeeklyService implements OnApplicationBootstrap {
                 const memberList = projectMemberListMap[projectName];
                 const memberInfo = this.formatRecordWithMemberList<Type>(
                     projectRecord,
-                    memberList[`${listType}s`],
+                    memberList[`${moduleType}s`],
                 );
                 moduleInfo.projectInfo.push(projectInfo);
                 moduleInfo.memberInfo.push(...memberInfo);

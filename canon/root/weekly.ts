@@ -1,4 +1,4 @@
-import { ProjectName, BasicType } from './root';
+import { ProjectName, BasicType, CharacterRecordType, SeiyuuRecordType, AggregationType } from './root';
 import { CharacterInfo, CoupleInfo, SeiyuuInfo } from './member-list';
 
 interface ProjectInfo {
@@ -25,7 +25,22 @@ export type GetMemberInfo<Type extends BasicType> = Type extends BasicType.chara
 
 type ModuleInfoMap<Type extends BasicType> = MemberWeekInfo & GetMemberInfo<Type>
 
-export interface ModuleInfo<Type extends BasicType> {
+export interface RecordWeeklyInfo<Type extends BasicType> {
+    range: string;
     projectInfo: ProjectInfo[];
     memberInfo: ModuleInfoMap<Type>[];
 }
+
+export type CharaRecordWeeklyInfo = Record<CharacterRecordType, RecordWeeklyInfo<BasicType.character>>
+& Record<AggregationType, RecordWeeklyInfo<BasicType.character>>
+
+export type CoupleRecordWeeklyInfo = Record<CharacterRecordType, RecordWeeklyInfo<BasicType.couple>>
+& Record<AggregationType, RecordWeeklyInfo<BasicType.couple>>
+
+export type SeiyuuRecordWeeklyInfo = Record<CharacterRecordType, RecordWeeklyInfo<BasicType.character>>;
+
+export type WeeklyInfo = {
+    [BasicType.character]: CharaRecordWeeklyInfo;
+    [BasicType.couple]: CoupleRecordWeeklyInfo;
+    [BasicType.seiyuu]: SeiyuuRecordWeeklyInfo;
+};

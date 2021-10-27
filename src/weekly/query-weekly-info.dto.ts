@@ -2,6 +2,7 @@ import { IsDateString, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { formatDate } from 'src/utils';
 import { AggregationType, BasicType, InfoType, RecordType } from '@chiyu-bit/canon.root';
+import { ApiProperty } from '@nestjs/swagger';
 
 abstract class BaseQuery {
     @IsString()
@@ -13,15 +14,11 @@ abstract class BaseQuery {
     endDate?: string;
 }
 
-export class QueryRecordTypeWeeklyInfo extends BaseQuery {
+export class QueryRecordWeeklyInfo extends BaseQuery {
     @IsString()
-    recordType: RecordType;
-}
-export class QueryAggregationTypeWeeklyInfo extends BaseQuery {
-    @IsString()
-    aggregationType: AggregationType;
-}
-
-export class QueryTypeWeeklyInfo extends BaseQuery {
-    infoType: InfoType
+    @ApiProperty({
+        type: String,
+        description: 'infoType',
+    })
+    infoType: InfoType;
 }
