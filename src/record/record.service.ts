@@ -97,7 +97,7 @@ export class RecordService {
         }
 
         return Promise.all(
-            relativeDate.map((date, index) => index === 0 && service.findAggregationRecord({
+            relativeDate.map((date) => service.findAggregationRecord({
                 projectName,
                 type: infoType,
                 date,

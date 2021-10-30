@@ -3,7 +3,7 @@ import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { MemberListService } from 'src/member-list/member-list.service';
 import { RecordService } from 'src/record/record.service';
 import { ProjectName, BasicType } from '@chiyu-bit/canon.root';
-import { RecordWeeklyInfo, GetMemberInfo } from '@chiyu-bit/canon.root/weekly';
+import { RecordWeeklyInfo, MemberBasicInfo } from '@chiyu-bit/canon.root/weekly';
 import type { ProjectMemberListMap } from 'src/member-list/member-list.type';
 import { QueryRecordWeeklyInfo } from './query-weekly-info.dto';
 
@@ -112,7 +112,7 @@ export class WeeklyService implements OnApplicationBootstrap {
      */
     formatRecordWithMemberList<Type extends BasicType>(
         projectRecord: ProjectRecord,
-        memberList: GetMemberInfo<Type>[],
+        memberList: MemberBasicInfo<Type>[],
     ) {
         if (!projectRecord) {
             return null;

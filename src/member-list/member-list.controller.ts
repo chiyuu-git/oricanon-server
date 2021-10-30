@@ -17,12 +17,6 @@ export class MemberListController {
         return this.service.create(createMemberListDto);
     }
 
-    // 不需要 findAll 使用 format_list_with_project 代替
-    // @Get('/all_project')
-    // findAll() {
-    //     return this.projectsService.findAll();
-    // }
-
     @Get('/member_list')
     @ApiQuery({ name: 'type', enum: BasicType })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
@@ -52,7 +46,7 @@ export class MemberListController {
      */
     @Get('list_of_type/:type')
     @ApiParam({ name: 'type', enum: BasicType })
-    async findListOfType(@Param('type') type: BasicType) {
+    async getListOfType(@Param('type') type: BasicType) {
         if (BasicType[type]) {
             const MemberListsOfType = await this.service.findListByType(type);
             return MemberListsOfType;
@@ -65,27 +59,37 @@ export class MemberListController {
      * 获取所有角色的Tags
      */
     @Get('all_character_tag')
-    async findAllCharacterTags() {
-        const allCharacterTags = await this.service.findAllCharacterTags();
+    async getAllCharacterTag() {
+        const allCharacterTag = await this.service.findAllCharacterTag();
 
-        return allCharacterTags;
+        return allCharacterTag;
     }
 
     /**
      * 获取所有角色cp的Tags
      */
     @Get('all_couple_tag')
-    async findAllCoupleTags() {
-        const allCoupleTags = await this.service.findAllCoupleTags();
+    async getAllCoupleTag() {
+        const allCoupleTag = await this.service.findAllCoupleTag();
 
-        return allCoupleTags;
+        return allCoupleTag;
+    }
+
+    /**
+     * 获取所有声优的推特帐号
+     */
+    @Get('all_seiyuu_twitter_account')
+    async getAllSeiyuuTwitterAccount() {
+        const allSeiyuuTwitterAccount = await this.service.findAllSeiyuuTwitterAccount();
+
+        return allSeiyuuTwitterAccount;
     }
 
     /**
      * 返回以 projectName 为主要字段整合全部 memberList
      */
     @Get('list_format_with_project')
-    async findListFormatWithProject() {
+    async getListFormatWithProject() {
         const formatList = await this.service.formatListWithProject();
 
         return formatList;

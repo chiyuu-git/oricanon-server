@@ -57,26 +57,26 @@ export class MemberListService {
     }
 
     /**
-     * 获取所有角色的Tags
+     * 获取所有角色的Tag
      */
-    async findAllCharacterTags() {
-        const characterLists = await this.findListByType(BasicType.character);
-        const allCharacterTags = characterLists.map(({ projectName, list }) => {
+    async findAllCharacterTag() {
+        const characterList = await this.findListByType(BasicType.character);
+        const allCharacterTag = characterList.map(({ projectName, list }) => {
             const pixivTags = list.map(({ pixivTag }) => pixivTag);
             return {
                 projectName,
                 pixivTags,
             };
         });
-        return allCharacterTags;
+        return allCharacterTag;
     }
 
     /**
-     * 获取所有角色cp的Tags
+     * 获取所有角色cp的Tag
      */
-    async findAllCoupleTags() {
-        const coupleLists = await this.findListByType(BasicType.couple);
-        const allCoupleTags = coupleLists.map(({ projectName, list }) => {
+    async findAllCoupleTag() {
+        const coupleList = await this.findListByType(BasicType.couple);
+        const allCoupleTags = coupleList.map(({ projectName, list }) => {
             const tags: string[] = [];
             const reverseTags: string[] = [];
             const intersectionTags: string[] = [];
@@ -95,6 +95,21 @@ export class MemberListService {
             };
         });
         return allCoupleTags;
+    }
+
+    /**
+     * 获取所有声优的推特帐号
+     */
+    async findAllSeiyuuTwitterAccount() {
+        const seiyuuList = await this.findListByType(BasicType.seiyuu);
+        const allSeiyuuAccount = seiyuuList.map(({ projectName, list }) => {
+            const twitterAccounts = list.map(({ twitterAccount }) => twitterAccount);
+            return {
+                projectName,
+                twitterAccounts,
+            };
+        });
+        return allSeiyuuAccount;
     }
 
     /**

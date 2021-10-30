@@ -139,6 +139,7 @@ export class CoupleTagService implements FindRecord, FindAggregationRecord {
         }
 
         const unionRecord = defaultRecord.map((record, i) => record + reverseRecord[i] - intersectionRecord[i]);
+
         if (unionRecord.length > 0) {
             return unionRecord;
         }

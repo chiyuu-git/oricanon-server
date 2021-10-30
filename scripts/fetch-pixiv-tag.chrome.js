@@ -30,6 +30,7 @@ const others = '&order=date_d&mode=all&p=1&type=all&lang=ja';
  */
 // const encode = encodeURI(members[i] + ' 10000users入り');
 const PIXIV_HOME_PAGE = 'https://www.pixiv.net/ajax/search';
+const HOST = 'http://localhost:3000';
 
 async function fetchPixivTagsInOrder({
     pixivTags,
@@ -53,7 +54,9 @@ async function fetchPixivTagsInOrder({
             // const url = `${pixivHomePage}/novels/${encode}?word=${encode}&order=date_d&mode=all&p=1&s_mode=s_tag_full&lang=ja`;
             console.log(`${pixivTag}fetch start：${PIXIV_HOME_PAGE}/top/${pixivTag}?lang=ja`);
             const data = await fetch(url);
-            const result = await data.json();
+            const result = await data.json
+                ? data.json()
+                : data;
             // pixiv 默认也会返回 0，还是别保险了，报错发现问题
             illusts.push(result.body.illustManga.total);
             novels.push(result.body.novel.total);
@@ -66,14 +69,14 @@ async function fetchPixivTagsInOrder({
     return { illusts, novels };
 }
 
-async function postNewRecord({
+async function postRecord({
     projectName,
     records,
     type = 'pixiv_illust',
     route = 'character_tag',
 }) {
     const date = new Date();
-    const url = `http://localhost:3000/${route}`;
+    const url = `${HOST}/${route}`;
     const res = await fetch(url, {
         method: 'post',
         headers: {
@@ -87,7 +90,7 @@ async function postNewRecord({
 
 async function fetchPixivCharacterTag() {
     console.log('==== fetch character start');
-    const data = await fetch('http://localhost:3000/member_list/all_character_tag');
+    const data = await fetch(`${HOST}/member_list/all_character_tag`);
     const characterTagLists = await data.json();
     console.log('characterTagLists:', characterTagLists);
 
@@ -95,11 +98,11 @@ async function fetchPixivCharacterTag() {
         const { illusts, novels } = await fetchPixivTagsInOrder({ pixivTags });
         console.log(projectName, 'illust', illusts);
         console.log(projectName, 'novel', novels);
-        postNewRecord({
+        postRecord({
             projectName,
             records: illusts,
         });
-        postNewRecord({
+        postRecord({
             projectName,
             records: novels,
             type: 'pixiv_novel',
@@ -112,7 +115,7 @@ await fetchPixivCharacterTag();
 
 async function fetchPixivCoupleTag() {
     console.log('==== fetch couple start');
-    const data = await fetch('http://localhost:3000/member_list/all_couple_tag');
+    const data = await fetch(`${HOST}/member_list/all_couple_tag`);
     const coupleTagLists = await data.json();
     console.log('coupleTagLists:', coupleTagLists);
     const route = 'couple_tag';
@@ -122,12 +125,12 @@ async function fetchPixivCoupleTag() {
         console.log(projectName, 'illust', illusts);
         console.log(projectName, 'novel', novels);
 
-        postNewRecord({
+        postRecord({
             projectName,
             records: illusts,
             route,
         });
-        postNewRecord({
+        postRecord({
             projectName,
             route,
             records: novels,
@@ -141,13 +144,13 @@ async function fetchPixivCoupleTag() {
         console.log(projectName, 'illust', illusts);
         console.log(projectName, 'novel', novels);
 
-        postNewRecord({
+        postRecord({
             projectName,
             route,
             records: illusts,
             type: 'pixiv_illust_reverse',
         });
-        postNewRecord({
+        postRecord({
             projectName,
             route,
             records: novels,
@@ -162,14 +165,14 @@ async function fetchPixivCoupleTag() {
         console.log(projectName, 'illust', illusts);
         console.log(projectName, 'novel', novels);
 
-        postNewRecord({
+        postRecord({
             projectName,
             route,
             records: illusts,
             type: 'pixiv_illust_intersection',
         });
 
-        postNewRecord({
+        postRecord({
             projectName,
             route,
             records: novels,

@@ -3,6 +3,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 
+import { fetchTwitterFollower } from '../scripts/fetch-twitter-follower';
+
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     // swagger 配置
@@ -18,4 +20,14 @@ async function bootstrap() {
     app.enableCors();
     await app.listen(3000);
 }
-bootstrap();
+bootstrap()
+    .then(() => {
+        // 服务启动之后再执行脚本
+        // fetchTwitterFollower();
+        const placeholder = 123;
+        return true;
+    })
+    .catch((error) => {
+        console.log('bootstrap err:', error);
+    });
+

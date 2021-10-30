@@ -11,7 +11,7 @@ export class WeeklyController {
     @Get('/weekly_info_of_record_type')
     findRecordWeeklyInfo(@Query() query: QueryRecordWeeklyInfo) {
         const { basicType, infoType, endDate } = query;
-        console.log(query);
+        // console.log(query);
         return this.service.getRecordTypeWeeklyInfo({ basicType, endDate, infoType });
     }
 }

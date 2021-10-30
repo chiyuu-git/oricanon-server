@@ -11,7 +11,7 @@
 {
     "root": {
         "scope": "chiyu-bit.canon",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "mainFile": "index.ts",
         "rootDir": "canon/root"
     },
