@@ -6,9 +6,8 @@
 import * as superagent from 'superagent';
 import cheerio from 'cheerio';
 import { ProjectName } from '@chiyu-bit/canon.root';
-
-const HOST = 'http://localhost:3000';
-const SEIYUU_SITE = 'https://headline.client.jp/ranking_f.html';
+import { postFollowerRecord } from './utils';
+import { HOST, WEEKLY_SEIYUU_SITE } from './constant';
 
 type TwitterFollowerList = {
     projectName: ProjectName;
@@ -42,29 +41,6 @@ function findFollowerCount(accounts: string[], allAccountNode: any): number[] | 
     });
 }
 
-async function postFollowerRecord({
-    projectName,
-    records,
-}) {
-    const date = new Date();
-    // 网站在第二天更新0点时的数据，标记为23：59分
-    date.setDate(date.getDate() - 1);
-
-    const url = `${HOST}/seiyuu_follower`;
-    const res = await fetch(url, {
-        method: 'post',
-        headers: {
-            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        },
-        body: `projectName=${projectName}&records=${JSON.stringify(records)}&date=${date}`,
-    });
-    const response = await res.json();
-    const result = await response.json
-        ? response.json()
-        : response;
-    console.log(`${projectName} response:`, result);
-}
-
 export async function fetchTwitterFollower() {
     try {
     // 获取 seiyuu twitterAccount
@@ -72,7 +48,7 @@ export async function fetchTwitterFollower() {
         const twitterFollowerList: TwitterFollowerList = response.body;
 
         // 获取网页上所有的推特账号
-        const html = await superagent.get(SEIYUU_SITE);
+        const html = await superagent.get(WEEKLY_SEIYUU_SITE);
         const $ = cheerio.load(html.text);
         const allAccountNode = $('#f_rank>tbody>tr>td>a');
 

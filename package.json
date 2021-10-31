@@ -32,7 +32,7 @@
     ]
   },
   "dependencies": {
-    "@chiyu-bit/canon.root": "^0.0.7",
+    "@chiyu-bit/canon.root": "^0.0.8",
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/mapped-types": "*",
@@ -44,6 +44,7 @@
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "mysql2": "^2.3.0",
+    "node-fetch": "^2.6.5",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
