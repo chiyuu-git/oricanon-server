@@ -10,7 +10,7 @@
 import * as superagent from 'superagent';
 import cheerio from 'cheerio';
 import { ProjectName } from '@chiyu-bit/canon.root';
-import { postFollowerRecord } from './utils';
+import { postFollowerRecord } from './conmon';
 import { HOST, DAILY_SEIYUU_SITE } from './constant';
 
  type TwitterFollowerList = {

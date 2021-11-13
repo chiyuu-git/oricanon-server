@@ -24,7 +24,8 @@ export enum CharacterRecordType {
     fifty = 'pixiv_50',
     fiveHundred = 'pixiv_500',
     fiveThousand = 'pixiv_5000',
-    r18 = 'pixiv_r18'
+    r18 = 'pixiv_r18',
+    tagView = 'pixiv_tag_view'
 }
 
 export enum SeiyuuRecordType {

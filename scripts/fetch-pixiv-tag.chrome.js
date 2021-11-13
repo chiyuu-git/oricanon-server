@@ -32,7 +32,7 @@ const others = '&order=date_d&mode=all&p=1&type=all&lang=ja';
 const PIXIV_HOME_PAGE = 'https://www.pixiv.net/ajax/search';
 const HOST = 'http://localhost:3000';
 
-async function fetchPixivTagsInOrder({
+async function fetchPixivTagCount({
     pixivTags,
     // search_mode有两种情况, s_tag_full | s_tag
     searchMode = 's_tag_full',
@@ -54,13 +54,17 @@ async function fetchPixivTagsInOrder({
             // const url = `${pixivHomePage}/novels/${encode}?word=${encode}&order=date_d&mode=all&p=1&s_mode=s_tag_full&lang=ja`;
             console.log(`${pixivTag}fetch start：${PIXIV_HOME_PAGE}/top/${pixivTag}?lang=ja`);
             const data = await fetch(url);
-            const result = await data.json
-                ? data.json()
-                : data;
-            // pixiv 默认也会返回 0，还是别保险了，报错发现问题
-            illusts.push(result.body.illustManga.total);
-            novels.push(result.body.novel.total);
-            // tags.push(result.body.novel.total)
+            if (data.ok) {
+                const result = await data.json();
+                // pixiv 默认也会返回 0，还是别保险了，报错发现问题
+                illusts.push(result.body.illustManga.total);
+                novels.push(result.body.novel.total);
+                // tags.push(result.body.novel.total)
+            }
+            else {
+                illusts.push(0);
+                novels.push(0);
+            }
         }
     }
     catch (error) {
@@ -84,18 +88,18 @@ async function postRecord({
         },
         body: `projectName=${projectName}&records=${JSON.stringify(records)}&date=${date}&type=${type}`,
     });
-    const response = await res.json();
+    const response = await res.text();
     console.log(`${projectName} ${type} response:`, response);
 }
 
-async function fetchPixivCharacterTag() {
+async function getPixivCharacterTagCount() {
     console.log('==== fetch character start');
     const data = await fetch(`${HOST}/member_list/all_character_tag`);
     const characterTagLists = await data.json();
     console.log('characterTagLists:', characterTagLists);
 
     for (const { projectName, pixivTags } of characterTagLists) {
-        const { illusts, novels } = await fetchPixivTagsInOrder({ pixivTags });
+        const { illusts, novels } = await fetchPixivTagCount({ pixivTags });
         console.log(projectName, 'illust', illusts);
         console.log(projectName, 'novel', novels);
         postRecord({
@@ -111,9 +115,9 @@ async function fetchPixivCharacterTag() {
     console.log('==== fetch character end');
 }
 
-await fetchPixivCharacterTag();
+await getPixivCharacterTagCount();
 
-async function fetchPixivCoupleTag() {
+async function getPixivCoupleTagCount() {
     console.log('==== fetch couple start');
     const data = await fetch(`${HOST}/member_list/all_couple_tag`);
     const coupleTagLists = await data.json();
@@ -121,7 +125,7 @@ async function fetchPixivCoupleTag() {
     const route = 'couple_tag';
 
     for (const { projectName, pixivTags } of coupleTagLists) {
-        const { illusts, novels } = await fetchPixivTagsInOrder({ pixivTags });
+        const { illusts, novels } = await fetchPixivTagCount({ pixivTags });
         console.log(projectName, 'illust', illusts);
         console.log(projectName, 'novel', novels);
 
@@ -139,10 +143,10 @@ async function fetchPixivCoupleTag() {
     }
 
     for (const { projectName, pixivReverseTags } of coupleTagLists) {
-        const { illusts, novels } = await fetchPixivTagsInOrder({ pixivTags: pixivReverseTags });
+        const { illusts, novels } = await fetchPixivTagCount({ pixivTags: pixivReverseTags });
 
-        console.log(projectName, 'illust', illusts);
-        console.log(projectName, 'novel', novels);
+        console.log(projectName, 'illust_reverse', illusts);
+        console.log(projectName, 'novel_reverse', novels);
 
         postRecord({
             projectName,
@@ -159,11 +163,11 @@ async function fetchPixivCoupleTag() {
     }
 
     for (const { projectName, pixivIntersectionTags } of coupleTagLists) {
-        const { illusts, novels } = await fetchPixivTagsInOrder({
+        const { illusts, novels } = await fetchPixivTagCount({
             pixivTags: pixivIntersectionTags,
         });
-        console.log(projectName, 'illust', illusts);
-        console.log(projectName, 'novel', novels);
+        console.log(projectName, 'illust_intersection', illusts);
+        console.log(projectName, 'novel_intersection', novels);
 
         postRecord({
             projectName,
@@ -182,4 +186,4 @@ async function fetchPixivCoupleTag() {
     console.log('==== fetch couple end');
 }
 
-await fetchPixivCoupleTag();
+await getPixivCoupleTagCount();

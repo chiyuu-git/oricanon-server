@@ -19,8 +19,6 @@ export async function postFollowerRecord({
         },
         body: `projectName=${projectName}&records=${JSON.stringify(records)}&date=${date}`,
     });
-    const result = await res.json
-        ? res.json()
-        : res;
+    const result = await res.text();
     console.log(`${projectName} response:`, result);
 }
