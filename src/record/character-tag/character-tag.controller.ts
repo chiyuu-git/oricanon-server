@@ -2,7 +2,6 @@ import {
     Controller,
     Get, Post, Body, Patch, Delete,
     Query,
-    ParseArrayPipe,
 } from '@nestjs/common';
 import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CharacterRecordType, ProjectName } from '@chiyu-bit/canon.root';
@@ -31,8 +30,8 @@ export class CharacterTagController {
     @ApiQuery({ name: 'type', enum: CharacterRecordType })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
     findOne(@Query() query: QueryCharacterTagDto) {
-        const { date, projectName, type } = query;
-        return this.service.findOne({ date, projectName, type });
+        const { date, projectName, recordType } = query;
+        return this.service.findOne({ date, projectName, recordType });
     }
 
     @Patch()
@@ -40,8 +39,8 @@ export class CharacterTagController {
     update(@Body() updateCharacterTagDto: UpdateCharacterTagDto) {
         // 要么是路由带上多个param
         // 要么是从body中取
-        const { date, projectName, type } = updateCharacterTagDto;
-        return this.service.update({ date, projectName, type }, updateCharacterTagDto);
+        const { date, projectName, recordType } = updateCharacterTagDto;
+        return this.service.update({ date, projectName, recordType }, updateCharacterTagDto);
     }
 
     @Delete()
@@ -49,7 +48,7 @@ export class CharacterTagController {
     @ApiQuery({ name: 'type', enum: CharacterRecordType })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
     remove(@Query() query: QueryCharacterTagDto) {
-        const { date, projectName, type } = query;
-        return this.service.remove({ date, projectName, type });
+        const { date, projectName, recordType } = query;
+        return this.service.remove({ date, projectName, recordType });
     }
 }

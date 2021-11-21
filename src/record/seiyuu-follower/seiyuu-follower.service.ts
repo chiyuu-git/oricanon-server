@@ -1,42 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { FindAggregationRecord, FindRecord, QueryAggregationRecordDTO } from '../record.type';
+import { RecordDataService } from '../common/record-data-service';
+import { QueryOneAggtRecordDto } from '../common/dto/query-record-data.dto';
 import { CreateSeiyuuFollowerDto } from './dto/create-seiyuu-follower.dto';
 import { QuerySeiyuuFollowerDto } from './dto/query-seiyuu-follower.dto';
 import { UpdateSeiyuuFollowerDto } from './dto/update-seiyuu-follower.dto';
 import { SeiyuuFollower } from './entities/seiyuu-follower.entity';
 
 @Injectable()
-export class SeiyuuFollowerService implements FindRecord, FindAggregationRecord {
-    constructor(
-        @InjectRepository(SeiyuuFollower)
-        private repository: Repository<SeiyuuFollower>,
-    ) {}
+export class SeiyuuFollowerService extends RecordDataService {
+    // eslint-disable-next-line @typescript-eslint/no-useless-constructor
+    constructor(@InjectRepository(SeiyuuFollower) repository: Repository<SeiyuuFollower>) {
+        super(repository);
+    }
 
     async create(createSeiyuuFollowerDto: CreateSeiyuuFollowerDto) {
         await this.repository.insert(createSeiyuuFollowerDto);
         return 'This action adds a new seiyuuFollower';
-    }
-
-    findAll() {
-        return this.repository.find();
-    }
-
-    async findRecord(params: QuerySeiyuuFollowerDto) {
-        // 过滤掉 recordType seiyuu 目前只有一种
-        const { projectName, date } = params;
-        const seiyuuFollower = await this.repository.find({
-            where: { projectName, date },
-        });
-        if (seiyuuFollower.length === 0) {
-            return false;
-        }
-        return seiyuuFollower[0].records;
-    }
-
-    findAggregationRecord(params: QueryAggregationRecordDTO): Promise<false | number[]> {
-        throw new Error('Method not implemented.');
     }
 
     async findOne({ date, projectName }: QuerySeiyuuFollowerDto) {
@@ -62,5 +43,18 @@ export class SeiyuuFollowerService implements FindRecord, FindAggregationRecord 
 
     remove({ date, projectName }: QuerySeiyuuFollowerDto) {
         return `This action removes a ${date}, ${projectName} seiyuuFollower`;
+    }
+
+    findOneAggtRecord(params: QueryOneAggtRecordDto): Promise<false | number[]> {
+        throw new Error('Method not implemented.');
+    }
+
+    async findLatestDailyFetchDate() {
+        const seiyuuFollower = await this.repository.findOne({
+            order: {
+                date: 'DESC',
+            },
+        });
+        return seiyuuFollower.date;
     }
 }

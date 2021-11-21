@@ -28,10 +28,11 @@ export class CoupleTag {
 
     @PrimaryColumn({
         type: 'enum',
+        name: 'record_type',
         enum: CharacterRecordType,
         default: CharacterRecordType.illust,
     })
-    type: CharacterRecordType;
+    recordType: CharacterRecordType;
 
     @Column({ type: 'json', name: 'tags' })
     records: number[];

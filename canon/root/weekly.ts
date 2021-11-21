@@ -1,18 +1,18 @@
-import { ProjectName, BasicType, CharacterRecordType, SeiyuuRecordType, AggregationType } from './root';
+import { ProjectName, BasicType, CharacterRecordType, SeiyuuRecordType, AggregationType, DateString } from './root';
 import { CharacterInfo, CoupleInfo, SeiyuuInfo } from './member-list';
 
 interface ProjectInfo {
     projectName: ProjectName;
     projectTotal: number;
-    projectWeekIncrease: number;
-    projectWeekIncreaseRate: string;
+    projectWeekIncrement: number;
+    projectWeekIncrementRate: string;
 }
 
 interface MemberWeekInfo {
     projectName: ProjectName;
     record: number;
-    weekIncrease: number;
-    weekIncreaseRate: string;
+    weekIncrement: number;
+    weekIncrementRate: string;
 }
 
 export type MemberBasicInfo<Type extends BasicType> = Type extends BasicType.character
@@ -27,8 +27,8 @@ type MemberInfo<Type extends BasicType> = MemberWeekInfo & MemberBasicInfo<Type>
 
 export interface RecordWeeklyInfo<Type extends BasicType> {
     range: string;
-    projectInfo: ProjectInfo[];
-    memberInfo: MemberInfo<Type>[];
+    projectInfoList: ProjectInfo[];
+    memberInfoList: MemberInfo<Type>[];
 }
 
 export type CharaRecordWeeklyInfo = Record<CharacterRecordType, RecordWeeklyInfo<BasicType.character>>
@@ -44,3 +44,13 @@ export type WeeklyInfo = {
     [BasicType.couple]: CoupleRecordWeeklyInfo;
     [BasicType.seiyuu]: SeiyuuRecordWeeklyInfo;
 };
+
+export interface MemberIncrementInfo {
+    date: DateString;
+    romaName: string;
+    increment: number;
+}
+
+export type HistoricalIncrementRank = Record<ProjectName, MemberIncrementInfo[]> & {
+    historical: MemberIncrementInfo[];
+}

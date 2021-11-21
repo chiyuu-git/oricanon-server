@@ -3,7 +3,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 
-import { fetchTwitterFollower } from '../scripts/fetch-weekly-twitter-follower';
+import { fetchTwitterFollower } from '../scripts/fetch-twitter-follower';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);

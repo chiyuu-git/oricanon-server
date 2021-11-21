@@ -11,6 +11,15 @@ export const formatDate = function (dateStr: string | Date): string {
     return date.toJSON().split('T')[0];
 };
 
+export const dateDifferent = function (dateStrA: string | Date, dateStrB: string | Date): number {
+    const dateA = new Date(dateStrA);
+    const dateB = new Date(dateStrB);
+    // 两个日期相差的毫秒数
+    const different = dateA.getTime() - dateB.getTime();
+    // 返回相差了多少天
+    return different / 1000 / 60 / 60 / 24;
+};
+
 /**
  * 如果是9-25，本质还是9-18的lastRecord
  * baseDate 是9-18 fetchDay 应该是 5
@@ -21,8 +30,8 @@ export const formatDate = function (dateStr: string | Date): string {
  * @return {string} weekday
  */
 function getFetchWeekDay(date: Date) {
-    const breakChangeDate = new Date('2020-9-18');
-    if (date >= breakChangeDate) {
+    const breakChangeDate = new Date('2020-09-18');
+    if (date > breakChangeDate) {
         return 5;
     }
     return 6;
@@ -36,7 +45,7 @@ function getFetchWeekDay(date: Date) {
  * @param {string} base YYYY-MM-DD
  * @return {string} last YYYY-MM-DD
  */
-function getLastFetchDate(base: string) {
+export function getPrevWeeklyFetchDate(base: string) {
     const baseDate = new Date(base);
     const fetchWeekDay = getFetchWeekDay(baseDate);
     const baseWeekday = baseDate.getDay();
@@ -69,8 +78,8 @@ export const getRelativeDate = function (date: string) {
     const baseDate = date;
 
     // 根据base计算出last和beforeLast
-    const lastDate = getLastFetchDate(baseDate);
-    const beforeLastDate = getLastFetchDate(lastDate);
+    const lastDate = getPrevWeeklyFetchDate(baseDate);
+    const beforeLastDate = getPrevWeeklyFetchDate(lastDate);
 
     return [baseDate, lastDate, beforeLastDate];
 };

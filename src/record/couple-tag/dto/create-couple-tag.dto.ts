@@ -13,7 +13,7 @@ export class CreateCoupleTagDto {
     projectName: ProjectName;
 
     @IsString()
-    type: CharacterRecordType;
+    recordType: CharacterRecordType;
 
     @IsArray()
     @Transform(({ value }) => JSON.parse(value))

@@ -30,8 +30,8 @@ export class CoupleTagController {
     @ApiQuery({ name: 'type', enum: CharacterRecordType })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
     findOne(@Query() query: QueryCoupleTagDto) {
-        const { date, projectName, type } = query;
-        return this.coupleTagService.findOne({ date, projectName, type });
+        const { date, projectName, recordType } = query;
+        return this.coupleTagService.findOne({ date, projectName, recordType });
     }
 
     @Patch()
@@ -39,8 +39,8 @@ export class CoupleTagController {
     update(@Body() updateCoupleTagDto: UpdateCoupleTagDto) {
         // 要么是路由带上多个param
         // 要么是从body中取
-        const { date, projectName, type } = updateCoupleTagDto;
-        return this.coupleTagService.update({ date, projectName, type }, updateCoupleTagDto);
+        const { date, projectName, recordType } = updateCoupleTagDto;
+        return this.coupleTagService.update({ date, projectName, recordType }, updateCoupleTagDto);
     }
 
     @Delete()
@@ -48,7 +48,7 @@ export class CoupleTagController {
     @ApiQuery({ name: 'type', enum: CharacterRecordType })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
     remove(@Query() query: QueryCoupleTagDto) {
-        const { date, projectName, type } = query;
-        return this.coupleTagService.remove({ date, projectName, type });
+        const { date, projectName, recordType } = query;
+        return this.coupleTagService.remove({ date, projectName, recordType });
     }
 }

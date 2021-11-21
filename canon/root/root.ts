@@ -1,3 +1,5 @@
+export type DateString = string;
+
 export enum ProjectName {
     ll = 'lovelive',
     lls = 'lovelive_sunshine',

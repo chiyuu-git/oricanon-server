@@ -30,7 +30,7 @@ async function fetchPixivTotalViewCount(pixivTags) {
                 // 正则匹配 总阅览数
                 const viewRegex = /総閲覧数: (\d+)/;
                 const [match, p1] = viewRegex.exec(html);
-                totalViewCounts.push(p1);
+                totalViewCounts.push(+p1);
             }
             else {
                 totalViewCounts.push(0);
@@ -67,7 +67,7 @@ async function fetchPixivDailyViewCount(pixivTags) {
 async function postRecord({
     projectName,
     records,
-    type = 'pixiv_illust',
+    recordType = 'pixiv_illust',
     route = 'character_tag',
 }) {
     const date = new Date();
@@ -77,10 +77,10 @@ async function postRecord({
         headers: {
             'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         },
-        body: `projectName=${projectName}&records=${JSON.stringify(records)}&date=${date}&type=${type}`,
+        body: `projectName=${projectName}&records=${JSON.stringify(records)}&date=${date}&recordType=${recordType}`,
     });
     const response = await res.text();
-    console.log(`${projectName} ${type} response:`, response);
+    console.log(`${projectName} ${recordType} response:`, response);
 }
 
 async function getCharacterPixivViewCount() {
@@ -97,7 +97,7 @@ async function getCharacterPixivViewCount() {
 
         postRecord({
             projectName,
-            type: 'pixiv_tag_view',
+            recordType: 'pixiv_tag_view',
             records: viewCounts,
         });
     }

@@ -2,11 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AggregationType, CharacterRecordType } from '@chiyu-bit/canon.root';
+import { RecordDataService, RecordDataUnionKey } from '../common/record-data-service';
+import { QueryOneAggtRecordDto } from '../common/dto/query-record-data.dto';
 import { CreateCoupleTagDto } from './dto/create-couple-tag.dto';
 import { QueryCoupleTagDto } from './dto/query-conpule-tag.dto';
 import { UpdateCoupleTagDto } from './dto/update-couple-tag.dto';
 import { CoupleTag } from './entities/couple-tag.entity';
-import { FindAggregationRecord, FindRecord, QueryAggregationRecordDTO, QueryRecordDTO } from '../record.type';
 
 interface QueryUnionList {
     typeList: {
@@ -16,48 +17,34 @@ interface QueryUnionList {
     };
 }
 @Injectable()
-export class CoupleTagService implements FindRecord, FindAggregationRecord {
-    constructor(
-        @InjectRepository(CoupleTag)
-        private repository: Repository<CoupleTag>,
-    ) {}
+export class CoupleTagService extends RecordDataService {
+    // eslint-disable-next-line @typescript-eslint/no-useless-constructor
+    constructor(@InjectRepository(CoupleTag) repository: Repository<CoupleTag>) {
+        super(repository);
+    }
 
     async create(createCoupleTagDto: CreateCoupleTagDto) {
         await this.repository.insert(createCoupleTagDto);
         return 'This action adds a new coupleTag';
     }
 
-    findAll() {
-        return this.repository.find();
-    }
-
-    async findOne({ date, projectName, type }: QueryCoupleTagDto) {
+    async findOne({ date, projectName, recordType }: QueryCoupleTagDto) {
         const coupleTag = await this.repository.findOne({
             where: {
                 date,
                 projectName,
-                type,
+                recordType,
             },
         });
         return coupleTag;
     }
 
-    async findRecord(params: QueryRecordDTO) {
-        const coupleTag = await this.repository.find({
-            where: params,
-        });
-        if (coupleTag.length === 0) {
-            return false;
-        }
-        return coupleTag[0].records;
-    }
-
     /**
      * couple 聚合入口，根据 aggregationType 调用不同的聚合方法
      */
-    async findAggregationRecord(params: QueryAggregationRecordDTO): Promise<false | number[]> {
-        const { projectName, type, date } = params;
-        switch (type) {
+    async findOneAggtRecord(params: QueryOneAggtRecordDto): Promise<false | number[]> {
+        const { projectName, aggregationType, date } = params;
+        switch (aggregationType) {
             case AggregationType.coupleUnionIllust:
                 return this.findUnionIllust({ projectName, date });
             case AggregationType.coupleUnionNovel:
@@ -69,7 +56,7 @@ export class CoupleTagService implements FindRecord, FindAggregationRecord {
         }
     }
 
-    async findIllustWithNovel(params: QueryAggregationRecordDTO) {
+    async findIllustWithNovel(params: QueryOneAggtRecordDto) {
         const [unionIllustRecord, unionNovelRecord] = await Promise.all(
             [
                 this.findUnionIllust(params),
@@ -83,7 +70,7 @@ export class CoupleTagService implements FindRecord, FindAggregationRecord {
         return false;
     }
 
-    async findUnionNovel(params: QueryAggregationRecordDTO) {
+    async findUnionNovel(params: QueryOneAggtRecordDto) {
         const { projectName, date } = params;
         return this.findUnion({
             projectName,
@@ -96,7 +83,7 @@ export class CoupleTagService implements FindRecord, FindAggregationRecord {
         });
     }
 
-    async findUnionIllust(params: QueryAggregationRecordDTO) {
+    async findUnionIllust(params: QueryOneAggtRecordDto) {
         const { projectName, date } = params;
         return this.findUnion({
             projectName,
@@ -109,9 +96,10 @@ export class CoupleTagService implements FindRecord, FindAggregationRecord {
         });
     }
 
-    async findUnion(params: Omit<QueryAggregationRecordDTO, 'infoType'> & QueryUnionList) {
+    async findUnion(params: Omit<QueryOneAggtRecordDto, 'infoType'> & QueryUnionList) {
         const { projectName, date, typeList } = params;
-        const findOptionList = Object.values(typeList).map((type) => ({ projectName, date, type }));
+        const findOptionList: RecordDataUnionKey[] = Object.values(typeList)
+            .map((recordType) => ({ projectName, date, recordType }));
 
         const coupleTagArr = await this.repository.find({
             where: findOptionList,
@@ -122,9 +110,9 @@ export class CoupleTagService implements FindRecord, FindAggregationRecord {
         let reverseRecord: number[] = [];
         let intersectionRecord: number[] = [];
         for (const coupleTag of coupleTagArr) {
-            const { type, records } = coupleTag;
+            const { recordType, records } = coupleTag;
 
-            switch (type) {
+            switch (recordType) {
                 case typeList.default:
                     defaultRecord = records;
                     break;
@@ -148,17 +136,17 @@ export class CoupleTagService implements FindRecord, FindAggregationRecord {
     }
 
     async update(
-        { date, projectName, type }: QueryCoupleTagDto,
+        { date, projectName, recordType }: QueryCoupleTagDto,
         updateCoupleTagDto: UpdateCoupleTagDto,
     ) {
         const coupleTag = await this.repository.update(
-            { date, projectName, type },
+            { date, projectName, recordType },
             updateCoupleTagDto,
         );
         return coupleTag;
     }
 
-    remove({ date, projectName, type }: QueryCoupleTagDto) {
-        return `This action removes a ${date}, ${projectName}, ${type} coupleTag`;
+    remove({ date, projectName, recordType }: QueryCoupleTagDto) {
+        return `This action removes a ${date}, ${projectName}, ${recordType} coupleTag`;
     }
 }

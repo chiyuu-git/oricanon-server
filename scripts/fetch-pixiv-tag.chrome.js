@@ -76,7 +76,7 @@ async function fetchPixivTagCount({
 async function postRecord({
     projectName,
     records,
-    type = 'pixiv_illust',
+    recordType = 'pixiv_illust',
     route = 'character_tag',
 }) {
     const date = new Date();
@@ -86,10 +86,10 @@ async function postRecord({
         headers: {
             'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         },
-        body: `projectName=${projectName}&records=${JSON.stringify(records)}&date=${date}&type=${type}`,
+        body: `projectName=${projectName}&records=${JSON.stringify(records)}&date=${date}&recordType=${recordType}`,
     });
     const response = await res.text();
-    console.log(`${projectName} ${type} response:`, response);
+    console.log(`${projectName} ${recordType} response:`, response);
 }
 
 async function getPixivCharacterTagCount() {
@@ -109,7 +109,7 @@ async function getPixivCharacterTagCount() {
         postRecord({
             projectName,
             records: novels,
-            type: 'pixiv_novel',
+            recordType: 'pixiv_novel',
         });
     }
     console.log('==== fetch character end');
@@ -138,7 +138,7 @@ async function getPixivCoupleTagCount() {
             projectName,
             route,
             records: novels,
-            type: 'pixiv_novel',
+            recordType: 'pixiv_novel',
         });
     }
 
@@ -152,13 +152,13 @@ async function getPixivCoupleTagCount() {
             projectName,
             route,
             records: illusts,
-            type: 'pixiv_illust_reverse',
+            recordType: 'pixiv_illust_reverse',
         });
         postRecord({
             projectName,
             route,
             records: novels,
-            type: 'pixiv_novel_reverse',
+            recordType: 'pixiv_novel_reverse',
         });
     }
 
@@ -173,14 +173,14 @@ async function getPixivCoupleTagCount() {
             projectName,
             route,
             records: illusts,
-            type: 'pixiv_illust_intersection',
+            recordType: 'pixiv_illust_intersection',
         });
 
         postRecord({
             projectName,
             route,
             records: novels,
-            type: 'pixiv_novel_intersection',
+            recordType: 'pixiv_novel_intersection',
         });
     }
     console.log('==== fetch couple end');

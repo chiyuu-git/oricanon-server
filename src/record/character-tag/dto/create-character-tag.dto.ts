@@ -13,7 +13,7 @@ export class CreateCharacterTagDto {
 
     @IsString()
     @IsOptional()
-    type: CharacterRecordType;
+    recordType: CharacterRecordType;
 
     @IsArray()
     @Transform(({ value }) => JSON.parse(value))
