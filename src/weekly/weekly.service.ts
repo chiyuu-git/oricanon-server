@@ -5,10 +5,10 @@ import { IncrementRecord, RecordService } from 'src/record/record.service';
 import { ProjectName, BasicType, RecordType } from '@chiyu-bit/canon.root';
 import {
     RecordWeeklyInfo,
-    MemberBasicInfo,
     HistoricalIncrementRank,
     MemberIncrementInfo,
 } from '@chiyu-bit/canon.root/weekly';
+import { MemberBasicInfo } from '@chiyu-bit/canon.root/member-list';
 import type { ProjectMemberListMap } from 'src/member-list/member-list.type';
 import {
     QueryIncrementRankOfTypeInRange,
@@ -26,7 +26,6 @@ interface ProjectRelativeRecord {
 type ModuleRelativeRecord = ProjectRelativeRecord[];
 
 interface ProjectRecord {
-    projectName: ProjectName;
     records: number[];
     weekIncrementArr: number[];
     weekIncrementRateArr: string[];
@@ -92,7 +91,7 @@ export class WeeklyService implements OnApplicationBootstrap {
         const moduleTotal = 0;
         const moduleWeekIncrement = 0;
         const moduleLastWeekIncrement = 0;
-        const moduleInfo: RecordWeeklyInfo<Type> = {
+        const moduleInfo: RecordWeeklyInfo = {
             range: '',
             projectInfoList: [],
             memberInfoList: [],
@@ -130,18 +129,16 @@ export class WeeklyService implements OnApplicationBootstrap {
             return null;
         }
         const {
-            projectName,
             records,
             weekIncrementArr,
             weekIncrementRateArr,
         } = projectRecord;
 
         return memberList.map((member, i) => ({
-            projectName,
+            romaName: member.romaName,
             record: records[i],
             weekIncrement: weekIncrementArr[i],
             weekIncrementRate: weekIncrementRateArr[i],
-            ...member,
         }));
     }
 
@@ -189,7 +186,6 @@ export class WeeklyService implements OnApplicationBootstrap {
 
         return {
             projectRecord: {
-                projectName,
                 records: baseRecord,
                 weekIncrementArr,
                 weekIncrementRateArr,

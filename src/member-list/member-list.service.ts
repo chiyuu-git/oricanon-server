@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BasicType } from '@chiyu-bit/canon.root';
-import { MemberListTypeMap, ProjectMemberListMap } from './member-list.type';
+import { MemberInfoMap } from '@chiyu-bit/canon.root/member-list';
+import { MemberListType, ProjectMemberListMap } from './member-list.type';
 import { CreateMemberListDto } from './dto/create-member-list.dto';
 import { QueryMemberListDto } from './dto/query-member-list-dto';
 import { UpdateMemberListDto } from './dto/update-member-list.dto';
@@ -45,7 +46,7 @@ export class MemberListService {
         return `This action removes a #${projectName} ${type} memberList`;
     }
 
-    async findListByType<T extends keyof MemberListTypeMap>(type: T): Promise<MemberListTypeMap[T][]> {
+    async findListByType<Type extends BasicType>(type: Type): Promise<MemberListType<Type>[]> {
         const memberList = await this.repository.find({
             select: ['projectName', 'list'],
             where: { type },
@@ -53,7 +54,7 @@ export class MemberListService {
         /**
          * TODO: 这里使用了一个强制断言，看下是否有更好的方法实现
          */
-        return memberList as unknown as MemberListTypeMap[T][];
+        return memberList as unknown as MemberListType<Type>[];
     }
 
     /**
@@ -131,5 +132,24 @@ export class MemberListService {
             }
         }
         return projectMemberListMap;
+    }
+
+    /**
+     * 获取基础类型的 memberInfoMap
+     */
+    async findMemberInfoMapOfType<Type extends BasicType>(basicType: Type) {
+        const memberLists = await this.findListByType<Type>(basicType);
+        const memberInfoMap: MemberInfoMap<Type> = {} as MemberInfoMap<Type>;
+        for (const memberList of memberLists) {
+            const { projectName, list } = memberList;
+            for (const memberInfo of list) {
+                const { romaName } = memberInfo;
+                memberInfoMap[romaName] = {
+                    projectName,
+                    ...memberInfo,
+                };
+            }
+        }
+        return memberInfoMap;
     }
 }

@@ -45,10 +45,16 @@ export async function fetchTwitterFollower() {
     try {
     // 获取 seiyuu twitterAccount
         const response = await superagent.get(`${HOST}/member_list/all_seiyuu_twitter_account`);
+
         const twitterFollowerList: TwitterFollowerList = response.body;
 
         // 获取网页上所有的推特账号
-        const html = await superagent.get(WEEKLY_SEIYUU_SITE);
+        const html = await superagent
+            .get(WEEKLY_SEIYUU_SITE)
+        // eslint-disable-next-line max-len
+            .set('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36')
+            .set('Host', 'headline.client.jp');
+        // .set('Referer', 'http://www.xxx.net/');
         const $ = cheerio.load(html.text);
         const allAccountNode = $('#f_rank>tbody>tr>td>a');
 

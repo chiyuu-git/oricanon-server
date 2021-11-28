@@ -94,4 +94,19 @@ export class MemberListController {
 
         return formatList;
     }
+
+    /**
+     * 返回以 projectName 为主要字段整合全部 memberList
+     */
+    @Get('member_info_map')
+    @ApiQuery({ name: 'type', enum: BasicType })
+    async getMemberInfoMapOfType(@Query('type') type: BasicType) {
+        if (BasicType[type]) {
+            const memberInfoMap = await this.service.findMemberInfoMapOfType(type);
+
+            return memberInfoMap;
+        }
+
+        return `type ${type} not exist`;
+    }
 }

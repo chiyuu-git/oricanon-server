@@ -74,6 +74,7 @@ async function postRecord({
     const url = `${HOST}/${route}`;
     const res = await fetch(url, {
         method: 'post',
+        mode: 'cors',
         headers: {
             'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         },
@@ -85,7 +86,7 @@ async function postRecord({
 
 async function getCharacterPixivViewCount() {
     console.log('==== fetch character view start');
-    const data = await fetch(`${HOST}/member_list/all_character_tag`);
+    const data = await fetch(`${HOST}/member_list/all_character_tag`, { mode: 'cors' });
     const characterTagLists = await data.json();
     console.log('characterTagLists:', characterTagLists);
 
@@ -101,6 +102,8 @@ async function getCharacterPixivViewCount() {
             records: viewCounts,
         });
     }
+
+    console.log('==== fetch character view end');
 }
 
 await getCharacterPixivViewCount();

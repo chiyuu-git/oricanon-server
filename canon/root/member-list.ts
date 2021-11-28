@@ -1,3 +1,5 @@
+import { BasicType, ProjectName } from './root';
+
 export interface CharacterInfo {
     name: string;
     /**
@@ -9,9 +11,9 @@ export interface CharacterInfo {
 }
 export interface CoupleInfo {
     /**
-     * couple 元组由两名成员组成，按公式顺序开始排列组合
+     * couple 两名成员的名字拼串而成，按公式顺序开始排列组合
      */
-    couple: [string, string];
+    name: string;
     /**
      * couple romaName 由上述元组拼串组成 e.g: kanon-keke
      */
@@ -28,4 +30,18 @@ export interface SeiyuuInfo {
      */
     romaName: string;
     twitterAccount: string;
+}
+
+export type MemberBasicInfo<Type extends BasicType> = Type extends BasicType.character
+    ? CharacterInfo
+    : Type extends BasicType.couple
+        ? CoupleInfo
+        : Type extends BasicType.seiyuu
+            ? SeiyuuInfo
+            : never
+
+export type MemberInfoMap<Type extends BasicType > = {
+    [romaName in string]: MemberBasicInfo<Type> & {
+        projectName: ProjectName;
+    }
 }
