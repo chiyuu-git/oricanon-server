@@ -1,7 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
-    QueryIncrementRankOfTypeInRange,
     QueryInfoTypeWeekly,
     QueryWeeklyDetail,
 } from './query-weekly-info.dto';
@@ -25,10 +24,5 @@ export class WeeklyController {
         const { projectName, endDate } = query;
         // console.log(query);
         return this.service.getTwitterFollowerWeeklyDetail({ projectName, endDate });
-    }
-
-    @Get('/increment_rank_of_type_in_range')
-    findIncrementRankOfTypeInRange(@Query() query: QueryIncrementRankOfTypeInRange) {
-        return this.service.getIncrementRankOfTypeInRange(query);
     }
 }

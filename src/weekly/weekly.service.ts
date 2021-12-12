@@ -1,17 +1,14 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 // service
 import { MemberListService } from 'src/member-list/member-list.service';
-import { IncrementRecord, RecordService } from 'src/record/record.service';
-import { ProjectName, BasicType, RecordType } from '@chiyu-bit/canon.root';
+import { RecordService } from 'src/record/record.service';
+import { ProjectName, BasicType, SeiyuuRecordType } from '@chiyu-bit/canon.root';
 import {
     RecordWeeklyInfo,
-    HistoricalIncrementRank,
-    MemberIncrementInfo,
 } from '@chiyu-bit/canon.root/weekly';
 import { MemberBasicInfo } from '@chiyu-bit/canon.root/member-list';
 import type { ProjectMemberListMap } from 'src/member-list/member-list.type';
 import {
-    QueryIncrementRankOfTypeInRange,
     QueryInfoTypeWeekly,
     QueryWeeklyDetail,
 } from './query-weekly-info.dto';
@@ -30,12 +27,6 @@ interface ProjectRecord {
     weekIncrementArr: number[];
     weekIncrementRateArr: string[];
 }
-
-type IncrementRecordOfTypeInRange = {
-    projectName: ProjectName;
-    recordType: RecordType;
-    incrementRecordInRange: IncrementRecord[];
-}[]
 
 @Injectable()
 export class WeeklyService implements OnApplicationBootstrap {
@@ -88,9 +79,9 @@ export class WeeklyService implements OnApplicationBootstrap {
         moduleType: Type,
         moduleRelativeRecord: ModuleRelativeRecord,
     ) {
-        const moduleTotal = 0;
-        const moduleWeekIncrement = 0;
-        const moduleLastWeekIncrement = 0;
+        // const moduleTotal = 0;
+        // const moduleWeekIncrement = 0;
+        // const moduleLastWeekIncrement = 0;
         const moduleInfo: RecordWeeklyInfo = {
             range: '',
             projectInfoList: [],
@@ -206,91 +197,15 @@ export class WeeklyService implements OnApplicationBootstrap {
      * 3. 星/虹动画期间的日增线，平均线，这些线似乎可以加到 incrementRank，需要一个均线服务
      * 4. 需要一个分位线服务
      */
-    async getTwitterFollowerWeeklyDetail({ projectName, endDate }: QueryWeeklyDetail) {
+    async getTwitterFollowerWeeklyDetail({ endDate }: QueryWeeklyDetail) {
         const { from, to } = await this.recordService.findWeekRange(endDate);
-        const result = await this.recordService.findRangeRecordByUnionKey({ from, to });
-        return result;
-    }
-
-    /**
-     * 查找历史周增数组，先整理出排序后的数组，计算百分位套用公式即可
-     * 默认维度 basicType projectName infoType
-     */
-    async getIncrementRankOfTypeInRange({
-        basicType,
-        recordType,
-        from,
-        to,
-    }: QueryIncrementRankOfTypeInRange) {
-        // 每个企划的历史周增数据
-        const incrementRecordOfTypeInRange = await this.recordService.findIncrementRecordOfTypeInRange(
-            basicType,
-            [...Object.values(ProjectName)],
-            recordType,
+        const result = await this.recordService.findRangeRecordByUnionKey({
+            basicType: BasicType.seiyuu,
+            recordType: SeiyuuRecordType.twitterFollower,
+            projectName: ProjectName.llss,
             from,
             to,
-        );
-        const incrementRankOfTypeInRange = this.processIncrementRecord(basicType, incrementRecordOfTypeInRange);
-
-        return incrementRankOfTypeInRange;
-    }
-
-    /**
-     * 获取企划内 incrementRecord 排序后的数组
-     * 与 range、type 维度无关，函数内部的变量名均无 range、type
-     */
-    private processIncrementRecord<Type extends BasicType>(
-        basicType: Type,
-        incrementRecordOfTypeInRange: IncrementRecordOfTypeInRange,
-    ) {
-        const historicalIncrementRank: HistoricalIncrementRank = {
-            historical: [],
-        } as HistoricalIncrementRank;
-        // 企划内排序
-        for (const projectIncrementRecord of incrementRecordOfTypeInRange) {
-            const { projectName, incrementRecordInRange: IncrementRecordInRange } = projectIncrementRecord;
-
-            const sortedProjectIncrementInfo = this.processProjectIncrementRecord<Type>(
-                IncrementRecordInRange,
-                this.projectMemberListMap[projectName][`${basicType}s`],
-            );
-
-            historicalIncrementRank[projectName] = sortedProjectIncrementInfo;
-            historicalIncrementRank.historical.push(...sortedProjectIncrementInfo);
-        }
-
-        // 全部企划再排序
-        historicalIncrementRank.historical = historicalIncrementRank.historical
-            .sort((a, b) => a.increment - b.increment);
-
-        return historicalIncrementRank;
-    }
-
-    /**
-     * flatten 企划内所有的增量记录，并添加上成员信息，排序后返回
-     */
-    private processProjectIncrementRecord<Type extends BasicType>(
-        IncrementRecordInRange: IncrementRecord[],
-        memberList: MemberBasicInfo<Type>[],
-    ) {
-        const projectIncrementInfoArray: MemberIncrementInfo[] = [];
-        // 1. flatten & add member info
-        for (const { date, records } of IncrementRecordInRange) {
-            const len = records.length;
-            for (let index = 0; index < len; index++) {
-                const increment = records[index];
-                const { romaName } = memberList[index];
-                projectIncrementInfoArray.push({
-                    date,
-                    increment,
-                    romaName,
-                });
-            }
-        }
-        // 2. sort
-        const sortedProjectIncrementInfo = projectIncrementInfoArray
-            .sort((a, b) => a.increment - b.increment);
-
-        return sortedProjectIncrementInfo;
+        });
+        return result;
     }
 }

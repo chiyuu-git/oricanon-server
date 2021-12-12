@@ -56,3 +56,8 @@ export function isRecordType(infoType: InfoType): infoType is RecordType {
     return Object.values(CharacterRecordType).includes(infoType as CharacterRecordType)
         || Object.values(SeiyuuRecordType).includes(infoType as SeiyuuRecordType);
 }
+
+export interface Record {
+    date: DateString;
+    records: number[];
+}

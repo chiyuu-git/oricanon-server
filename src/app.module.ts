@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 import { MemberListModule } from './member-list/member-list.module';
 import { WeeklyModule } from './weekly/weekly.module';
 import { RecordModule } from './record/record.module';
+import { SummaryModule } from './summary/summary.module';
 
 @Module({
     imports: [
@@ -32,6 +33,7 @@ import { RecordModule } from './record/record.module';
         MemberListModule,
         WeeklyModule,
         RecordModule,
+        SummaryModule,
     ],
     controllers: [AppController],
     providers: [AppService],

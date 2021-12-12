@@ -34,15 +34,6 @@ export class SeiyuuFollowerController {
         return this.service.findOne({ date, projectName });
     }
 
-    @Get('/seiyuu_follower_between_range')
-    @ApiQuery({ name: 'from', type: 'string' })
-    @ApiQuery({ name: 'to', type: 'string' })
-    @ApiQuery({ name: 'projectName', enum: ProjectName })
-    findRangeRecord(@Query() query: QueryRangeRecordDto) {
-        const { from, to, projectName } = query;
-        return this.service.findRecordInRange({ from, to, projectName, recordType: SeiyuuRecordType.twitterFollower });
-    }
-
     @Patch()
     @ApiBody({ type: UpdateSeiyuuFollowerDto })
     update(@Body() updateSeiyuuFollowerDto: UpdateSeiyuuFollowerDto) {

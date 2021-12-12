@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ProjectName, BasicType, RecordType, isRecordType, InfoType, DateString } from '@chiyu-bit/canon.root';
+import { ProjectName, BasicType, RecordType, isRecordType, InfoType, DateString, Record } from '@chiyu-bit/canon.root';
 import { getPrevWeeklyFetchDate, getRelativeDate } from 'src/utils';
 import { CharacterTagService } from './character-tag/character-tag.service';
 import { CoupleTagService } from './couple-tag/couple-tag.service';
@@ -11,16 +11,15 @@ const serviceMap = {
 
     [BasicType.couple]: 'coupleTagService',
 
-    [BasicType.seiyuu]: 'seiyuuFollowService',
+    [BasicType.seiyuu]: 'seiyuuFollowerService',
 };
 
 type RelativeDate = DateString[];
 
 interface FindRangeRecordByUnionKey {
-    // 目前仅支持 seiyuu 模块，twitterFollower 类型，所以减少一些参数
-    // basicType: BasicType;
-    // projectName: ProjectName
-    // infoType: InfoType;
+    basicType: BasicType;
+    projectName: ProjectName;
+    recordType: InfoType;
     from: string;
     to: string;
 }
@@ -35,16 +34,12 @@ interface FindProjectIncrementRecordOfTypeInRange {
     to?: DateString;
 }
 
-export interface IncrementRecord {
-    date: DateString;
-    records: number[];
-}
 @Injectable()
 export class RecordService {
     constructor(
         // RecordDataService 总共有三种 character seiyuu couple 均实现了 RecordDataService 接口
         private readonly characterTagService: CharacterTagService,
-        private readonly seiyuuFollowService: SeiyuuFollowerService,
+        private readonly seiyuuFollowerService: SeiyuuFollowerService,
         private readonly coupleTagService: CoupleTagService,
     ) {}
 
@@ -149,7 +144,7 @@ export class RecordService {
 
         if (!baseDate) {
             // 如果 baseDate 为空，默认获取最后一条作为 baseDate
-            baseDate = await this.seiyuuFollowService.findLatestDailyFetchDate();
+            baseDate = await this.seiyuuFollowerService.findLatestDailyFetchDate();
         }
 
         // 从上一个获取日到 baseDate，以上一个获取日的数据作为起点
@@ -166,17 +161,24 @@ export class RecordService {
      * 默认维度 unionKey
      */
     async findRangeRecordByUnionKey({
+        basicType,
+        recordType,
+        projectName,
         from,
         to,
-    }: FindRangeRecordByUnionKey) {
-        // 隐藏了 basicType 和 infoType
-        // const result = await this.seiyuuFollowService.findRangeRecord({
-        //     from,
-        //     to,
-        //     // 默认的 projectName
-        //     projectName: ProjectName.llss,
-        // });
-        // return result;
+    }: FindRangeRecordByUnionKey): Promise<Record[] | false> {
+        const service = serviceMap[basicType];
+
+        if (!service) {
+            return false;
+        }
+
+        return this[service].findRecordInRange({
+            recordType,
+            projectName,
+            from,
+            to,
+        });
     }
 
     /**
@@ -230,7 +232,7 @@ export class RecordService {
         });
 
         // 倒过来获取周增数组
-        const incrementRecordInRange: IncrementRecord[] = [];
+        const incrementRecordInRange: Record[] = [];
         let i = recordInRange.length - 1;
         let curRecord = recordInRange[i];
         while (i > 0) {

@@ -1,5 +1,4 @@
-import { ProjectName, BasicType, DateString } from './root';
-import { MemberBasicInfo } from './member-list';
+import { ProjectName } from './root';
 
 interface ProjectInfo {
     projectName: ProjectName;
@@ -20,12 +19,4 @@ export interface RecordWeeklyInfo {
     projectInfoList: ProjectInfo[];
     memberInfoList: MemberWeeklyInfo[];
 }
-export interface MemberIncrementInfo {
-    date: DateString;
-    romaName: string;
-    increment: number;
-}
 
-export type HistoricalIncrementRank = Record<ProjectName, MemberIncrementInfo[]> & {
-    historical: MemberIncrementInfo[];
-}
