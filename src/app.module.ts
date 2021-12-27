@@ -10,6 +10,7 @@ import { MemberListModule } from './member-list/member-list.module';
 import { WeeklyModule } from './weekly/weekly.module';
 import { RecordModule } from './record/record.module';
 import { SummaryModule } from './summary/summary.module';
+import { MemberInfoModule } from './member-info/member-info.module';
 
 @Module({
     imports: [
@@ -18,7 +19,7 @@ import { SummaryModule } from './summary/summary.module';
             host: 'localhost',
             port: 3306,
             username: 'root',
-            password: '123456',
+            password: '',
             database: 'canon',
             autoLoadEntities: true,
             synchronize: false,
@@ -34,6 +35,7 @@ import { SummaryModule } from './summary/summary.module';
         WeeklyModule,
         RecordModule,
         SummaryModule,
+        MemberInfoModule,
     ],
     controllers: [AppController],
     providers: [AppService],
