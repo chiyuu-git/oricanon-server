@@ -1,27 +1,11 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { ProjectName } from '@chiyu-bit/canon.root';
+import { Column, Entity } from 'typeorm';
+import { Member } from './member.entity';
 
 @Entity({
     database: 'canon_member',
     name: 'chara_couple_info',
 })
-export class CoupleInfo {
-    @Column({
-        name: 'project_name',
-        enum: ProjectName,
-        default: ProjectName.llss,
-    })
-    projectName: ProjectName;
-
-    @Column({ type: 'varchar' })
-    name;
-
-    @PrimaryColumn({
-        type: 'varchar',
-        name: 'roma_name',
-    })
-    romaName;
-
+export class CoupleInfo extends Member {
     @Column({
         type: 'varchar',
         name: 'pixiv_tag',
@@ -33,10 +17,4 @@ export class CoupleInfo {
         name: 'pixiv_reverse_tag',
     })
     pixivReverseTag;
-
-    @Column({
-        type: 'varchar',
-        name: 'support_color',
-    })
-    supportColor;
 }

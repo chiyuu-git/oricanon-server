@@ -6,7 +6,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { resolve } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MemberListModule } from './member-list/member-list.module';
 import { WeeklyModule } from './weekly/weekly.module';
 import { RecordModule } from './record/record.module';
 import { SummaryModule } from './summary/summary.module';
@@ -23,7 +22,7 @@ import { MemberInfoModule } from './member-info/member-info.module';
             database: 'canon',
             autoLoadEntities: true,
             synchronize: false,
-            logging: false,
+            // logging: ['query', 'error'],
         }),
         ServeStaticModule.forRoot({
             // 相对于打包后的dist目录
@@ -31,11 +30,10 @@ import { MemberInfoModule } from './member-info/member-info.module';
             rootPath: resolve(__dirname, '../../public'),
 
         }),
-        MemberListModule,
+        MemberInfoModule,
         WeeklyModule,
         RecordModule,
         SummaryModule,
-        MemberInfoModule,
     ],
     controllers: [AppController],
     providers: [AppService],

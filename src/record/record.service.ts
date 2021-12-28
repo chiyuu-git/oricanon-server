@@ -7,7 +7,7 @@ import { SeiyuuFollowerService } from './seiyuu-follower/seiyuu-follower.service
 import { RecordDataService } from './common/record-data-service';
 
 const serviceMap = {
-    [BasicType.character]: 'characterTagService',
+    [BasicType.chara]: 'characterTagService',
 
     [BasicType.couple]: 'coupleTagService',
 

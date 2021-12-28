@@ -1,38 +1,16 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { ProjectName } from '@chiyu-bit/canon.root';
+import { Column, Entity } from 'typeorm';
+import { Member } from './member.entity';
 
 @Entity({
     database: 'canon_member',
     name: 'seiyuu_info',
 })
-export class SeiyuuInfo {
-    @Column({
-        name: 'project_name',
-        enum: ProjectName,
-        default: ProjectName.llss,
-    })
-    projectName: ProjectName;
-
-    @Column({ type: 'varchar' })
-    name;
-
-    @PrimaryColumn({
-        type: 'varchar',
-        name: 'roma_name',
-    })
-    romaName;
-
+export class SeiyuuInfo extends Member {
     @Column({
         type: 'varchar',
         name: 'twitter_account',
     })
     twitterAccount;
-
-    @Column({
-        type: 'varchar',
-        name: 'support_color',
-    })
-    supportColor;
 
     @Column({
         type: 'varchar',

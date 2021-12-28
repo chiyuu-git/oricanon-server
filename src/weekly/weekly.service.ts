@@ -1,13 +1,13 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 // service
-import { MemberListService } from 'src/member-list/member-list.service';
+import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordService } from 'src/record/record.service';
 import { ProjectName, BasicType, SeiyuuRecordType } from '@chiyu-bit/canon.root';
+import { MemberInfoTypeMap } from '@chiyu-bit/canon.root//member-info';
 import {
     RecordWeeklyInfo,
 } from '@chiyu-bit/canon.root/weekly';
-import { MemberBasicInfo } from '@chiyu-bit/canon.root/member-list';
-import type { ProjectMemberListMap } from 'src/member-list/member-list.type';
+import { ProjectMemberListMap } from 'src/member-info/common';
 import {
     QueryInfoTypeWeekly,
     QueryWeeklyDetail,
@@ -34,14 +34,14 @@ export class WeeklyService implements OnApplicationBootstrap {
 
     constructor(
         private readonly recordService: RecordService,
-        private readonly memberListService: MemberListService,
+        private readonly memberInfoService: MemberInfoService,
     ) {}
 
     /**
      * 生命周期 初始化
      */
     async onApplicationBootstrap() {
-        this.projectMemberListMap = await this.memberListService.formatListWithProject();
+        this.projectMemberListMap = await this.memberInfoService.formatListWithProject();
     }
 
     async getInfoTypeWeekly({ basicType, infoType, endDate }: QueryInfoTypeWeekly) {
@@ -114,7 +114,7 @@ export class WeeklyService implements OnApplicationBootstrap {
      */
     private formatRecordWithMemberList<Type extends BasicType>(
         projectRecord: ProjectRecord,
-        memberList: MemberBasicInfo<Type>[],
+        memberList: MemberInfoTypeMap[Type][],
     ) {
         if (!projectRecord) {
             return null;

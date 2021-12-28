@@ -1,11 +1,11 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { BasicType, ProjectName, RecordType, Record } from '@chiyu-bit/canon.root';
-import { MemberBasicInfo } from '@chiyu-bit/canon.root/member-list';
+import { MemberInfoTypeMap } from '@chiyu-bit/canon.root/member-info';
 import { HistoricalIncrementRank, MemberIncrementInfo } from '@chiyu-bit/canon.root/summary';
-import { MemberListService } from 'src/member-list/member-list.service';
+import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordService } from 'src/record/record.service';
 
-import { ProjectMemberListMap } from 'src/member-list/member-list.type';
+import { ProjectMemberListMap } from 'src/member-info/common';
 import { QueryIncrementRankOfTypeInRange, QueryRelativeIncrementOfTypeInRange } from './query-summary-info.dto';
 
 type IncrementRecordOfTypeInRange = {
@@ -20,14 +20,14 @@ export class SummaryService implements OnApplicationBootstrap {
 
     constructor(
         private readonly recordService: RecordService,
-        private readonly memberListService: MemberListService,
+        private readonly memberInfoService: MemberInfoService,
     ) {}
 
     /**
      * 生命周期 初始化
      */
     async onApplicationBootstrap() {
-        this.projectMemberListMap = await this.memberListService.formatListWithProject();
+        this.projectMemberListMap = await this.memberInfoService.formatListWithProject();
     }
 
     /**
@@ -89,7 +89,7 @@ export class SummaryService implements OnApplicationBootstrap {
      */
     private processProjectIncrementRecord<Type extends BasicType>(
         IncrementRecordInRange: Record[],
-        memberList: MemberBasicInfo<Type>[],
+        memberList: MemberInfoTypeMap[Type][],
     ) {
         const projectIncrementInfoArray: MemberIncrementInfo[] = [];
         // 1. flatten & add member info

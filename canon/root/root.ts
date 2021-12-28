@@ -8,7 +8,7 @@ export enum ProjectName {
 }
 
 export enum BasicType {
-    character = 'character',
+    chara = 'chara',
     seiyuu = 'seiyuu',
     couple = 'couple',
 }
