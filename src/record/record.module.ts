@@ -3,6 +3,7 @@ import { RecordService } from './record.service';
 import { CharacterTagModule } from './character-tag/character-tag.module';
 import { CoupleTagModule } from './couple-tag/couple-tag.module';
 import { SeiyuuFollowerModule } from './seiyuu-follower/seiyuu-follower.module';
+import { RecordController } from './record.controller';
 
 @Module({
     imports: [

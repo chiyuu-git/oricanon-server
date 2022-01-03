@@ -13,7 +13,7 @@ export enum BasicType {
     couple = 'couple',
 }
 
-export enum CharacterRecordType {
+export enum CharaRecordType {
     illust = 'pixiv_illust',
     illustReverse = 'pixiv_illust_reverse',
     illustIntersection = 'pixiv_illust_intersection',
@@ -30,15 +30,27 @@ export enum CharacterRecordType {
     tagView = 'pixiv_tag_view'
 }
 
+export enum CoupleRecordType {
+    illust = 'pixiv_illust',
+    illustReverse = 'pixiv_illust_reverse',
+    illustIntersection = 'pixiv_illust_intersection',
+    novel = 'pixiv_novel',
+    novelReverse = 'pixiv_novel_reverse',
+    novelIntersection = 'pixiv_novel_intersection',
+    r18 = 'pixiv_r18',
+    r18Reverse = 'pixiv_r18_reverse',
+    r18Intersection = 'pixiv_r18_intersection',
+}
+
 export enum SeiyuuRecordType {
     twitterFollower = 'twitter_follower',
     youtube = 'youtube',
     ins = 'ins'
 }
 
-// export type RecordType = CharacterRecordType | SeiyuuRecordType
+// export type RecordType = CharaRecordType | SeiyuuRecordType
 // TODO: 不同的 basicType 对应的 recordType 理论上来说是不同，是否有办法通过泛型区分？
-export type RecordType = CharacterRecordType | SeiyuuRecordType;
+export type RecordType = CharaRecordType | CoupleRecordType | SeiyuuRecordType;
 
 /**
  * AggregationRecordType
@@ -53,7 +65,7 @@ export enum AggregationType {
 export type InfoType = RecordType | AggregationType;
 
 export function isRecordType(infoType: InfoType): infoType is RecordType {
-    return Object.values(CharacterRecordType).includes(infoType as CharacterRecordType)
+    return Object.values(CharaRecordType).includes(infoType as CharaRecordType)
         || Object.values(SeiyuuRecordType).includes(infoType as SeiyuuRecordType);
 }
 

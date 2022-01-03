@@ -4,7 +4,7 @@ import {
     Query,
 } from '@nestjs/common';
 import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { ProjectName, CharacterRecordType } from '@chiyu-bit/canon.root';
+import { ProjectName, CharaRecordType } from '@chiyu-bit/canon.root';
 import { CoupleTagService } from './couple-tag.service';
 import { CreateProjectCoupleRecordDto } from './dto/create-couple-tag.dto';
 import { QueryCoupleTagDto } from './dto/query-conpule-tag.dto';
@@ -22,7 +22,7 @@ export class CoupleTagController {
 
     @Get('/couple_tag')
     @ApiQuery({ name: 'date', type: 'string' })
-    @ApiQuery({ name: 'type', enum: CharacterRecordType })
+    @ApiQuery({ name: 'type', enum: CharaRecordType })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
     findOne(@Query() query: QueryCoupleTagDto) {
         const { date, projectName, recordType } = query;

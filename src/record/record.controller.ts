@@ -4,8 +4,7 @@ import {
     Query,
 } from '@nestjs/common';
 import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { CharacterRecordType, ProjectName } from '@chiyu-bit/canon.root';
-import { CharaRecordType } from '@chiyu-bit/canon.root/record';
+import { CharaRecordType, ProjectName } from '@chiyu-bit/canon.root';
 import { RecordService } from './record.service';
 import { CreateRecordDto } from './dto/create-record.dto';
 import { QueryRecordDTO } from './dto/query-record.dto';

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CharacterRecordType, ProjectName } from '@chiyu-bit/canon.root';
+import { CharaRecordType, ProjectName } from '@chiyu-bit/canon.root';
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordDataService } from '../common/record-data-service';
 import { QueryOneAggtRecordDto } from '../common/dto/query-record-data.dto';
@@ -107,10 +107,10 @@ export class CharacterTagService extends RecordDataService {
             const { recordType, records } = characterRecord;
 
             switch (recordType) {
-                case CharacterRecordType.illust:
+                case CharaRecordType.illust:
                     illustRecord = records;
                     break;
-                case CharacterRecordType.novel:
+                case CharaRecordType.novel:
                     novelRecord = records;
                     break;
                 default:

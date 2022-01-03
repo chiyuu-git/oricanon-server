@@ -1,5 +1,5 @@
 import { IsString } from 'class-validator';
-import { CharacterRecordType, BasicType, ProjectName, RecordType } from '@chiyu-bit/canon.root';
+import { CharaRecordType, BasicType, ProjectName, RecordType } from '@chiyu-bit/canon.root';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class QueryIncrementRankOfTypeInRange {
@@ -10,7 +10,7 @@ export class QueryIncrementRankOfTypeInRange {
     @ApiProperty({
         // swagger 不清楚联合类型 RecordType 的基础类型是啥，所以需要显式声明
         type: String,
-        default: CharacterRecordType.illust,
+        default: CharaRecordType.illust,
     })
     recordType: RecordType;
 

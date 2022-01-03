@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AggregationType, CharacterRecordType, ProjectName } from '@chiyu-bit/canon.root';
+import { AggregationType, CharaRecordType, ProjectName } from '@chiyu-bit/canon.root';
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordDataService, RecordDataUnionKey } from '../common/record-data-service';
 import { QueryOneAggtRecordDto } from '../common/dto/query-record-data.dto';
@@ -13,9 +13,9 @@ import { CoupleRecordEntity } from '../common/record.entity';
 
 interface QueryUnionList {
     typeList: {
-        default: CharacterRecordType;
-        reverse: CharacterRecordType;
-        intersection: CharacterRecordType;
+        default: CharaRecordType;
+        reverse: CharaRecordType;
+        intersection: CharaRecordType;
     };
 }
 @Injectable()
@@ -114,9 +114,9 @@ export class CoupleTagService extends RecordDataService {
             projectName,
             date,
             typeList: {
-                default: CharacterRecordType.novel,
-                reverse: CharacterRecordType.novelReverse,
-                intersection: CharacterRecordType.novelIntersection,
+                default: CharaRecordType.novel,
+                reverse: CharaRecordType.novelReverse,
+                intersection: CharaRecordType.novelIntersection,
             },
         });
     }
@@ -127,9 +127,9 @@ export class CoupleTagService extends RecordDataService {
             projectName,
             date,
             typeList: {
-                default: CharacterRecordType.illust,
-                reverse: CharacterRecordType.illustReverse,
-                intersection: CharacterRecordType.illustIntersection,
+                default: CharaRecordType.illust,
+                reverse: CharaRecordType.illustReverse,
+                intersection: CharaRecordType.illustIntersection,
             },
         });
     }
