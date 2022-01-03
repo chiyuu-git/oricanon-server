@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ProjectName, BasicType, RecordType, isRecordType, InfoType, DateString, Record } from '@chiyu-bit/canon.root';
 import { getPrevWeeklyFetchDate, getRelativeDate } from 'src/utils';
+import { MemberInfoService } from 'src/member-info/member-info.service';
 import { CharacterTagService } from './character-tag/character-tag.service';
 import { CoupleTagService } from './couple-tag/couple-tag.service';
 import { SeiyuuFollowerService } from './seiyuu-follower/seiyuu-follower.service';
 import { RecordDataService } from './common/record-data-service';
+import { CreateRecordDto } from './dto/create-record.dto';
 
 const serviceMap = {
     [BasicType.chara]: 'characterTagService',
@@ -37,11 +39,14 @@ interface FindProjectIncrementRecordOfTypeInRange {
 @Injectable()
 export class RecordService {
     constructor(
+        private readonly memberInfoService: MemberInfoService,
         // RecordDataService 总共有三种 character seiyuu couple 均实现了 RecordDataService 接口
         private readonly characterTagService: CharacterTagService,
         private readonly seiyuuFollowerService: SeiyuuFollowerService,
         private readonly coupleTagService: CoupleTagService,
     ) {}
+
+    create({ date, recordType, romaName, record }: CreateRecordDto) {}
 
     /**
      * 获取 recordType 对应的 module 下，所有企划的相关数据

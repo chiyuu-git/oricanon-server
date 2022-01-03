@@ -1,7 +1,7 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column } from 'typeorm';
 import { ProjectName } from '@chiyu-bit/canon.root';
 
-export abstract class Member {
+export abstract class MemberInfo {
     @Column({
         type: 'varchar',
         name: 'project_name',
@@ -11,7 +11,7 @@ export abstract class Member {
     @Column({ type: 'varchar' })
     name;
 
-    @PrimaryColumn({
+    @Column({
         type: 'varchar',
         name: 'roma_name',
     })

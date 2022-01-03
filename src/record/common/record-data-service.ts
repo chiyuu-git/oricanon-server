@@ -4,6 +4,9 @@
 
 import { Between, Repository } from 'typeorm';
 import { ProjectName, RecordType } from '@chiyu-bit/canon.root';
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import { MemberInfoService } from 'src/member-info/member-info.service';
+import { ProjectMemberListMap } from 'src/member-info/common';
 import { QueryOneAggtRecordDto, QueryOneRecordDto, QueryRangeRecordDto } from './dto/query-record-data.dto';
 
 export interface RecordDataEntity {
@@ -24,12 +27,25 @@ export interface RecordDataUnionKey {
     recordType: RecordType;
 }
 
-// TODO: 改造成泛型类，提升 create findOne 等方法？ 会不会导致太复杂了呢？ 万一以后新增更多的种类
-export abstract class RecordDataService {
+// TODO: 改造成泛型类，传入实体，提升 create findOne 等方法？ 会不会导致太复杂了呢？ 万一以后新增更多的种类
+export class RecordDataService implements OnApplicationBootstrap {
     protected repository: Repository<RecordDataEntity>
 
-    constructor(repository: Repository<RecordDataEntity>) {
+    projectMemberListMap: ProjectMemberListMap;
+
+    constructor(
+        repository: Repository<RecordDataEntity>,
+        readonly memberInfoService: MemberInfoService,
+    ) {
         this.repository = repository;
+        this.memberInfoService = memberInfoService;
+    }
+
+    /**
+     * 生命周期 初始化
+     */
+    async onApplicationBootstrap() {
+        this.projectMemberListMap = await this.memberInfoService.formatListWithProject();
     }
 
     findAll() {

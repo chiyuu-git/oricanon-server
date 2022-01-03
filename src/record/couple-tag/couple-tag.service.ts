@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AggregationType, CharacterRecordType } from '@chiyu-bit/canon.root';
+import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordDataService, RecordDataUnionKey } from '../common/record-data-service';
 import { QueryOneAggtRecordDto } from '../common/dto/query-record-data.dto';
 import { CreateCoupleTagDto } from './dto/create-couple-tag.dto';
 import { QueryCoupleTagDto } from './dto/query-conpule-tag.dto';
 import { UpdateCoupleTagDto } from './dto/update-couple-tag.dto';
-import { CoupleTag } from './entities/couple-tag.entity';
+import { CoupleTag, LLSSCouple } from './entities/couple-tag.entity';
+import { RecordType } from '../common/record-type.entity';
 
 interface QueryUnionList {
     typeList: {
@@ -18,14 +20,57 @@ interface QueryUnionList {
 }
 @Injectable()
 export class CoupleTagService extends RecordDataService {
+    @InjectRepository(LLSSCouple)
+    LLSSCoupleRepository: Repository<LLSSCouple>
+
+    @InjectRepository(RecordType)
+    recordTypeRepository: Repository<RecordType>
+
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-    constructor(@InjectRepository(CoupleTag) repository: Repository<CoupleTag>) {
-        super(repository);
+    constructor(
+    @InjectRepository(CoupleTag) repository: Repository<CoupleTag>,
+        readonly memberInfoService: MemberInfoService,
+    ) {
+        super(repository, memberInfoService);
     }
 
     async create(createCoupleTagDto: CreateCoupleTagDto) {
         await this.repository.insert(createCoupleTagDto);
         return 'This action adds a new coupleTag';
+    }
+
+    async createProjectCoupleRecord(dto: CreateCoupleTagDto) {
+        const coupleRecord = await this.findAll();
+        const res: any[] = [];
+        for (const recordData of coupleRecord) {
+            const { projectName, date, recordType, records } = recordData;
+
+            if (projectName !== 'lovelive_superstar') {
+                // eslint-disable-next-line no-continue
+                continue;
+            }
+
+            const projectCoupleInfo = this.projectMemberListMap[projectName].couples;
+            // eslint-disable-next-line no-await-in-loop
+            const { recordTypeId } = await this.recordTypeRepository.findOne({
+                where: { name: recordType },
+            });
+
+            for (const [i, record] of records.entries()) {
+                const coupleInfo = projectCoupleInfo[i];
+                const { coupleId } = coupleInfo;
+
+                const data = {
+                    date,
+                    typeId: recordTypeId,
+                    coupleId,
+                    record,
+                };
+                // res.push(data);
+                // this.LLSSCoupleRepository.insert(data);
+            }
+        }
+        return res;
     }
 
     async findOne({ date, projectName, recordType }: QueryCoupleTagDto) {

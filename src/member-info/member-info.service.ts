@@ -8,8 +8,9 @@ import { UpdateMemberInfoDto } from './dto/update-member-info.dto';
 import { CharaInfo } from './entities/chara-info.entity';
 import { CoupleInfo } from './entities/couple-info.entity';
 import { SeiyuuInfo } from './entities/seiyuu-info.entity';
-import { Member } from './entities/member.entity';
+import { MemberInfo } from './entities/member-info.entity';
 import { ProjectMemberListMap } from './common';
+import { MemberList } from './entities/member-list.entity';
 
 type ProjectCharaTagListMap = Record<ProjectName, {
     projectName: ProjectName;
@@ -30,6 +31,8 @@ type ProjectCoupleTagListMap = Record<ProjectName, {
 export class MemberInfoService {
     constructor(
         @InjectRepository(CharaInfo)
+        private MemberListRepository: Repository<MemberList>,
+        @InjectRepository(CharaInfo)
         private charaRepository: Repository<CharaInfo>,
         @InjectRepository(SeiyuuInfo)
         private seiyuuRepository: Repository<SeiyuuInfo>,
@@ -37,7 +40,7 @@ export class MemberInfoService {
         private coupleRepository: Repository<CoupleInfo>,
     ) {}
 
-    getRepositoryByType(basicType: BasicType): Repository<Member> {
+    getRepositoryByType(basicType: BasicType): Repository<MemberInfo> {
         switch (basicType) {
             case BasicType.chara:
                 return this.charaRepository;
@@ -48,6 +51,13 @@ export class MemberInfoService {
             default:
                 return null;
         }
+    }
+
+    async findMemberInfoByRomaName(romaName: string) {
+        const member = await this.MemberListRepository.findOne({
+            where: { romaName },
+        });
+        return member.memberId;
     }
 
     findMemberInfoByTypeAndProject<Type extends BasicType>(
@@ -69,8 +79,8 @@ export class MemberInfoService {
         });
     }
 
-    getMemberInfoListByType<Type extends BasicType>(type: Type): Promise<MemberBasicInfo<Type>[]>
-    async getMemberInfoListByType(type: BasicType) {
+    findMemberInfoListByType<Type extends BasicType>(type: Type): Promise<MemberBasicInfo<Type>[]>
+    async findMemberInfoListByType(type: BasicType) {
         const repository = this.getRepositoryByType(type);
 
         if (!repository) {
@@ -84,7 +94,7 @@ export class MemberInfoService {
      * 获取所有 角色 的 tag
      */
     async findCharaTagList() {
-        const charaList = await this.getMemberInfoListByType(BasicType.chara);
+        const charaList = await this.findMemberInfoListByType(BasicType.chara);
         const charaTagList: ProjectCharaTagListMap = {} as ProjectCharaTagListMap;
 
         for (const charaInfo of charaList) {
@@ -110,7 +120,7 @@ export class MemberInfoService {
      * 获取所有 seiyuu 的 twitter account
      */
     async findSeiyuuTwitterAccountList() {
-        const seiyuuList = await this.getMemberInfoListByType(BasicType.seiyuu);
+        const seiyuuList = await this.findMemberInfoListByType(BasicType.seiyuu);
         const seiyuuTwitterAccountList: ProjectSeiyuuTwitterAccountListMap = {} as ProjectSeiyuuTwitterAccountListMap;
 
         for (const charaInfo of seiyuuList) {
@@ -136,7 +146,7 @@ export class MemberInfoService {
      * 获取所有 couple 的 tag
      */
     async findCoupleTagList() {
-        const coupleList = await this.getMemberInfoListByType(BasicType.couple);
+        const coupleList = await this.findMemberInfoListByType(BasicType.couple);
         const coupleTagList: ProjectCoupleTagListMap = {} as ProjectCoupleTagListMap;
 
         for (const charaInfo of coupleList) {
@@ -169,7 +179,7 @@ export class MemberInfoService {
         const projectMemberListMap: ProjectMemberListMap = {} as ProjectMemberListMap;
 
         const pendingFormatters = Object.values(BasicType).map((type) => {
-            const formatter = this.getMemberInfoListByType(type)
+            const formatter = this.findMemberInfoListByType(type)
                 .then((memberInfoList) => {
                     for (const memberInfo of memberInfoList) {
                         const { projectName } = memberInfo;
@@ -204,7 +214,7 @@ export class MemberInfoService {
      * 获取基础类型的 memberInfoMap
      */
     async findMemberInfoMapOfType<Type extends BasicType>(type: Type) {
-        const memberInfoList = await this.getMemberInfoListByType(type);
+        const memberInfoList = await this.findMemberInfoListByType(type);
         const memberInfoMap: MemberInfoMap<Type> = {} as MemberInfoMap<Type>;
         for (const memberInfo of memberInfoList) {
             const { romaName } = memberInfo;

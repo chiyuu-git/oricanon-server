@@ -10,7 +10,7 @@ import type { SeiyuuInfo } from './entities/seiyuu-info.entity';
 */
 interface ProjectMemberList {
     projectName: ProjectName;
-    characters: CharaInfo[];
+    charas: CharaInfo[];
     couples?: CoupleInfo[];
     seiyuus?: SeiyuuInfo[];
 }

@@ -13,16 +13,21 @@ import { UpdateCoupleTagDto } from './dto/update-couple-tag.dto';
 @ApiTags('couple_tag')
 @Controller('couple_tag')
 export class CoupleTagController {
-    constructor(private readonly coupleTagService: CoupleTagService) {}
+    constructor(private readonly service: CoupleTagService) {}
 
     @Post()
     create(@Body() createCoupleTagDto: CreateCoupleTagDto) {
-        return this.coupleTagService.create(createCoupleTagDto);
+        return this.service.create(createCoupleTagDto);
+    }
+
+    @Post('/create_project_couple_record')
+    createProjectCoupleRecord(@Body() createCharacterTagDto: CreateCoupleTagDto) {
+        return this.service.createProjectCoupleRecord(createCharacterTagDto);
     }
 
     @Get('/all')
     findAll() {
-        return this.coupleTagService.findAll();
+        return this.service.findAll();
     }
 
     @Get('/couple_tag')
@@ -31,7 +36,7 @@ export class CoupleTagController {
     @ApiQuery({ name: 'projectName', enum: ProjectName })
     findOne(@Query() query: QueryCoupleTagDto) {
         const { date, projectName, recordType } = query;
-        return this.coupleTagService.findOne({ date, projectName, recordType });
+        return this.service.findOne({ date, projectName, recordType });
     }
 
     @Patch()
@@ -40,7 +45,7 @@ export class CoupleTagController {
         // 要么是路由带上多个param
         // 要么是从body中取
         const { date, projectName, recordType } = updateCoupleTagDto;
-        return this.coupleTagService.update({ date, projectName, recordType }, updateCoupleTagDto);
+        return this.service.update({ date, projectName, recordType }, updateCoupleTagDto);
     }
 
     @Delete()
@@ -49,6 +54,6 @@ export class CoupleTagController {
     @ApiQuery({ name: 'projectName', enum: ProjectName })
     remove(@Query() query: QueryCoupleTagDto) {
         const { date, projectName, recordType } = query;
-        return this.coupleTagService.remove({ date, projectName, recordType });
+        return this.service.remove({ date, projectName, recordType });
     }
 }

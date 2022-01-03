@@ -13,11 +13,18 @@ import { UpdateCharacterTagDto } from './dto/update-character-tag.dto';
 @ApiTags('character_tag')
 @Controller('character_tag')
 export class CharacterTagController {
-    constructor(private readonly service: CharacterTagService) {}
+    constructor(
+        private readonly service: CharacterTagService,
+    ) {}
 
     @Post()
     create(@Body() createCharacterTagDto: CreateCharacterTagDto) {
         return this.service.create(createCharacterTagDto);
+    }
+
+    @Post('/create_project_chara_record')
+    createProjectCharaRecord(@Body() createCharacterTagDto: CreateCharacterTagDto) {
+        return this.service.createProjectCharaRecord(createCharacterTagDto);
     }
 
     @Get('/all')

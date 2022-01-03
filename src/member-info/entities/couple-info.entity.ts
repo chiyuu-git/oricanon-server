@@ -1,11 +1,17 @@
-import { Column, Entity } from 'typeorm';
-import { Member } from './member.entity';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { MemberInfo } from './member-info.entity';
 
 @Entity({
     database: 'canon_member',
-    name: 'chara_couple_info',
+    name: 'couple_info',
 })
-export class CoupleInfo extends Member {
+export class CoupleInfo extends MemberInfo {
+    @PrimaryColumn({
+        type: 'int',
+        name: 'couple_id',
+    })
+    coupleId;
+
     @Column({
         type: 'varchar',
         name: 'pixiv_tag',

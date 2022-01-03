@@ -21,6 +21,11 @@ export class SeiyuuFollowerController {
         return this.service.create(createSeiyuuFollowerDto);
     }
 
+    @Post('/create_project_seiyuu_record')
+    createProjectCharaRecord(@Body() createCharacterTagDto: CreateSeiyuuFollowerDto) {
+        return this.service.createProjectSeiyuuRecord(createCharacterTagDto);
+    }
+
     @Get('/all')
     findAll() {
         return this.service.findAll();
