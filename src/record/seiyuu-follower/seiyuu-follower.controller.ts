@@ -6,7 +6,7 @@ import {
 import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ProjectName, SeiyuuRecordType } from '@chiyu-bit/canon.root';
 import { SeiyuuFollowerService } from './seiyuu-follower.service';
-import { CreateSeiyuuFollowerDto } from './dto/create-seiyuu-follower.dto';
+import { CreateProjectSeiyuuRecordDto } from './dto/create-seiyuu-follower.dto';
 import { QuerySeiyuuFollowerDto } from './dto/query-seiyuu-follower.dto';
 import { UpdateSeiyuuFollowerDto } from './dto/update-seiyuu-follower.dto';
 import { QueryRangeRecordDto } from '../common/dto/query-record-data.dto';
@@ -16,19 +16,9 @@ import { QueryRangeRecordDto } from '../common/dto/query-record-data.dto';
 export class SeiyuuFollowerController {
     constructor(private readonly service: SeiyuuFollowerService) {}
 
-    @Post()
-    create(@Body() createSeiyuuFollowerDto: CreateSeiyuuFollowerDto) {
-        return this.service.create(createSeiyuuFollowerDto);
-    }
-
     @Post('/create_project_seiyuu_record')
-    createProjectCharaRecord(@Body() createCharacterTagDto: CreateSeiyuuFollowerDto) {
-        return this.service.createProjectSeiyuuRecord(createCharacterTagDto);
-    }
-
-    @Get('/all')
-    findAll() {
-        return this.service.findAll();
+    createProjectSeiyuuRecord(@Body() createProjectSeiyuuRecordDto: CreateProjectSeiyuuRecordDto) {
+        return this.service.createProjectSeiyuuRecord(createProjectSeiyuuRecordDto);
     }
 
     @Get('/seiyuu_follower')
@@ -37,22 +27,5 @@ export class SeiyuuFollowerController {
     findOne(@Query() query: QuerySeiyuuFollowerDto) {
         const { date, projectName } = query;
         return this.service.findOne({ date, projectName });
-    }
-
-    @Patch()
-    @ApiBody({ type: UpdateSeiyuuFollowerDto })
-    update(@Body() updateSeiyuuFollowerDto: UpdateSeiyuuFollowerDto) {
-        // 要么是路由带上多个param
-        // 要么是从body中取
-        const { date, projectName } = updateSeiyuuFollowerDto;
-        return this.service.update({ date, projectName }, updateSeiyuuFollowerDto);
-    }
-
-    @Delete()
-    @ApiQuery({ name: 'date', type: 'string' })
-    @ApiQuery({ name: 'projectName', enum: ProjectName })
-    remove(@Query() query: QuerySeiyuuFollowerDto) {
-        const { date, projectName } = query;
-        return this.service.remove({ date, projectName });
     }
 }

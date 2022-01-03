@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AggregationType, CharacterRecordType } from '@chiyu-bit/canon.root';
+import { AggregationType, CharacterRecordType, ProjectName } from '@chiyu-bit/canon.root';
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordDataService, RecordDataUnionKey } from '../common/record-data-service';
 import { QueryOneAggtRecordDto } from '../common/dto/query-record-data.dto';
-import { CreateCoupleTagDto } from './dto/create-couple-tag.dto';
+import { CreateProjectCoupleRecordDto } from './dto/create-couple-tag.dto';
 import { QueryCoupleTagDto } from './dto/query-conpule-tag.dto';
-import { UpdateCoupleTagDto } from './dto/update-couple-tag.dto';
 import { CoupleTag, LLSSCouple } from './entities/couple-tag.entity';
-import { RecordType } from '../common/record-type.entity';
+import { RecordTypeEntity } from '../common/record-type.entity';
+import { CoupleRecordEntity } from '../common/record.entity';
 
 interface QueryUnionList {
     typeList: {
@@ -23,8 +23,8 @@ export class CoupleTagService extends RecordDataService {
     @InjectRepository(LLSSCouple)
     LLSSCoupleRepository: Repository<LLSSCouple>
 
-    @InjectRepository(RecordType)
-    recordTypeRepository: Repository<RecordType>
+    @InjectRepository(RecordTypeEntity)
+    recordTypeRepository: Repository<RecordTypeEntity>
 
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor
     constructor(
@@ -34,43 +34,36 @@ export class CoupleTagService extends RecordDataService {
         super(repository, memberInfoService);
     }
 
-    async create(createCoupleTagDto: CreateCoupleTagDto) {
-        await this.repository.insert(createCoupleTagDto);
-        return 'This action adds a new coupleTag';
+    getRepositoryByProject(projectName: ProjectName): Repository<CoupleRecordEntity> {
+        switch (projectName) {
+            case ProjectName.llss:
+                return this.LLSSCoupleRepository;
+            default:
+                return null;
+        }
     }
 
-    async createProjectCoupleRecord(dto: CreateCoupleTagDto) {
-        const coupleRecord = await this.findAll();
-        const res: any[] = [];
-        for (const recordData of coupleRecord) {
-            const { projectName, date, recordType, records } = recordData;
+    async createProjectCoupleRecord({ date, projectName, recordType, records }: CreateProjectCoupleRecordDto) {
+        const projectCoupleInfo = this.projectMemberListMap[projectName].couples;
+        // eslint-disable-next-line no-await-in-loop
+        const { recordTypeId } = await this.recordTypeRepository.findOne({
+            where: { name: recordType },
+        });
 
-            if (projectName !== 'lovelive_superstar') {
-                // eslint-disable-next-line no-continue
-                continue;
-            }
+        const repository = this.getRepositoryByProject(projectName);
 
-            const projectCoupleInfo = this.projectMemberListMap[projectName].couples;
-            // eslint-disable-next-line no-await-in-loop
-            const { recordTypeId } = await this.recordTypeRepository.findOne({
-                where: { name: recordType },
-            });
+        for (const [i, record] of records.entries()) {
+            const coupleInfo = projectCoupleInfo[i];
+            const { memberId } = coupleInfo;
 
-            for (const [i, record] of records.entries()) {
-                const coupleInfo = projectCoupleInfo[i];
-                const { coupleId } = coupleInfo;
-
-                const data = {
-                    date,
-                    typeId: recordTypeId,
-                    coupleId,
-                    record,
-                };
-                // res.push(data);
-                // this.LLSSCoupleRepository.insert(data);
-            }
+            const data = {
+                date,
+                typeId: recordTypeId,
+                memberId,
+                record,
+            };
+            repository.insert(data);
         }
-        return res;
     }
 
     async findOne({ date, projectName, recordType }: QueryCoupleTagDto) {
@@ -178,20 +171,5 @@ export class CoupleTagService extends RecordDataService {
         }
         // return null 相当于 return any，还是用 false 比较好
         return false;
-    }
-
-    async update(
-        { date, projectName, recordType }: QueryCoupleTagDto,
-        updateCoupleTagDto: UpdateCoupleTagDto,
-    ) {
-        const coupleTag = await this.repository.update(
-            { date, projectName, recordType },
-            updateCoupleTagDto,
-        );
-        return coupleTag;
-    }
-
-    remove({ date, projectName, recordType }: QueryCoupleTagDto) {
-        return `This action removes a ${date}, ${projectName}, ${recordType} coupleTag`;
     }
 }

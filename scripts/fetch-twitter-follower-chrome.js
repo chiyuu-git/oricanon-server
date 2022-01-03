@@ -56,7 +56,7 @@ function findFollowerCount(accounts, allAccountNode) {
 
 async function fetchTwitterFollower() {
     try {
-        const response = await fetch(`${HOST}/member_list/all_seiyuu_twitter_account`);
+        const response = await fetch(`${HOST}/member_info/seiyuu_twitter_account_list`);
         const twitterFollowerList = response.body;
 
         // 获取 seiyuu twitterAccount

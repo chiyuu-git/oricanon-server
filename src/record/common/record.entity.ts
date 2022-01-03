@@ -1,6 +1,6 @@
 import { Column, PrimaryColumn } from 'typeorm';
 
-abstract class RecordEntity {
+export abstract class RecordEntity {
     @PrimaryColumn({
         type: 'int',
         name: 'record_id',
@@ -37,6 +37,6 @@ export abstract class CoupleRecordEntity extends RecordEntity {
         type: 'int',
         name: 'couple_id',
     })
-    coupleId: number;
+    memberId: number;
 }
 

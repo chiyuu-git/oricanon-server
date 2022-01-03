@@ -20,11 +20,6 @@ export class RecordController {
         return this.service.create(createRecordDto);
     }
 
-    // @Get('/all')
-    // findAll() {
-    //     return this.service.findAll();
-    // }
-
     // @Get('/seiyuu_follower')
     // @ApiQuery({ name: 'date', type: 'string' })
     // @ApiQuery({ name: 'recordType', enum: CharaRecordType })

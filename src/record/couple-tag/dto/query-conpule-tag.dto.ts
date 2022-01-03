@@ -1,4 +1,4 @@
 import { OmitType, PartialType } from '@nestjs/swagger';
-import { CreateCoupleTagDto } from './create-couple-tag.dto';
+import { CreateProjectCoupleRecordDto } from './create-couple-tag.dto';
 
-export class QueryCoupleTagDto extends PartialType(OmitType(CreateCoupleTagDto, ['records'])) {}
+export class QueryCoupleTagDto extends PartialType(OmitType(CreateProjectCoupleRecordDto, ['records'])) {}

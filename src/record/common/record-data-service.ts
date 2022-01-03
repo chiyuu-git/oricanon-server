@@ -7,7 +7,9 @@ import { ProjectName, RecordType } from '@chiyu-bit/canon.root';
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { ProjectMemberListMap } from 'src/member-info/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { QueryOneAggtRecordDto, QueryOneRecordDto, QueryRangeRecordDto } from './dto/query-record-data.dto';
+import { RecordTypeEntity } from './record-type.entity';
 
 export interface RecordDataEntity {
     date: string;
@@ -28,8 +30,12 @@ export interface RecordDataUnionKey {
 }
 
 // TODO: 改造成泛型类，传入实体，提升 create findOne 等方法？ 会不会导致太复杂了呢？ 万一以后新增更多的种类
+@Injectable()
 export class RecordDataService implements OnApplicationBootstrap {
     protected repository: Repository<RecordDataEntity>
+
+    // @InjectRepository(RecordTypeEntity)
+    // recordTypeRepository: Repository<RecordTypeEntity>
 
     projectMemberListMap: ProjectMemberListMap;
 

@@ -3,10 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoupleTagService } from './couple-tag.service';
 import { CoupleTagController } from './couple-tag.controller';
 import { CoupleTag, LLSSCouple } from './entities/couple-tag.entity';
-import { RecordType } from '../common/record-type.entity';
+import { RecordTypeEntity } from '../common/record-type.entity';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([CoupleTag, RecordType, LLSSCouple])],
+    imports: [TypeOrmModule.forFeature([CoupleTag, RecordTypeEntity, LLSSCouple])],
     controllers: [CoupleTagController],
     providers: [CoupleTagService],
     exports: [CoupleTagService],

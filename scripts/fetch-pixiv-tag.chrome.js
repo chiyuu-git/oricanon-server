@@ -77,7 +77,7 @@ async function postRecord({
     projectName,
     records,
     recordType = 'pixiv_illust',
-    route = 'character_tag',
+    route = 'character_tag/create_project_chara_record',
 }) {
     const date = new Date();
     const url = `${HOST}/${route}`;
@@ -94,7 +94,7 @@ async function postRecord({
 
 async function getPixivCharacterTagCount() {
     console.log('==== fetch character start');
-    const data = await fetch(`${HOST}/member_list/all_character_tag`);
+    const data = await fetch(`${HOST}/member_info/chara_tag_list`);
     const characterTagLists = await data.json();
     console.log('characterTagLists:', characterTagLists);
 
@@ -119,10 +119,10 @@ await getPixivCharacterTagCount();
 
 async function getPixivCoupleTagCount() {
     console.log('==== fetch couple start');
-    const data = await fetch(`${HOST}/member_list/all_couple_tag`);
+    const data = await fetch(`${HOST}/member_info/couple_tag_list`);
     const coupleTagLists = await data.json();
     console.log('coupleTagLists:', coupleTagLists);
-    const route = 'couple_tag';
+    const route = 'couple_tag/create_project_couple_record';
 
     for (const { projectName, pixivTags } of coupleTagLists) {
         const { illusts, novels } = await fetchPixivTagCount({ pixivTags });

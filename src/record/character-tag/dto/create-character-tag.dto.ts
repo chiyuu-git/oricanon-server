@@ -1,9 +1,10 @@
 import { IsArray, IsDateString, IsOptional, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { formatDate } from 'src/utils';
-import { ProjectName, CharacterRecordType } from '@chiyu-bit/canon.root';
+import { ProjectName } from '@chiyu-bit/canon.root';
+import { CharaRecordType } from '@chiyu-bit/canon.root/record';
 
-export class CreateCharacterTagDto {
+export class CreateProjectCharaRecordDto {
     @IsDateString()
     @Transform(({ value }) => formatDate(value))
     date: string;
@@ -13,7 +14,7 @@ export class CreateCharacterTagDto {
 
     @IsString()
     @IsOptional()
-    recordType: CharacterRecordType;
+    recordType: CharaRecordType;
 
     @IsArray()
     @Transform(({ value }) => JSON.parse(value))

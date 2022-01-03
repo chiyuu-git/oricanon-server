@@ -9,18 +9,18 @@ export abstract class MemberInfo {
     projectName: ProjectName;
 
     @Column({ type: 'varchar' })
-    name;
+    name: string;
 
     @Column({
         type: 'varchar',
         name: 'roma_name',
     })
-    romaName;
+    romaName: string;
 
     @Column({
         type: 'varchar',
         name: 'support_color',
     })
-    supportColor;
+    supportColor: string;
 }
 

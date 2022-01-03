@@ -3,7 +3,7 @@ import { Transform } from 'class-transformer';
 import { formatDate } from 'src/utils';
 import { ProjectName } from '@chiyu-bit/canon.root';
 
-export class CreateSeiyuuFollowerDto {
+export class CreateProjectSeiyuuRecordDto {
     @IsDateString()
     @Transform(({ value }) => formatDate(value))
     date: string;

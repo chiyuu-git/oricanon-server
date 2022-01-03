@@ -10,17 +10,17 @@ export class SeiyuuInfo extends MemberInfo {
         type: 'int',
         name: 'member_id',
     })
-    memberId;
+    memberId: number;
 
     @Column({
         type: 'varchar',
         name: 'twitter_account',
     })
-    twitterAccount;
+    twitterAccount: string;
 
     @Column({
         type: 'varchar',
         name: 'official_order',
     })
-    officialOrder;
+    officialOrder: number;
 }

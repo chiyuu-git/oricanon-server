@@ -2,13 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MemberInfoService } from 'src/member-info/member-info.service';
+import { ProjectName } from '@chiyu-bit/canon.root';
+// import { SeiyuuRecordType } from '@chiyu-bit/canon.root/record';
 import { RecordDataService } from '../common/record-data-service';
 import { QueryOneAggtRecordDto } from '../common/dto/query-record-data.dto';
-import { CreateSeiyuuFollowerDto } from './dto/create-seiyuu-follower.dto';
+import { CreateProjectSeiyuuRecordDto } from './dto/create-seiyuu-follower.dto';
 import { QuerySeiyuuFollowerDto } from './dto/query-seiyuu-follower.dto';
 import { UpdateSeiyuuFollowerDto } from './dto/update-seiyuu-follower.dto';
 import { LLNSeiyuu, LLSSeiyuu, LLSSSeiyuu, SeiyuuFollower } from './entities/seiyuu-follower.entity';
-import { RecordType } from '../common/record-type.entity';
+import { RecordTypeEntity } from '../common/record-type.entity';
+import { MemberRecordEntity } from '../common/record.entity';
 
 @Injectable()
 export class SeiyuuFollowerService extends RecordDataService {
@@ -21,55 +24,51 @@ export class SeiyuuFollowerService extends RecordDataService {
     @InjectRepository(LLSSSeiyuu)
     LLSSSeiyuuRepository: Repository<LLSSSeiyuu>;
 
-    @InjectRepository(RecordType)
-    recordTypeRepository: Repository<RecordType>
+    @InjectRepository(RecordTypeEntity)
+    recordTypeRepository: Repository<RecordTypeEntity>
 
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor
     constructor(
-    @InjectRepository(SeiyuuFollower) repository: Repository<SeiyuuFollower>,
         readonly memberInfoService: MemberInfoService,
+        @InjectRepository(SeiyuuFollower) repository: Repository<SeiyuuFollower>,
     ) {
         super(repository, memberInfoService);
     }
 
-    async create(createSeiyuuFollowerDto: CreateSeiyuuFollowerDto) {
-        await this.repository.insert(createSeiyuuFollowerDto);
-        return 'This action adds a new seiyuuFollower';
+    getRepositoryByProject(projectName: ProjectName): Repository<MemberRecordEntity> {
+        switch (projectName) {
+            case ProjectName.lls:
+                return this.LLSSeiyuuRepository;
+            case ProjectName.lln:
+                return this.LLNSeiyuuRepository;
+            case ProjectName.llss:
+                return this.LLSSSeiyuuRepository;
+            default:
+                return null;
+        }
     }
 
-    async createProjectSeiyuuRecord(dto: CreateSeiyuuFollowerDto) {
-        // await this.repository.insert(createCharaRecordDto);
-        const seiyuuFollower = await this.findAll();
-        const res: any[] = [];
-        for (const recordData of seiyuuFollower) {
-            const { projectName, date, recordType, records } = recordData;
+    async createProjectSeiyuuRecord({ date, projectName, records }: CreateProjectSeiyuuRecordDto) {
+        const projectSeiyuuInfo = this.projectMemberListMap[projectName].seiyuus;
+        // 现在只有 twitterFollower 一种 类型
+        const { recordTypeId } = await this.recordTypeRepository.findOne({
+            where: { name: 'twitter_follower' },
+        });
 
-            if (projectName !== 'lovelive_superstar') {
-                // eslint-disable-next-line no-continue
-                continue;
-            }
+        const repository = this.getRepositoryByProject(projectName);
 
-            const projectSeiyuuInfo = this.projectMemberListMap[projectName].seiyuus;
-            // eslint-disable-next-line no-await-in-loop
-            const { recordTypeId } = await this.recordTypeRepository.findOne({
-                where: { name: recordType },
-            });
+        for (const [i, record] of records.entries()) {
+            const { memberId } = projectSeiyuuInfo[i];
 
-            for (const [i, record] of records.entries()) {
-                const seiyuuInfo = projectSeiyuuInfo[i];
-                const { memberId } = seiyuuInfo;
-
-                const data = {
-                    date,
-                    typeId: recordTypeId,
-                    memberId,
-                    record,
-                };
-                // res.push(data);
-                // this.LLSSSeiyuuRepository.insert(data);
-            }
+            const data = {
+                date,
+                typeId: recordTypeId,
+                memberId,
+                record,
+            };
+            repository.insert(data);
         }
-        return res;
+        return `Add new seiyuuFollowerRecord of ${projectName}`;
     }
 
     async findOne({ date, projectName }: QuerySeiyuuFollowerDto) {
@@ -82,27 +81,12 @@ export class SeiyuuFollowerService extends RecordDataService {
         return seiyuuFollower;
     }
 
-    async update(
-        { date, projectName }: QuerySeiyuuFollowerDto,
-        updateCharacterTagDto: UpdateSeiyuuFollowerDto,
-    ) {
-        const seiyuuFollower = await this.repository.update(
-            { date, projectName },
-            updateCharacterTagDto,
-        );
-        return seiyuuFollower;
-    }
-
-    remove({ date, projectName }: QuerySeiyuuFollowerDto) {
-        return `This action removes a ${date}, ${projectName} seiyuuFollower`;
-    }
-
     findOneAggtRecord(params: QueryOneAggtRecordDto): Promise<false | number[]> {
         throw new Error('Method not implemented.');
     }
 
     async findLatestDailyFetchDate() {
-        const seiyuuFollower = await this.repository.findOne({
+        const seiyuuFollower = await this.LLSSSeiyuuRepository.findOne({
             order: {
                 date: 'DESC',
             },

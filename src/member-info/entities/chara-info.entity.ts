@@ -10,18 +10,18 @@ export class CharaInfo extends MemberInfo {
         type: 'int',
         name: 'member_id',
     })
-    memberId;
+    memberId: string;
 
     @Column({
         type: 'varchar',
         name: 'pixiv_tag',
     })
-    pixivTag;
+    pixivTag: string;
 
     @Column({
         type: 'varchar',
         name: 'official_order',
     })
-    officialOrder;
+    officialOrder: number;
 }
 

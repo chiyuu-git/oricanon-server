@@ -3,12 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CharacterTagService } from './character-tag.service';
 import { CharacterTagController } from './character-tag.controller';
 import { CharacterTag, LLChara, LLNChara, LLSChara, LLSSChara } from './entities/character-tag.entity';
-import { RecordType } from '../common/record-type.entity';
+import { RecordTypeEntity } from '../common/record-type.entity';
 
 @Module({
     imports: [TypeOrmModule.forFeature([
         CharacterTag,
-        RecordType,
+        RecordTypeEntity,
         LLChara,
         LLSChara,
         LLNChara,

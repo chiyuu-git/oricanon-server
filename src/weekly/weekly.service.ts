@@ -3,7 +3,7 @@ import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordService } from 'src/record/record.service';
 import { ProjectName, BasicType, SeiyuuRecordType } from '@chiyu-bit/canon.root';
-import { MemberInfoTypeMap } from '@chiyu-bit/canon.root//member-info';
+import { MemberInfoTypeMap } from '@chiyu-bit/canon.root/member-info';
 import {
     RecordWeeklyInfo,
 } from '@chiyu-bit/canon.root/weekly';

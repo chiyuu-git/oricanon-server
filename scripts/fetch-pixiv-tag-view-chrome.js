@@ -68,7 +68,7 @@ async function postRecord({
     projectName,
     records,
     recordType = 'pixiv_illust',
-    route = 'character_tag',
+    route = 'character_tag/create_project_chara_record',
 }) {
     const date = new Date();
     const url = `${HOST}/${route}`;
@@ -86,7 +86,7 @@ async function postRecord({
 
 async function getCharacterPixivViewCount() {
     console.log('==== fetch character view start');
-    const data = await fetch(`${HOST}/member_list/all_character_tag`, { mode: 'cors' });
+    const data = await fetch(`${HOST}/member_info/character_tag_list`, { mode: 'cors' });
     const characterTagLists = await data.json();
     console.log('characterTagLists:', characterTagLists);
 

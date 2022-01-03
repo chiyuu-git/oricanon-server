@@ -6,7 +6,7 @@
 import * as superagent from 'superagent';
 import cheerio from 'cheerio';
 import { ProjectName } from '@chiyu-bit/canon.root';
-import { postFollowerRecord } from './conmon';
+import { postProjectFollowerRecord } from './conmon';
 import { HOST, WEEKLY_SEIYUU_SITE } from './constant';
 
 type TwitterFollowerList = {
@@ -44,9 +44,9 @@ function findFollowerCount(accounts: string[], allAccountNode: any): number[] | 
 export async function fetchTwitterFollower() {
     try {
     // 获取 seiyuu twitterAccount
-        const response = await superagent.get(`${HOST}/member_list/all_seiyuu_twitter_account`);
+        const response = await superagent.get(`${HOST}/member_info/seiyuu_twitter_account_list`);
 
-        const twitterFollowerList: TwitterFollowerList = response.body;
+        const twitterAccountList: TwitterFollowerList = response.body;
 
         // 获取网页上所有的推特账号
         const html = await superagent
@@ -58,13 +58,13 @@ export async function fetchTwitterFollower() {
         const $ = cheerio.load(html.text);
         const allAccountNode = $('#f_rank>tbody>tr>td>a');
 
-        for (const { projectName, twitterAccounts } of twitterFollowerList) {
+        for (const { projectName, twitterAccounts } of twitterAccountList) {
             // map 推特账号数组
             const records = findFollowerCount(twitterAccounts, allAccountNode);
 
             console.log('projectName:', projectName);
             console.log('fos:', records);
-            postFollowerRecord({
+            postProjectFollowerRecord({
                 projectName,
                 records,
             });

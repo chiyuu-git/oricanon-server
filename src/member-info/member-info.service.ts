@@ -123,8 +123,8 @@ export class MemberInfoService {
         const seiyuuList = await this.findMemberInfoListByType(BasicType.seiyuu);
         const seiyuuTwitterAccountList: ProjectSeiyuuTwitterAccountListMap = {} as ProjectSeiyuuTwitterAccountListMap;
 
-        for (const charaInfo of seiyuuList) {
-            const { projectName, twitterAccount } = charaInfo;
+        for (const seiyuuInfo of seiyuuList) {
+            const { projectName, twitterAccount } = seiyuuInfo;
             let listOfProject = seiyuuTwitterAccountList[projectName];
 
             if (!listOfProject) {

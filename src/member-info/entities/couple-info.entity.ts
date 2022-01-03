@@ -10,17 +10,17 @@ export class CoupleInfo extends MemberInfo {
         type: 'int',
         name: 'couple_id',
     })
-    coupleId;
+    memberId: number;
 
     @Column({
         type: 'varchar',
         name: 'pixiv_tag',
     })
-    pixivTag;
+    pixivTag: string;
 
     @Column({
         type: 'varchar',
         name: 'pixiv_reverse_tag',
     })
-    pixivReverseTag;
+    pixivReverseTag: string;
 }
