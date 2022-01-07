@@ -22,9 +22,9 @@ export class QueryOneProjectRecordInDB {
 }
 
 /**
- * date、projectName、recordType 仅能查找基础类别下对应的表中的数据数据
+ * 在某个基础类别下，查询单个 projectRecord 需要 date、projectName、recordType 三个参数
  */
-export class QueryOneBasicTypeProjectRecordDto {
+export class QueryOneProjectRecord {
     @IsString()
     @Transform(({ value }) => formatDate(value))
     date: string;
@@ -36,7 +36,7 @@ export class QueryOneBasicTypeProjectRecordDto {
     recordType: RecordType;
 }
 
-export class QueryRangeBasicTypeProjectRecordDto {
+export class QueryRangeProjectRecordOfTypeDto {
     // TODO: custom validator
     @IsDateString()
     @Transform(({ value }) => formatDate(value))

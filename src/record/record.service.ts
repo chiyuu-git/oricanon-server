@@ -108,7 +108,7 @@ export class RecordService {
         relativeDate: RelativeDate,
     ) {
         return Promise.all(
-            relativeDate.map((date) => service.findOneBasicTypeProjectRecord({
+            relativeDate.map((date) => service.findOneProjectRecord({
                 projectName,
                 recordType,
                 date,

@@ -6,9 +6,9 @@ import { CoupleRecordType } from '@common/record';
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordDataService } from '../common/record-data-service';
 import {
-    QueryOneBasicTypeProjectRecordDto,
+    QueryOneProjectRecord,
     QueryOneProjectRecordInDB,
-    QueryRangeBasicTypeProjectRecordDto,
+    QueryRangeProjectRecordOfTypeDto,
 } from '../common/dto/query-record-data.dto';
 import { LLSSCouple } from './couple-tag.entity';
 import { CoupleRecordEntity } from '../common/record.entity';
@@ -41,8 +41,12 @@ export class CoupleTagService extends RecordDataService {
      * findOneCoupleProjectRecord
      * couple 聚合入口，根据 aggregationType 调用不同的聚合方法
      */
-    async findOneBasicTypeProjectRecord(params: QueryOneBasicTypeProjectRecordDto): Promise<false |number[]> {
-        const { recordType } = params;
+    async findOneProjectRecord(params: QueryOneProjectRecord): Promise<false |number[]> {
+        const { recordType, projectName } = params;
+
+        if (projectName !== ProjectName.llss) {
+            return false;
+        }
 
         switch (recordType) {
             case CoupleRecordType.coupleUnionIllust:
@@ -60,7 +64,7 @@ export class CoupleTagService extends RecordDataService {
         });
     }
 
-    async findIllustWithNovel(params: QueryOneBasicTypeProjectRecordDto) {
+    async findIllustWithNovel(params: QueryOneProjectRecord) {
         const [unionIllustRecord, unionNovelRecord] = await Promise.all(
             [
                 this.findUnionIllust(params),
@@ -74,7 +78,7 @@ export class CoupleTagService extends RecordDataService {
         return [];
     }
 
-    async findUnionNovel(params: QueryOneBasicTypeProjectRecordDto) {
+    async findUnionNovel(params: QueryOneProjectRecord) {
         return this.findUnion(params, {
             default: CoupleRecordType.novel,
             reverse: CoupleRecordType.novelReverse,
@@ -82,7 +86,7 @@ export class CoupleTagService extends RecordDataService {
         });
     }
 
-    async findUnionIllust(params: QueryOneBasicTypeProjectRecordDto) {
+    async findUnionIllust(params: QueryOneProjectRecord) {
         return this.findUnion(params, {
             default: CoupleRecordType.illust,
             reverse: CoupleRecordType.illustReverse,
@@ -90,7 +94,7 @@ export class CoupleTagService extends RecordDataService {
         });
     }
 
-    async findUnion(params: QueryOneBasicTypeProjectRecordDto, typeList: QueryUnionList) {
+    async findUnion(params: QueryOneProjectRecord, typeList: QueryUnionList) {
         const findOptionList: QueryOneProjectRecordInDB[] = Object.values(typeList)
             .map((recordType) => ({
                 basicType: BasicType.couple,
@@ -114,7 +118,10 @@ export class CoupleTagService extends RecordDataService {
         return defaultRecord.map((record, i) => record + reverseRecord[i] - intersectionRecord[i]);
     }
 
-    async findRangeBasicTypeProjectRecord(params: QueryRangeBasicTypeProjectRecordDto) {
+    async findRangeBasicTypeProjectRecord(params: QueryRangeProjectRecordOfTypeDto) {
+        // if (params.projectName !== ProjectName.llss) {
+        //     return false;
+        // }
         // 普通类型 record
         return this.findRangeProjectRecordEntityInDB(BasicType.couple, params);
     }

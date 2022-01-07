@@ -4,8 +4,8 @@ import { Repository } from 'typeorm';
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { BasicType, ProjectName } from '@common/root';
 import {
-    QueryOneBasicTypeProjectRecordDto,
-    QueryRangeBasicTypeProjectRecordDto,
+    QueryOneProjectRecord,
+    QueryRangeProjectRecordOfTypeDto,
 } from '../common/dto/query-record-data.dto';
 import { LLNSeiyuu, LLSSeiyuu, LLSSSeiyuu } from './seiyuu-follower.entity';
 import { MemberRecordEntity } from '../common/record.entity';
@@ -43,14 +43,18 @@ export class SeiyuuFollowerService extends RecordDataService {
     /**
      * findOneSeiyuuProjectRecord
      */
-    async findOneBasicTypeProjectRecord(params: QueryOneBasicTypeProjectRecordDto): Promise<false |number[]> {
+    async findOneProjectRecord(params: QueryOneProjectRecord): Promise<false | number[]> {
+        if (params.projectName === ProjectName.ll) {
+            return false;
+        }
+
         return this.findOneProjectRecordInDB({
             basicType: BasicType.seiyuu,
             ...params,
         });
     }
 
-    async findRangeBasicTypeProjectRecord(params: QueryRangeBasicTypeProjectRecordDto) {
+    async findRangeBasicTypeProjectRecord(params: QueryRangeProjectRecordOfTypeDto) {
         // 普通类型 record
         return this.findRangeProjectRecordEntityInDB(BasicType.seiyuu, params);
     }

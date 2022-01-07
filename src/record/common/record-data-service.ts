@@ -11,9 +11,9 @@ import { ProjectMemberListMap } from 'src/member-info/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MemberInfo } from '@src/member-info/entities/member-info.entity';
 import {
-    QueryOneBasicTypeProjectRecordDto,
+    QueryOneProjectRecord,
     QueryOneProjectRecordInDB,
-    QueryRangeBasicTypeProjectRecordDto,
+    QueryRangeProjectRecordOfTypeDto,
 } from './dto/query-record-data.dto';
 import { RecordEntity } from './record.entity';
 import { RecordTypeEntity } from './record-type.entity';
@@ -111,7 +111,10 @@ export class RecordDataService implements OnApplicationBootstrap {
         return `Create new ${recordType} ${basicType}Record of ${projectName}`;
     }
 
-    async findOneBasicTypeProjectRecord(params: QueryOneBasicTypeProjectRecordDto): Promise<false | number[]> {
+    /**
+     * 由各个基础 service 各自实现，查询单个 projectRecord
+     */
+    async findOneProjectRecord(params: QueryOneProjectRecord): Promise<false | number[]> {
         throw new Error('Method not implemented.');
     }
 
@@ -146,7 +149,7 @@ export class RecordDataService implements OnApplicationBootstrap {
     }
 
     async findRangeBasicTypeProjectRecord(
-        params: QueryRangeBasicTypeProjectRecordDto,
+        params: QueryRangeProjectRecordOfTypeDto,
     ): Promise<ProjectRecordEntity[]> {
         throw new Error('Method not implemented.');
     }
@@ -156,7 +159,7 @@ export class RecordDataService implements OnApplicationBootstrap {
      */
     async findRangeProjectRecordEntityInDB(
         basicType: BasicType,
-        { from, to, projectName, recordType }: QueryRangeBasicTypeProjectRecordDto,
+        { from, to, projectName, recordType }: QueryRangeProjectRecordOfTypeDto,
     ) {
         const idType = basicType === BasicType.couple ? 'couple_id' : 'member_id';
 
@@ -177,6 +180,7 @@ export class RecordDataService implements OnApplicationBootstrap {
             GROUP BY date;
         `);
 
+        // TODO: range 系列 稳健性处理，返回 false 更妥当
         if (projectRecordStr.length === 0) {
             return [];
         }

@@ -6,7 +6,7 @@
 import * as superagent from 'superagent';
 import cheerio from 'cheerio';
 import { ProjectName } from '@common/root';
-import { postFollowerRecord, postProjectFollowerRecord } from './common';
+import { postProjectFollowerRecord } from './common';
 import { HOST, WEEKLY_SEIYUU_SITE } from './constant';
 
 type TwitterFollowerList = {
@@ -64,10 +64,6 @@ export async function fetchTwitterFollower() {
 
             console.log('projectName:', projectName);
             console.log('fos:', records);
-            postFollowerRecord({
-                projectName,
-                records,
-            });
             postProjectFollowerRecord({
                 projectName,
                 records,

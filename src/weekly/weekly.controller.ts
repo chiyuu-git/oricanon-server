@@ -1,7 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
-    QueryInfoTypeWeekly,
+    QueryRecordTypeWeekly,
     QueryWeeklyDetail,
 } from './query-weekly-info.dto';
 import { WeeklyService } from './weekly.service';
@@ -12,15 +12,15 @@ export class WeeklyController {
     constructor(private readonly service: WeeklyService) {}
 
     // TODO: 整合所有的信息，减少请求次数
-    @Get('/info_type_weekly')
-    findInfoTypeWeekly(@Query() query: QueryInfoTypeWeekly) {
-        const { basicType, recordType: infoType, endDate } = query;
+    @Get('/record_type_weekly')
+    getRecordTypeWeekly(@Query() query: QueryRecordTypeWeekly) {
+        const { basicType, recordType, endDate } = query;
         // console.log(query);
-        return this.service.getInfoTypeWeekly({ basicType, endDate, recordType: infoType });
+        return this.service.getRecordTypeWeekly({ basicType, endDate, recordType });
     }
 
     @Get('/weekly_detail_of_twitter_follower')
-    findTwitterFollowerWeeklyDetail(@Query() query: QueryWeeklyDetail) {
+    getTwitterFollowerWeeklyDetail(@Query() query: QueryWeeklyDetail) {
         const { projectName, endDate } = query;
         // console.log(query);
         return this.service.getTwitterFollowerWeeklyDetail({ projectName, endDate });

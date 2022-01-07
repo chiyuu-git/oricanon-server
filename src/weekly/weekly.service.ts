@@ -8,7 +8,7 @@ import { SeiyuuRecordType } from '@common/record';
 import { RecordWeeklyInfo } from '@common/weekly';
 import { ProjectMemberListMap } from 'src/member-info/common';
 import {
-    QueryInfoTypeWeekly,
+    QueryRecordTypeWeekly,
     QueryWeeklyDetail,
 } from './query-weekly-info.dto';
 
@@ -19,7 +19,7 @@ interface ProjectRelativeRecord {
     beforeLastRecord: number[];
 }
 
-type ModuleRelativeRecord = ProjectRelativeRecord[];
+type RelativeRecordOfType = ProjectRelativeRecord[];
 
 interface ProjectRecord {
     records: number[];
@@ -43,7 +43,7 @@ export class WeeklyService implements OnApplicationBootstrap {
         this.projectMemberListMap = await this.memberInfoService.formatListWithProject();
     }
 
-    async getInfoTypeWeekly({ basicType, recordType, endDate }: QueryInfoTypeWeekly) {
+    async getRecordTypeWeekly({ basicType, recordType, endDate }: QueryRecordTypeWeekly) {
         const result = await this.recordService.findRelativeRecordOfType(
             basicType,
             recordType,
@@ -56,7 +56,7 @@ export class WeeklyService implements OnApplicationBootstrap {
 
         const { weekRange, relativeRecordOfType } = result;
 
-        const recordWeeklyInfo = this.processModuleRelativeRecord(
+        const recordWeeklyInfo = this.processRelativeRecordOfType(
             basicType,
             relativeRecordOfType,
         );
@@ -74,9 +74,9 @@ export class WeeklyService implements OnApplicationBootstrap {
     /**
      * 处理周报相关的数据，接受 ModuleRelativeRecord ，返回
      */
-    private processModuleRelativeRecord<Type extends BasicType>(
-        moduleType: Type,
-        moduleRelativeRecord: ModuleRelativeRecord,
+    private processRelativeRecordOfType<Type extends BasicType>(
+        basicType: Type,
+        relativeRecordOfType: RelativeRecordOfType,
     ) {
         // const moduleTotal = 0;
         // const moduleWeekIncrement = 0;
@@ -88,13 +88,13 @@ export class WeeklyService implements OnApplicationBootstrap {
         };
 
         // moduleRelativeRecord = [llRecords, llsRecords, llssRecords, llnRecords]
-        for (const projectRelativeRecord of moduleRelativeRecord) {
+        for (const projectRelativeRecord of relativeRecordOfType) {
             if (projectRelativeRecord) {
                 const { projectName } = projectRelativeRecord;
                 const { projectRecord, projectInfo } = this.processProjectRelativeRecord(projectRelativeRecord);
                 const memberInfo = this.formatRecordWithMemberList<Type>(
                     projectRecord,
-                    this.projectMemberListMap[projectName][`${moduleType}s`],
+                    this.projectMemberListMap[projectName][`${basicType}s`],
                 );
                 moduleInfo.projectInfoList.push(projectInfo);
                 moduleInfo.memberInfoList.push(...memberInfo);
@@ -141,13 +141,6 @@ export class WeeklyService implements OnApplicationBootstrap {
      */
     private processProjectRelativeRecord(projectRelativeRecord: ProjectRelativeRecord) {
         const { projectName, baseRecord, lastRecord, beforeLastRecord } = projectRelativeRecord;
-
-        if (baseRecord.length === 0
-            || lastRecord.length === 0
-            || beforeLastRecord.length === 0
-        ) {
-            return null;
-        }
 
         const projectTotal = baseRecord.reduce((acc, val) => acc + val);
         // 1.

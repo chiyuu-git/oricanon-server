@@ -115,12 +115,6 @@ async function getCharacterPixivViewCount() {
         console.log(`${projectName} viewCounts:`, viewCounts);
         // const dailyViewCounts = await fetchPixivDailyViewCount(pixivTags);
         // console.log(`${projectName} dailyViewCounts:`, dailyViewCounts);
-
-        postProjectRecord({
-            projectName,
-            recordType: 'pixiv_tag_view',
-            records: viewCounts,
-        });
         postProjectRecord({
             projectName,
             recordType: 'pixiv_tag_view',

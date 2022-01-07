@@ -8,8 +8,8 @@ import { ProjectName } from '@common/root';
 import { CharaRecordType } from '@common/record';
 import { CharacterTagService } from './character-tag.service';
 import {
-    QueryOneBasicTypeProjectRecordDto,
-    QueryRangeBasicTypeProjectRecordDto,
+    QueryOneProjectRecord,
+    QueryRangeProjectRecordOfTypeDto,
 } from '../common/dto/query-record-data.dto';
 import { CreateRecordOfProjectDto } from '../common/dto/create-record-data.dto';
 
@@ -29,8 +29,8 @@ export class CharacterTagController {
     @ApiQuery({ name: 'date', type: 'string' })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
     @ApiQuery({ name: 'recordType', type: 'string' })
-    findOneBasicTypeProjectRecord(@Query() query: QueryOneBasicTypeProjectRecordDto) {
-        return this.service.findOneBasicTypeProjectRecord(query);
+    findOneBasicTypeProjectRecord(@Query() query: QueryOneProjectRecord) {
+        return this.service.findOneProjectRecord(query);
     }
 
     @Get('/range_project_record')
@@ -38,7 +38,7 @@ export class CharacterTagController {
     @ApiQuery({ name: 'to', type: 'string' })
     @ApiQuery({ name: 'recordType', type: 'string' })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
-    findRangeBasicTypeProjectRecord(@Query() query: QueryRangeBasicTypeProjectRecordDto) {
+    findRangeBasicTypeProjectRecord(@Query() query: QueryRangeProjectRecordOfTypeDto) {
         return this.service.findRangeBasicTypeProjectRecord(query);
     }
 }

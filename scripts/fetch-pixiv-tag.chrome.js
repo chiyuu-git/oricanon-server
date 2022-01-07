@@ -90,18 +90,6 @@ async function postProjectRecord({
     });
     const response = await res.text();
     console.log(`${projectName} ${recordType} response:`, response);
-
-    // 兼容操作
-    const oldUrl = route.split('/')[0];
-    const oldRes = await fetch(url, {
-        method: 'post',
-        headers: {
-            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        },
-        body: `projectName=${projectName}&records=${JSON.stringify(records)}&date=${date}&recordType=${recordType}`,
-    });
-    const oldResponse = await res.text();
-    console.log(`${projectName} ${recordType} response:`, oldResponse);
 }
 
 async function getPixivCharacterTagCount() {

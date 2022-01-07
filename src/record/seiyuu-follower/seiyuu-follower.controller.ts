@@ -8,7 +8,7 @@ import { BasicType, ProjectName } from '@common/root';
 import { SeiyuuRecordType } from '@common/record';
 import { SeiyuuFollowerService } from './seiyuu-follower.service';
 import { CreateRecordOfProjectDto } from '../common/dto/create-record-data.dto';
-import { QueryOneBasicTypeProjectRecordDto } from '../common/dto/query-record-data.dto';
+import { QueryOneProjectRecord } from '../common/dto/query-record-data.dto';
 
 @ApiTags('seiyuu_follower')
 @Controller('seiyuu_follower')
@@ -24,7 +24,7 @@ export class SeiyuuFollowerController {
     @ApiQuery({ name: 'date', type: 'string' })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
     @ApiQuery({ name: 'recordType', type: 'string' })
-    findOneBasicTypeProjectRecord(@Query() query: QueryOneBasicTypeProjectRecordDto) {
-        return this.service.findOneBasicTypeProjectRecord(query);
+    findOneBasicTypeProjectRecord(@Query() query: QueryOneProjectRecord) {
+        return this.service.findOneProjectRecord(query);
     }
 }

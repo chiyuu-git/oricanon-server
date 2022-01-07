@@ -13,7 +13,7 @@ abstract class BaseWeeklyInfoQuery {
     endDate?: string;
 }
 
-export class QueryInfoTypeWeekly extends BaseWeeklyInfoQuery {
+export class QueryRecordTypeWeekly extends BaseWeeklyInfoQuery {
     @IsString()
     @ApiProperty({
         type: String,
