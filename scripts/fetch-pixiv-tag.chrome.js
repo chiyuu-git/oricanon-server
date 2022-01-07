@@ -73,7 +73,7 @@ async function fetchPixivTagCount({
     return { illusts, novels };
 }
 
-async function postRecord({
+async function postProjectRecord({
     projectName,
     records,
     recordType = 'pixiv_illust',
@@ -90,6 +90,18 @@ async function postRecord({
     });
     const response = await res.text();
     console.log(`${projectName} ${recordType} response:`, response);
+
+    // 兼容操作
+    const oldUrl = route.split('/')[0];
+    const oldRes = await fetch(url, {
+        method: 'post',
+        headers: {
+            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        },
+        body: `projectName=${projectName}&records=${JSON.stringify(records)}&date=${date}&recordType=${recordType}`,
+    });
+    const oldResponse = await res.text();
+    console.log(`${projectName} ${recordType} response:`, oldResponse);
 }
 
 async function getPixivCharacterTagCount() {
@@ -102,11 +114,11 @@ async function getPixivCharacterTagCount() {
         const { illusts, novels } = await fetchPixivTagCount({ pixivTags });
         console.log(projectName, 'illust', illusts);
         console.log(projectName, 'novel', novels);
-        postRecord({
+        postProjectRecord({
             projectName,
             records: illusts,
         });
-        postRecord({
+        postProjectRecord({
             projectName,
             records: novels,
             recordType: 'pixiv_novel',
@@ -129,12 +141,12 @@ async function getPixivCoupleTagCount() {
         console.log(projectName, 'illust', illusts);
         console.log(projectName, 'novel', novels);
 
-        postRecord({
+        postProjectRecord({
             projectName,
             records: illusts,
             route,
         });
-        postRecord({
+        postProjectRecord({
             projectName,
             route,
             records: novels,
@@ -148,13 +160,13 @@ async function getPixivCoupleTagCount() {
         console.log(projectName, 'illust_reverse', illusts);
         console.log(projectName, 'novel_reverse', novels);
 
-        postRecord({
+        postProjectRecord({
             projectName,
             route,
             records: illusts,
             recordType: 'pixiv_illust_reverse',
         });
-        postRecord({
+        postProjectRecord({
             projectName,
             route,
             records: novels,
@@ -169,14 +181,14 @@ async function getPixivCoupleTagCount() {
         console.log(projectName, 'illust_intersection', illusts);
         console.log(projectName, 'novel_intersection', novels);
 
-        postRecord({
+        postProjectRecord({
             projectName,
             route,
             records: illusts,
             recordType: 'pixiv_illust_intersection',
         });
 
-        postRecord({
+        postProjectRecord({
             projectName,
             route,
             records: novels,

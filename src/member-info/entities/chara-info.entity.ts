@@ -10,7 +10,7 @@ export class CharaInfo extends MemberInfo {
         type: 'int',
         name: 'member_id',
     })
-    memberId: string;
+    declare memberId: number;
 
     @Column({
         type: 'varchar',

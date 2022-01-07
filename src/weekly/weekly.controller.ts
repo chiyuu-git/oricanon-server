@@ -14,9 +14,9 @@ export class WeeklyController {
     // TODO: 整合所有的信息，减少请求次数
     @Get('/info_type_weekly')
     findInfoTypeWeekly(@Query() query: QueryInfoTypeWeekly) {
-        const { basicType, infoType, endDate } = query;
+        const { basicType, recordType: infoType, endDate } = query;
         // console.log(query);
-        return this.service.getInfoTypeWeekly({ basicType, endDate, infoType });
+        return this.service.getInfoTypeWeekly({ basicType, endDate, recordType: infoType });
     }
 
     @Get('/weekly_detail_of_twitter_follower')

@@ -2,11 +2,10 @@ import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 // service
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordService } from 'src/record/record.service';
-import { ProjectName, BasicType, SeiyuuRecordType } from '@chiyu-bit/canon.root';
-import { MemberInfoTypeMap } from '@chiyu-bit/canon.root/member-info';
-import {
-    RecordWeeklyInfo,
-} from '@chiyu-bit/canon.root/weekly';
+import { ProjectName, BasicType } from '@common/root';
+import { MemberInfoTypeMap } from '@common/member-info';
+import { SeiyuuRecordType } from '@common/record';
+import { RecordWeeklyInfo } from '@common/weekly';
 import { ProjectMemberListMap } from 'src/member-info/common';
 import {
     QueryInfoTypeWeekly,
@@ -44,15 +43,15 @@ export class WeeklyService implements OnApplicationBootstrap {
         this.projectMemberListMap = await this.memberInfoService.formatListWithProject();
     }
 
-    async getInfoTypeWeekly({ basicType, infoType, endDate }: QueryInfoTypeWeekly) {
+    async getInfoTypeWeekly({ basicType, recordType, endDate }: QueryInfoTypeWeekly) {
         const result = await this.recordService.findRelativeRecordOfType(
             basicType,
-            infoType,
+            recordType,
             endDate,
         );
 
         if (!result) {
-            return `infoType ${infoType} not found`;
+            return `record ${recordType} not found`;
         }
 
         const { weekRange, relativeRecordOfType } = result;
@@ -142,6 +141,13 @@ export class WeeklyService implements OnApplicationBootstrap {
      */
     private processProjectRelativeRecord(projectRelativeRecord: ProjectRelativeRecord) {
         const { projectName, baseRecord, lastRecord, beforeLastRecord } = projectRelativeRecord;
+
+        if (baseRecord.length === 0
+            || lastRecord.length === 0
+            || beforeLastRecord.length === 0
+        ) {
+            return null;
+        }
 
         const projectTotal = baseRecord.reduce((acc, val) => acc + val);
         // 1.

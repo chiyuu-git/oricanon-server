@@ -9,6 +9,7 @@ export enum CharaRecordType {
     thousand = 'pixiv_1000',
     fiveThousand = 'pixiv_5000',
     tenThousand = 'pixiv_10000',
+    illustWithNovel = 'pixiv_illust_with_novel',
 }
 
 export enum SeiyuuRecordType {
@@ -27,7 +28,14 @@ export enum CoupleRecordType {
     r18 = 'pixiv_r18',
     r18Reverse = 'pixiv_r18_reverse',
     r18Intersection = 'pixiv_r18_intersection',
+    illustWithNovel = 'pixiv_illust_with_novel',
+    coupleUnionIllust = 'pixiv_couple_union_illust',
+    coupleUnionNovel = 'pixiv_couple_union_novel'
 }
 
-export type RecordType = CharaRecordType | SeiyuuRecordType | CoupleRecordType;
+export type RecordType = CharaRecordType | CoupleRecordType| SeiyuuRecordType;
 
+export interface ProjectRecord {
+    date: string;
+    records: number[];
+}

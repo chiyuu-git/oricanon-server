@@ -4,12 +4,11 @@ import {
     Query,
 } from '@nestjs/common';
 import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { ProjectName, SeiyuuRecordType } from '@chiyu-bit/canon.root';
+import { BasicType, ProjectName } from '@common/root';
+import { SeiyuuRecordType } from '@common/record';
 import { SeiyuuFollowerService } from './seiyuu-follower.service';
-import { CreateProjectSeiyuuRecordDto } from './dto/create-seiyuu-follower.dto';
-import { QuerySeiyuuFollowerDto } from './dto/query-seiyuu-follower.dto';
-import { UpdateSeiyuuFollowerDto } from './dto/update-seiyuu-follower.dto';
-import { QueryRangeRecordDto } from '../common/dto/query-record-data.dto';
+import { CreateRecordOfProjectDto } from '../common/dto/create-record-data.dto';
+import { QueryOneBasicTypeProjectRecordDto } from '../common/dto/query-record-data.dto';
 
 @ApiTags('seiyuu_follower')
 @Controller('seiyuu_follower')
@@ -17,15 +16,15 @@ export class SeiyuuFollowerController {
     constructor(private readonly service: SeiyuuFollowerService) {}
 
     @Post('/create_project_seiyuu_record')
-    createProjectSeiyuuRecord(@Body() createProjectSeiyuuRecordDto: CreateProjectSeiyuuRecordDto) {
-        return this.service.createProjectSeiyuuRecord(createProjectSeiyuuRecordDto);
+    createProjectRecord(@Body() createProjectSeiyuuRecordDto: CreateRecordOfProjectDto) {
+        return this.service.createSeiyuuRecordOfProject(createProjectSeiyuuRecordDto);
     }
 
-    @Get('/seiyuu_follower')
+    @Get('/project_record')
     @ApiQuery({ name: 'date', type: 'string' })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
-    findOne(@Query() query: QuerySeiyuuFollowerDto) {
-        const { date, projectName } = query;
-        return this.service.findOne({ date, projectName });
+    @ApiQuery({ name: 'recordType', type: 'string' })
+    findOneBasicTypeProjectRecord(@Query() query: QueryOneBasicTypeProjectRecordDto) {
+        return this.service.findOneBasicTypeProjectRecord(query);
     }
 }

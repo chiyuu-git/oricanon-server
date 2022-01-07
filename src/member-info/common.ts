@@ -1,4 +1,4 @@
-import type { ProjectName } from '@chiyu-bit/canon.root';
+import type { ProjectName } from '@common/root';
 import type { CharaInfo } from './entities/chara-info.entity';
 import type { CoupleInfo } from './entities/couple-info.entity';
 import type { SeiyuuInfo } from './entities/seiyuu-info.entity';

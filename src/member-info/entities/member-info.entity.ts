@@ -1,7 +1,9 @@
 import { Column } from 'typeorm';
-import { ProjectName } from '@chiyu-bit/canon.root';
+import { ProjectName } from '@common/root';
 
 export abstract class MemberInfo {
+    memberId: number;
+
     @Column({
         type: 'varchar',
         name: 'project_name',

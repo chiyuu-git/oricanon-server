@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { ProjectName, BasicType, RecordType, isRecordType, InfoType, DateString, Record } from '@chiyu-bit/canon.root';
+import { ProjectName, BasicType, DateString } from '@common/root';
+import { RecordType, ProjectRecord } from '@common/record';
 import { getPrevWeeklyFetchDate, getRelativeDate } from 'src/utils';
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { CharacterTagService } from './character-tag/character-tag.service';
@@ -21,7 +22,7 @@ type RelativeDate = DateString[];
 interface FindRangeRecordByUnionKey {
     basicType: BasicType;
     projectName: ProjectName;
-    recordType: InfoType;
+    recordType: RecordType;
     from: string;
     to: string;
 }
@@ -46,15 +47,13 @@ export class RecordService {
         private readonly coupleTagService: CoupleTagService,
     ) {}
 
-    create({ date, recordType, romaName, record }: CreateRecordDto) {}
-
     /**
      * 获取 recordType 对应的 module 下，所有企划的相关数据
      * 默认维度 basicType infoType date
      */
     async findRelativeRecordOfType(
         basicType: BasicType,
-        infoType: InfoType,
+        recordType: RecordType,
         endDate?: string,
     ) {
         const service = serviceMap[basicType];
@@ -72,7 +71,7 @@ export class RecordService {
         const relativeRecordOfType = await Promise.all(
             Object.values(ProjectName).map(async (projectName) => {
                 const [baseRecord, lastRecord, beforeLastRecord] = await this.findProjectRelativeRecord(
-                    infoType,
+                    recordType,
                     this[service],
                     projectName,
                     relativeDate,
@@ -83,7 +82,7 @@ export class RecordService {
                 if (baseRecord && lastRecord && beforeLastRecord) {
                     return {
                         projectName,
-                        recordType: infoType,
+                        recordType,
                         baseRecord,
                         lastRecord,
                         beforeLastRecord,
@@ -103,25 +102,15 @@ export class RecordService {
      * 去 service 获取单个企划的数据
      */
     async findProjectRelativeRecord(
-        infoType: InfoType,
+        recordType: RecordType,
         service: RecordDataService,
         projectName: ProjectName,
         relativeDate: RelativeDate,
     ) {
-        if (isRecordType(infoType)) {
-            return Promise.all(
-                relativeDate.map((date) => service.findOneRecord({
-                    projectName,
-                    recordType: infoType,
-                    date,
-                })),
-            );
-        }
-
         return Promise.all(
-            relativeDate.map((date) => service.findOneAggtRecord({
+            relativeDate.map((date) => service.findOneBasicTypeProjectRecord({
                 projectName,
-                aggregationType: infoType,
+                recordType,
                 date,
             })),
         );
@@ -171,11 +160,11 @@ export class RecordService {
         projectName,
         from,
         to,
-    }: FindRangeRecordByUnionKey): Promise<Record[] | false> {
+    }: FindRangeRecordByUnionKey): Promise<ProjectRecord[]> {
         const service = serviceMap[basicType];
 
         if (!service) {
-            return false;
+            return [];
         }
 
         return this[service].findRecordInRange({
@@ -229,7 +218,7 @@ export class RecordService {
             endDate = await this.characterTagService.findLatestWeeklyFetchDate();
         }
 
-        const recordInRange = await (this[service] as RecordDataService).findRecordInRange({
+        const recordInRange = await (this[service] as RecordDataService).findRangeBasicTypeProjectRecord({
             from,
             to: endDate,
             projectName,
@@ -237,7 +226,7 @@ export class RecordService {
         });
 
         // 倒过来获取周增数组
-        const incrementRecordInRange: Record[] = [];
+        const incrementRecordInRange: ProjectRecord[] = [];
         let i = recordInRange.length - 1;
         let curRecord = recordInRange[i];
         while (i > 0) {

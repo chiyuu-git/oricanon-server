@@ -68,6 +68,26 @@ async function postRecord({
     projectName,
     records,
     recordType = 'pixiv_illust',
+    route = 'character_tag',
+}) {
+    const date = new Date();
+    const url = `${HOST}/${route}`;
+    const res = await fetch(url, {
+        method: 'post',
+        mode: 'cors',
+        headers: {
+            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        },
+        body: `projectName=${projectName}&records=${JSON.stringify(records)}&date=${date}&recordType=${recordType}`,
+    });
+    const response = await res.text();
+    console.log(`${projectName} ${recordType} response:`, response);
+}
+
+async function postProjectRecord({
+    projectName,
+    records,
+    recordType = 'pixiv_illust',
     route = 'character_tag/create_project_chara_record',
 }) {
     const date = new Date();
@@ -96,7 +116,12 @@ async function getCharacterPixivViewCount() {
         // const dailyViewCounts = await fetchPixivDailyViewCount(pixivTags);
         // console.log(`${projectName} dailyViewCounts:`, dailyViewCounts);
 
-        postRecord({
+        postProjectRecord({
+            projectName,
+            recordType: 'pixiv_tag_view',
+            records: viewCounts,
+        });
+        postProjectRecord({
             projectName,
             recordType: 'pixiv_tag_view',
             records: viewCounts,

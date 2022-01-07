@@ -10,7 +10,7 @@ export class SeiyuuInfo extends MemberInfo {
         type: 'int',
         name: 'member_id',
     })
-    memberId: number;
+    declare memberId: number;
 
     @Column({
         type: 'varchar',

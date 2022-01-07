@@ -10,7 +10,7 @@ export class CoupleInfo extends MemberInfo {
         type: 'int',
         name: 'couple_id',
     })
-    memberId: number;
+    declare memberId: number;
 
     @Column({
         type: 'varchar',

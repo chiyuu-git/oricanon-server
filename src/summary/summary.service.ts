@@ -1,7 +1,8 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { BasicType, ProjectName, RecordType, Record } from '@chiyu-bit/canon.root';
-import { MemberInfoTypeMap } from '@chiyu-bit/canon.root/member-info';
-import { HistoricalIncrementRank, MemberIncrementInfo } from '@chiyu-bit/canon.root/summary';
+import { BasicType, ProjectName } from '@common/root';
+import { RecordType, ProjectRecord } from '@common/record';
+import { MemberInfoTypeMap } from '@common/member-info';
+import { HistoricalIncrementRank, MemberIncrementInfo } from '@common/summary';
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordService } from 'src/record/record.service';
 
@@ -11,7 +12,7 @@ import { QueryIncrementRankOfTypeInRange, QueryRelativeIncrementOfTypeInRange } 
 type IncrementRecordOfTypeInRange = {
     projectName: ProjectName;
     recordType: RecordType;
-    incrementRecordInRange: Record[];
+    incrementRecordInRange: ProjectRecord[];
 }[]
 
 @Injectable()
@@ -88,7 +89,7 @@ export class SummaryService implements OnApplicationBootstrap {
      * flatten 企划内所有的增量记录，并添加上成员信息，排序后返回
      */
     private processProjectIncrementRecord<Type extends BasicType>(
-        IncrementRecordInRange: Record[],
+        IncrementRecordInRange: ProjectRecord[],
         memberList: MemberInfoTypeMap[Type][],
     ) {
         const projectIncrementInfoArray: MemberIncrementInfo[] = [];

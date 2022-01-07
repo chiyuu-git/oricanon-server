@@ -1,38 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AggregationType, CharaRecordType, ProjectName } from '@chiyu-bit/canon.root';
+import { BasicType, ProjectName } from '@common/root';
+import { CoupleRecordType } from '@common/record';
 import { MemberInfoService } from 'src/member-info/member-info.service';
-import { RecordDataService, RecordDataUnionKey } from '../common/record-data-service';
-import { QueryOneAggtRecordDto } from '../common/dto/query-record-data.dto';
-import { CreateProjectCoupleRecordDto } from './dto/create-couple-tag.dto';
-import { QueryCoupleTagDto } from './dto/query-conpule-tag.dto';
-import { CoupleTag, LLSSCouple } from './entities/couple-tag.entity';
-import { RecordTypeEntity } from '../common/record-type.entity';
+import { RecordDataService } from '../common/record-data-service';
+import {
+    QueryOneBasicTypeProjectRecordDto,
+    QueryOneProjectRecordInDB,
+    QueryRangeBasicTypeProjectRecordDto,
+} from '../common/dto/query-record-data.dto';
+import { LLSSCouple } from './couple-tag.entity';
 import { CoupleRecordEntity } from '../common/record.entity';
+import { CreateRecordOfProjectDto } from '../common/dto/create-record-data.dto';
 
 interface QueryUnionList {
-    typeList: {
-        default: CharaRecordType;
-        reverse: CharaRecordType;
-        intersection: CharaRecordType;
-    };
+    default: CoupleRecordType;
+    reverse: CoupleRecordType;
+    intersection: CoupleRecordType;
 }
 @Injectable()
 export class CoupleTagService extends RecordDataService {
     @InjectRepository(LLSSCouple)
     LLSSCoupleRepository: Repository<LLSSCouple>
-
-    @InjectRepository(RecordTypeEntity)
-    recordTypeRepository: Repository<RecordTypeEntity>
-
-    // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-    constructor(
-    @InjectRepository(CoupleTag) repository: Repository<CoupleTag>,
-        readonly memberInfoService: MemberInfoService,
-    ) {
-        super(repository, memberInfoService);
-    }
 
     getRepositoryByProject(projectName: ProjectName): Repository<CoupleRecordEntity> {
         switch (projectName) {
@@ -43,58 +33,34 @@ export class CoupleTagService extends RecordDataService {
         }
     }
 
-    async createProjectCoupleRecord({ date, projectName, recordType, records }: CreateProjectCoupleRecordDto) {
-        const projectCoupleInfo = this.projectMemberListMap[projectName].couples;
-        // eslint-disable-next-line no-await-in-loop
-        const { recordTypeId } = await this.recordTypeRepository.findOne({
-            where: { name: recordType },
-        });
-
-        const repository = this.getRepositoryByProject(projectName);
-
-        for (const [i, record] of records.entries()) {
-            const coupleInfo = projectCoupleInfo[i];
-            const { memberId } = coupleInfo;
-
-            const data = {
-                date,
-                typeId: recordTypeId,
-                memberId,
-                record,
-            };
-            repository.insert(data);
-        }
-    }
-
-    async findOne({ date, projectName, recordType }: QueryCoupleTagDto) {
-        const coupleTag = await this.repository.findOne({
-            where: {
-                date,
-                projectName,
-                recordType,
-            },
-        });
-        return coupleTag;
+    createCoupleRecordOfProject(createProjectCoupleRecordDto: CreateRecordOfProjectDto) {
+        return this.createRecordOfProject(BasicType.couple, createProjectCoupleRecordDto);
     }
 
     /**
+     * findOneCoupleProjectRecord
      * couple 聚合入口，根据 aggregationType 调用不同的聚合方法
      */
-    async findOneAggtRecord(params: QueryOneAggtRecordDto): Promise<false | number[]> {
-        const { projectName, aggregationType, date } = params;
-        switch (aggregationType) {
-            case AggregationType.coupleUnionIllust:
-                return this.findUnionIllust({ projectName, date });
-            case AggregationType.coupleUnionNovel:
-                return this.findUnionNovel({ projectName, date });
-            case AggregationType.illustWithNovel:
-                return this.findIllustWithNovel({ projectName, date });
+    async findOneBasicTypeProjectRecord(params: QueryOneBasicTypeProjectRecordDto): Promise<false |number[]> {
+        const { recordType } = params;
+
+        switch (recordType) {
+            case CoupleRecordType.coupleUnionIllust:
+                return this.findUnionIllust(params);
+            case CoupleRecordType.coupleUnionNovel:
+                return this.findUnionNovel(params);
+            case CoupleRecordType.illustWithNovel:
+                return this.findIllustWithNovel(params);
             default:
-                return false;
         }
+
+        return this.findOneProjectRecordInDB({
+            basicType: BasicType.couple,
+            ...params,
+        });
     }
 
-    async findIllustWithNovel(params: QueryOneAggtRecordDto) {
+    async findIllustWithNovel(params: QueryOneBasicTypeProjectRecordDto) {
         const [unionIllustRecord, unionNovelRecord] = await Promise.all(
             [
                 this.findUnionIllust(params),
@@ -105,71 +71,51 @@ export class CoupleTagService extends RecordDataService {
         if (unionIllustRecord && unionNovelRecord) {
             return unionIllustRecord.map((record, i) => record + unionNovelRecord[i]);
         }
-        return false;
+        return [];
     }
 
-    async findUnionNovel(params: QueryOneAggtRecordDto) {
-        const { projectName, date } = params;
-        return this.findUnion({
-            projectName,
-            date,
-            typeList: {
-                default: CharaRecordType.novel,
-                reverse: CharaRecordType.novelReverse,
-                intersection: CharaRecordType.novelIntersection,
-            },
+    async findUnionNovel(params: QueryOneBasicTypeProjectRecordDto) {
+        return this.findUnion(params, {
+            default: CoupleRecordType.novel,
+            reverse: CoupleRecordType.novelReverse,
+            intersection: CoupleRecordType.novelIntersection,
         });
     }
 
-    async findUnionIllust(params: QueryOneAggtRecordDto) {
-        const { projectName, date } = params;
-        return this.findUnion({
-            projectName,
-            date,
-            typeList: {
-                default: CharaRecordType.illust,
-                reverse: CharaRecordType.illustReverse,
-                intersection: CharaRecordType.illustIntersection,
-            },
+    async findUnionIllust(params: QueryOneBasicTypeProjectRecordDto) {
+        return this.findUnion(params, {
+            default: CoupleRecordType.illust,
+            reverse: CoupleRecordType.illustReverse,
+            intersection: CoupleRecordType.illustIntersection,
         });
     }
 
-    async findUnion(params: Omit<QueryOneAggtRecordDto, 'infoType'> & QueryUnionList) {
-        const { projectName, date, typeList } = params;
-        const findOptionList: RecordDataUnionKey[] = Object.values(typeList)
-            .map((recordType) => ({ projectName, date, recordType }));
+    async findUnion(params: QueryOneBasicTypeProjectRecordDto, typeList: QueryUnionList) {
+        const findOptionList: QueryOneProjectRecordInDB[] = Object.values(typeList)
+            .map((recordType) => ({
+                basicType: BasicType.couple,
+                ...params,
+                recordType,
+            }));
 
-        const coupleTagArr = await this.repository.find({
-            where: findOptionList,
-        });
         // union 类型有三种，需要去重之后返回，先整理成 map 形式
         // default + reverse - intersection
-        let defaultRecord: number[] = [];
-        let reverseRecord: number[] = [];
-        let intersectionRecord: number[] = [];
-        for (const coupleTag of coupleTagArr) {
-            const { recordType, records } = coupleTag;
+        const [
+            defaultRecord,
+            reverseRecord,
+            intersectionRecord,
+        ] = await Promise.all(findOptionList.map((findOption) => this.findOneProjectRecordInDB(findOption)));
 
-            switch (recordType) {
-                case typeList.default:
-                    defaultRecord = records;
-                    break;
-                case typeList.reverse:
-                    reverseRecord = records;
-                    break;
-                case typeList.intersection:
-                    intersectionRecord = records;
-                    break;
-                default:
-            }
+        if (!defaultRecord) {
+            // return null 相当于 return any，还是用 false 比较好
+            return false;
         }
 
-        const unionRecord = defaultRecord.map((record, i) => record + reverseRecord[i] - intersectionRecord[i]);
+        return defaultRecord.map((record, i) => record + reverseRecord[i] - intersectionRecord[i]);
+    }
 
-        if (unionRecord.length > 0) {
-            return unionRecord;
-        }
-        // return null 相当于 return any，还是用 false 比较好
-        return false;
+    async findRangeBasicTypeProjectRecord(params: QueryRangeBasicTypeProjectRecordDto) {
+        // 普通类型 record
+        return this.findRangeProjectRecordEntityInDB(BasicType.couple, params);
     }
 }

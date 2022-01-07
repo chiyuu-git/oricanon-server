@@ -1,5 +1,6 @@
 import { IsString } from 'class-validator';
-import { BasicType, InfoType, ProjectName } from '@chiyu-bit/canon.root';
+import { BasicType, ProjectName } from '@common/root';
+import { RecordType } from '@common/record';
 import { ApiProperty } from '@nestjs/swagger';
 
 abstract class BaseWeeklyInfoQuery {
@@ -18,7 +19,7 @@ export class QueryInfoTypeWeekly extends BaseWeeklyInfoQuery {
         type: String,
         description: 'infoType',
     })
-    infoType: InfoType;
+    recordType: RecordType;
 }
 
 export class QueryWeeklyDetail {

@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
-import { BasicType, ProjectName } from '@chiyu-bit/canon.root';
+import { BasicType, ProjectName } from '@common/root';
 import { MemberInfoService } from './member-info.service';
 import { CreateMemberInfoDto } from './dto/create-member-info.dto';
 import { UpdateMemberInfoDto } from './dto/update-member-info.dto';

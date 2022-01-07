@@ -4,11 +4,14 @@ import {
     Query,
 } from '@nestjs/common';
 import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { CharaRecordType, ProjectName } from '@chiyu-bit/canon.root';
+import { ProjectName } from '@common/root';
+import { CharaRecordType } from '@common/record';
 import { CharacterTagService } from './character-tag.service';
-import { CreateProjectCharaRecordDto } from './dto/create-character-tag.dto';
-import { QueryCharacterTagDto } from './dto/query-character-tag.dto';
-import { UpdateCharacterTagDto } from './dto/update-character-tag.dto';
+import {
+    QueryOneBasicTypeProjectRecordDto,
+    QueryRangeBasicTypeProjectRecordDto,
+} from '../common/dto/query-record-data.dto';
+import { CreateRecordOfProjectDto } from '../common/dto/create-record-data.dto';
 
 @ApiTags('character_tag')
 @Controller('character_tag')
@@ -17,17 +20,25 @@ export class CharacterTagController {
         private readonly service: CharacterTagService,
     ) {}
 
-    @Post('/create_project_chara_record')
-    createProjectCharaRecord(@Body() createCharacterTagDto: CreateProjectCharaRecordDto) {
-        return this.service.createProjectCharaRecord(createCharacterTagDto);
+    @Post('/create_project_record')
+    createProjectRecord(@Body() createProjectCharaRecordDto: CreateRecordOfProjectDto) {
+        return this.service.createCharaRecordOfProject(createProjectCharaRecordDto);
     }
 
-    @Get('/seiyuu_follower')
+    @Get('/one_project_record')
     @ApiQuery({ name: 'date', type: 'string' })
-    @ApiQuery({ name: 'type', enum: CharaRecordType })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
-    findOne(@Query() query: QueryCharacterTagDto) {
-        const { date, projectName, recordType } = query;
-        return this.service.findOne({ date, projectName, recordType });
+    @ApiQuery({ name: 'recordType', type: 'string' })
+    findOneBasicTypeProjectRecord(@Query() query: QueryOneBasicTypeProjectRecordDto) {
+        return this.service.findOneBasicTypeProjectRecord(query);
+    }
+
+    @Get('/range_project_record')
+    @ApiQuery({ name: 'from', type: 'string' })
+    @ApiQuery({ name: 'to', type: 'string' })
+    @ApiQuery({ name: 'recordType', type: 'string' })
+    @ApiQuery({ name: 'projectName', enum: ProjectName })
+    findRangeBasicTypeProjectRecord(@Query() query: QueryRangeBasicTypeProjectRecordDto) {
+        return this.service.findRangeBasicTypeProjectRecord(query);
     }
 }

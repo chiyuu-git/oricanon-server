@@ -1,7 +1,7 @@
 import { IsDateString, IsNumber, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { formatDate } from 'src/utils';
-import { RecordType } from '@chiyu-bit/canon.root/record';
+import { RecordType } from '@common/record';
 
 export class CreateRecordDto {
     @IsDateString()

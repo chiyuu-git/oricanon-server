@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BasicType, ProjectName } from '@chiyu-bit/canon.root';
-import { MemberInfoMap, MemberBasicInfo } from '@chiyu-bit/canon.root/member-info';
+import { BasicType, ProjectName } from '@common/root';
+import { MemberInfoMap, GetMemberInfoByType } from '@common/member-info';
 import { Repository } from 'typeorm';
 import { CreateMemberInfoDto } from './dto/create-member-info.dto';
 import { UpdateMemberInfoDto } from './dto/update-member-info.dto';
@@ -63,7 +63,7 @@ export class MemberInfoService {
     findMemberInfoByTypeAndProject<Type extends BasicType>(
         basicType: Type,
         projectName: ProjectName,
-    ): Promise<MemberBasicInfo<Type>[]>
+    ): Promise<GetMemberInfoByType<Type>[]>
     findMemberInfoByTypeAndProject(
         basicType: BasicType,
         projectName: ProjectName,
@@ -79,7 +79,7 @@ export class MemberInfoService {
         });
     }
 
-    findMemberInfoListByType<Type extends BasicType>(type: Type): Promise<MemberBasicInfo<Type>[]>
+    findMemberInfoListByType<Type extends BasicType>(type: Type): Promise<GetMemberInfoByType<Type>[]>
     async findMemberInfoListByType(type: BasicType) {
         const repository = this.getRepositoryByType(type);
 

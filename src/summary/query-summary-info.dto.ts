@@ -1,5 +1,6 @@
 import { IsString } from 'class-validator';
-import { CharaRecordType, BasicType, ProjectName, RecordType } from '@chiyu-bit/canon.root';
+import { BasicType, ProjectName } from '@common/root';
+import { CharaRecordType, RecordType } from '@common/record';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class QueryIncrementRankOfTypeInRange {

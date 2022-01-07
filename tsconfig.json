@@ -1,19 +1,37 @@
 {
-  "compilerOptions": {
-    "target": "esnext",
-    // 这个才可以使用 import.meta.url 代替 __dirname
-    "module": "commonjs",
-    // 设置这个才可以找到 @nestjs
-    // "moduleResolution": "node",
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
-    "incremental": true,
-    "skipLibCheck": true
-  }
+    "compilerOptions": {
+        "target": "esnext",
+        // 这个才可以使用 import.meta.url 代替 __dirname
+        "module": "commonjs",
+        // 设置这个才可以找到 @nestjs
+        // "moduleResolution": "node",
+        "declaration": true,
+        "removeComments": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "sourceMap": true,
+        "outDir": "./dist",
+        "baseUrl": "./",
+        // 路径映射，与 baseUrl 关联
+        "paths": {
+            "@common/*": [
+                "src/common/*"
+            ],
+            "@utils/*": [
+                "src/utils/*"
+            ],
+            "@constant/*": [
+                "src/constant/*"
+            ],
+            "@assets/*": [
+                "src/assets/*"
+            ],
+            "@src/*": [
+                "src/*"
+            ],
+        },
+        "incremental": true,
+        "skipLibCheck": true
+    }
 }

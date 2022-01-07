@@ -1,9 +1,10 @@
-import { IsArray, IsDateString, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsDateString, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { formatDate } from 'src/utils';
-import { ProjectName, CharaRecordType } from '@chiyu-bit/canon.root';
+import { ProjectName } from '@common/root';
+import { RecordType } from '@common/record';
 
-export class CreateProjectCharaRecordDto {
+export class CreateRecordOfProjectDto {
     @IsDateString()
     @Transform(({ value }) => formatDate(value))
     date: string;
@@ -12,8 +13,7 @@ export class CreateProjectCharaRecordDto {
     projectName: ProjectName;
 
     @IsString()
-    @IsOptional()
-    recordType: CharaRecordType;
+    recordType: RecordType;
 
     @IsArray()
     @Transform(({ value }) => JSON.parse(value))

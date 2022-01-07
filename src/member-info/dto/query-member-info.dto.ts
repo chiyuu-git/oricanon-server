@@ -1,5 +1,5 @@
 import { IsString } from 'class-validator';
-import { BasicType, ProjectName } from '@chiyu-bit/canon.root';
+import { BasicType, ProjectName } from '@common/root';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class QueryMemberInfo {
