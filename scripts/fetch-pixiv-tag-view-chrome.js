@@ -64,31 +64,11 @@ async function fetchPixivDailyViewCount(pixivTags) {
     return dailyViewCounts;
 }
 
-async function postRecord({
-    projectName,
-    records,
-    recordType = 'pixiv_illust',
-    route = 'character_tag',
-}) {
-    const date = new Date();
-    const url = `${HOST}/${route}`;
-    const res = await fetch(url, {
-        method: 'post',
-        mode: 'cors',
-        headers: {
-            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        },
-        body: `projectName=${projectName}&records=${JSON.stringify(records)}&date=${date}&recordType=${recordType}`,
-    });
-    const response = await res.text();
-    console.log(`${projectName} ${recordType} response:`, response);
-}
-
 async function postProjectRecord({
     projectName,
     records,
     recordType = 'pixiv_illust',
-    route = 'character_tag/create_project_chara_record',
+    route = 'character_tag/create_project_record',
 }) {
     const date = new Date();
     const url = `${HOST}/${route}`;
@@ -106,7 +86,7 @@ async function postProjectRecord({
 
 async function getCharacterPixivViewCount() {
     console.log('==== fetch character view start');
-    const data = await fetch(`${HOST}/member_info/character_tag_list`, { mode: 'cors' });
+    const data = await fetch(`${HOST}/member_info/chara_tag_list`, { mode: 'cors' });
     const characterTagLists = await data.json();
     console.log('characterTagLists:', characterTagLists);
 
@@ -119,6 +99,13 @@ async function getCharacterPixivViewCount() {
             projectName,
             recordType: 'pixiv_tag_view',
             records: viewCounts,
+        });
+
+        await new Promise((resolve, reject) => {
+            setTimeout(() => {
+                // 300ms 之后再resolve
+                resolve();
+            }, 300);
         });
     }
 

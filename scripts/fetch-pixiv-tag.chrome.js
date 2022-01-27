@@ -77,7 +77,7 @@ async function postProjectRecord({
     projectName,
     records,
     recordType = 'pixiv_illust',
-    route = 'character_tag/create_project_chara_record',
+    route = 'character_tag/create_project_record',
 }) {
     const date = new Date();
     const url = `${HOST}/${route}`;
@@ -122,7 +122,7 @@ async function getPixivCoupleTagCount() {
     const data = await fetch(`${HOST}/member_info/couple_tag_list`);
     const coupleTagLists = await data.json();
     console.log('coupleTagLists:', coupleTagLists);
-    const route = 'couple_tag/create_project_couple_record';
+    const route = 'couple_tag/create_project_record';
 
     for (const { projectName, pixivTags } of coupleTagLists) {
         const { illusts, novels } = await fetchPixivTagCount({ pixivTags });
@@ -139,6 +139,13 @@ async function getPixivCoupleTagCount() {
             route,
             records: novels,
             recordType: 'pixiv_novel',
+        });
+
+        await new Promise((resolve, reject) => {
+            setTimeout(() => {
+                // 300ms 之后再resolve
+                resolve();
+            }, 300);
         });
     }
 

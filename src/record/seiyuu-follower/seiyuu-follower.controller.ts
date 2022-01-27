@@ -15,12 +15,12 @@ import { QueryOneProjectRecord } from '../common/dto/query-record-data.dto';
 export class SeiyuuFollowerController {
     constructor(private readonly service: SeiyuuFollowerService) {}
 
-    @Post('/create_project_seiyuu_record')
+    @Post('/create_project_record')
     createProjectRecord(@Body() createProjectSeiyuuRecordDto: CreateRecordOfProjectDto) {
         return this.service.createSeiyuuRecordOfProject(createProjectSeiyuuRecordDto);
     }
 
-    @Get('/project_record')
+    @Get('/one_project_record')
     @ApiQuery({ name: 'date', type: 'string' })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
     @ApiQuery({ name: 'recordType', type: 'string' })

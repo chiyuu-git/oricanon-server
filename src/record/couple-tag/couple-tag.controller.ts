@@ -15,7 +15,7 @@ import { CreateRecordOfProjectDto } from '../common/dto/create-record-data.dto';
 export class CoupleTagController {
     constructor(private readonly service: CoupleTagService) {}
 
-    @Post('/create_project_couple_record')
+    @Post('/create_project_record')
     createProjectRecord(@Body() createProjectCoupleRecordDto: CreateRecordOfProjectDto) {
         return this.service.createCoupleRecordOfProject(createProjectCoupleRecordDto);
     }
