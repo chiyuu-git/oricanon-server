@@ -77,7 +77,7 @@ async function postProjectRecord({
     projectName,
     records,
     recordType = 'pixiv_illust',
-    route = 'character_tag/create_project_record',
+    route = 'chara_tag/create_project_record',
 }) {
     const date = new Date();
     const url = `${HOST}/${route}`;
@@ -92,13 +92,13 @@ async function postProjectRecord({
     console.log(`${projectName} ${recordType} response:`, response);
 }
 
-async function getPixivCharacterTagCount() {
-    console.log('==== fetch character start');
+async function getPixivCharaTagCount() {
+    console.log('==== fetch chara start');
     const data = await fetch(`${HOST}/member_info/chara_tag_list`);
-    const characterTagLists = await data.json();
-    console.log('characterTagLists:', characterTagLists);
+    const charaTagLists = await data.json();
+    console.log('charaTagLists:', charaTagLists);
 
-    for (const { projectName, pixivTags } of characterTagLists) {
+    for (const { projectName, pixivTags } of charaTagLists) {
         const { illusts, novels } = await fetchPixivTagCount({ pixivTags });
         console.log(projectName, 'illust', illusts);
         console.log(projectName, 'novel', novels);
@@ -112,10 +112,10 @@ async function getPixivCharacterTagCount() {
             recordType: 'pixiv_novel',
         });
     }
-    console.log('==== fetch character end');
+    console.log('==== fetch chara end');
 }
 
-await getPixivCharacterTagCount();
+await getPixivCharaTagCount();
 
 async function getPixivCoupleTagCount() {
     console.log('==== fetch couple start');

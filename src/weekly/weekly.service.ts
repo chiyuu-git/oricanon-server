@@ -65,7 +65,7 @@ export class WeeklyService implements OnApplicationBootstrap {
         // 处理集计范围
         const from = new Date(weekRange.from);
         const to = new Date(weekRange.to);
-        const range = `${from.getMonth() + 1}/${from.getDate() + 1}至${to.getMonth() + 1}/${to.getDate()}`;
+        const range = `${from.getMonth() + 1}/${from.getDate() + 1} 至 ${to.getMonth() + 1}/${to.getDate()}`;
 
         recordWeeklyInfo.range = range;
 

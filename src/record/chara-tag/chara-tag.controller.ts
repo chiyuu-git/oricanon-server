@@ -5,19 +5,18 @@ import {
 } from '@nestjs/common';
 import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ProjectName } from '@common/root';
-import { CharaRecordType } from '@common/record';
-import { CharacterTagService } from './character-tag.service';
+import { CharaTagService } from './chara-tag.service';
 import {
     QueryOneProjectRecord,
     QueryRangeProjectRecordOfTypeDto,
 } from '../common/dto/query-record-data.dto';
 import { CreateRecordOfProjectDto } from '../common/dto/create-record-data.dto';
 
-@ApiTags('character_tag')
-@Controller('character_tag')
-export class CharacterTagController {
+@ApiTags('chara_tag')
+@Controller('chara_tag')
+export class CharaTagController {
     constructor(
-        private readonly service: CharacterTagService,
+        private readonly service: CharaTagService,
     ) {}
 
     @Post('/create_project_record')

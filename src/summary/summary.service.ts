@@ -1,4 +1,4 @@
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { BasicType, ProjectName } from '@common/root';
 import { RecordType, ProjectRecord } from '@common/record';
 import { MemberInfoTypeMap } from '@common/member-info';
@@ -121,11 +121,16 @@ export class SummaryService implements OnApplicationBootstrap {
         return sortedProjectIncrementInfo;
     }
 
+    /**
+     * 获取指定日期的相对增量
+     */
     async getRelativeIncrementOfTypeInRange(query: QueryRelativeIncrementOfTypeInRange) {
         const recordInRange = await this.recordService.findRangeRecordByUnionKey(query);
+
         if (!recordInRange) {
-            return 'error basicType';
+            throw new HttpException(`Service of ${query.basicType} not exist`, HttpStatus.NOT_FOUND);
         }
+
         const compareTarget = recordInRange[0].records;
 
         const relativeIncrement = recordInRange.map(({ date, records }) => {

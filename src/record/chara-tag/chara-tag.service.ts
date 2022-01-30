@@ -8,12 +8,12 @@ import {
     QueryOneProjectRecord,
     QueryRangeProjectRecordOfTypeDto,
 } from '../common/dto/query-record-data.dto';
-import { LLChara, LLNChara, LLSChara, LLSSChara } from './character-tag.entity';
+import { LLChara, LLNChara, LLSChara, LLSSChara } from './chara-tag.entity';
 import { MemberRecordEntity } from '../common/record.entity';
 import { CreateRecordOfProjectDto } from '../common/dto/create-record-data.dto';
 
 @Injectable()
-export class CharacterTagService extends RecordDataService {
+export class CharaTagService extends RecordDataService {
     @InjectRepository(LLChara)
     LLCharaRepository: Repository<LLChara>;
 
@@ -66,7 +66,7 @@ export class CharacterTagService extends RecordDataService {
     }
 
     /**
-     * 聚合 illust 和 novel，目前 character 只有一个聚合
+     * 聚合 illust 和 novel，目前 chara 只有一个聚合
      * 之后新增聚合此方法可以作为入口分发
      */
     async findIllustWithNovel(params: QueryOneProjectRecord): Promise<null | number[]> {

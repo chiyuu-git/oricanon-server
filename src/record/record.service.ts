@@ -3,7 +3,7 @@ import { ProjectName, BasicType, DateString } from '@common/root';
 import { RecordType, ProjectRecord } from '@common/record';
 import { getPrevWeeklyFetchDate, getRelativeDate } from 'src/utils';
 import { MemberInfoService } from 'src/member-info/member-info.service';
-import { CharacterTagService } from './character-tag/character-tag.service';
+import { CharaTagService } from './chara-tag/chara-tag.service';
 import { CoupleTagService } from './couple-tag/couple-tag.service';
 import { SeiyuuFollowerService } from './seiyuu-follower/seiyuu-follower.service';
 import { RecordDataService } from './common/record-data-service';
@@ -32,8 +32,8 @@ interface FindProjectIncrementRecordOfTypeInRange {
 export class RecordService {
     constructor(
         private readonly memberInfoService: MemberInfoService,
-        // RecordDataService 总共有三种 character seiyuu couple 均实现了 RecordDataService 接口
-        private readonly charaTagService: CharacterTagService,
+        // RecordDataService 总共有三种 chara seiyuu couple 均实现了 RecordDataService 接口
+        private readonly charaTagService: CharaTagService,
         private readonly coupleTagService: CoupleTagService,
         private readonly seiyuuFollowerService: SeiyuuFollowerService,
     ) {}

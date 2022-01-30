@@ -150,6 +150,10 @@ export class RecordDataService implements OnApplicationBootstrap {
         return formatProjectRecordStr(projectRecordStr)[0].records;
     }
 
+    /**
+     * 获取指定日期内该企划所有 record
+     * 查询参数：基础类型、企划、recordType、range
+     */
     async findRangeBasicTypeProjectRecord(
         params: QueryRangeProjectRecordOfTypeDto,
     ): Promise<null | ProjectRecordEntity[]> {
@@ -167,7 +171,7 @@ export class RecordDataService implements OnApplicationBootstrap {
 
         const repository = this.getRepositoryByProject(projectName);
 
-        const projectRecordStr: ProjectRecordStr[] = await repository.query(`
+        const queryStr = `
             SELECT
                 DATE_FORMAT(date, '%Y-%m-%d') as date,
                 '${recordType}' as recordType,
@@ -176,7 +180,9 @@ export class RecordDataService implements OnApplicationBootstrap {
             JOIN canon_record.record_type r USING (type_id)
             WHERE date BETWEEN '${from}' AND '${to}' AND r.name = '${recordType}'
             GROUP BY date;
-        `);
+        `;
+        // console.log('queryStr:', queryStr);
+        const projectRecordStr: ProjectRecordStr[] = await repository.query(queryStr);
 
         if (projectRecordStr.length === 0) {
             return null;

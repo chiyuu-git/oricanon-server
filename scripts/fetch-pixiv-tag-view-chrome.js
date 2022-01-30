@@ -68,7 +68,7 @@ async function postProjectRecord({
     projectName,
     records,
     recordType = 'pixiv_illust',
-    route = 'character_tag/create_project_record',
+    route = 'chara_tag/create_project_record',
 }) {
     const date = new Date();
     const url = `${HOST}/${route}`;
@@ -84,13 +84,13 @@ async function postProjectRecord({
     console.log(`${projectName} ${recordType} response:`, response);
 }
 
-async function getCharacterPixivViewCount() {
-    console.log('==== fetch character view start');
+async function getCharaPixivViewCount() {
+    console.log('==== fetch chara view start');
     const data = await fetch(`${HOST}/member_info/chara_tag_list`, { mode: 'cors' });
-    const characterTagLists = await data.json();
-    console.log('characterTagLists:', characterTagLists);
+    const charaTagLists = await data.json();
+    console.log('charaTagLists:', charaTagLists);
 
-    for (const { projectName, pixivTags } of characterTagLists) {
+    for (const { projectName, pixivTags } of charaTagLists) {
         const viewCounts = await fetchPixivTotalViewCount(pixivTags);
         console.log(`${projectName} viewCounts:`, viewCounts);
         // const dailyViewCounts = await fetchPixivDailyViewCount(pixivTags);
@@ -109,7 +109,7 @@ async function getCharacterPixivViewCount() {
         });
     }
 
-    console.log('==== fetch character view end');
+    console.log('==== fetch chara view end');
 }
 
-await getCharacterPixivViewCount();
+await getCharaPixivViewCount();

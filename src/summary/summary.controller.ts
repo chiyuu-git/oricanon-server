@@ -11,13 +11,13 @@ import { SummaryService } from './summary.service';
 export class SummaryController {
     constructor(private readonly service: SummaryService) {}
 
-    @Get('/relative_increment_of_type_in_range')
-    findRelativeIncrementOfTypeInRange(@Query() query: QueryRelativeIncrementOfTypeInRange) {
-        return this.service.getRelativeIncrementOfTypeInRange(query);
-    }
-
     @Get('/week_increment_rank_of_type_in_range')
     findIncrementRankOfTypeInRange(@Query() query: QueryIncrementRankOfTypeInRange) {
         return this.service.getWeekIncrementRankOfTypeInRange(query);
+    }
+
+    @Get('/relative_increment_of_type_in_range')
+    findRelativeIncrementOfTypeInRange(@Query() query: QueryRelativeIncrementOfTypeInRange) {
+        return this.service.getRelativeIncrementOfTypeInRange(query);
     }
 }
