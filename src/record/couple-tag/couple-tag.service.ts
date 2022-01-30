@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BasicType, ProjectName } from '@common/root';
@@ -29,7 +29,7 @@ export class CoupleTagService extends RecordDataService {
             case ProjectName.llss:
                 return this.LLSSCoupleRepository;
             default:
-                return null;
+                throw new HttpException(`CoupleRepository of ${projectName} not exist`, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -41,11 +41,11 @@ export class CoupleTagService extends RecordDataService {
      * findOneCoupleProjectRecord
      * couple 聚合入口，根据 aggregationType 调用不同的聚合方法
      */
-    async findOneProjectRecord(params: QueryOneProjectRecord): Promise<false |number[]> {
+    async findOneProjectRecord(params: QueryOneProjectRecord): Promise<null |number[]> {
         const { recordType, projectName } = params;
 
         if (projectName !== ProjectName.llss) {
-            return false;
+            return null;
         }
 
         switch (recordType) {
@@ -75,7 +75,7 @@ export class CoupleTagService extends RecordDataService {
         if (unionIllustRecord && unionNovelRecord) {
             return unionIllustRecord.map((record, i) => record + unionNovelRecord[i]);
         }
-        return [];
+        return null;
     }
 
     async findUnionNovel(params: QueryOneProjectRecord) {
@@ -110,18 +110,17 @@ export class CoupleTagService extends RecordDataService {
             intersectionRecord,
         ] = await Promise.all(findOptionList.map((findOption) => this.findOneProjectRecordInDB(findOption)));
 
-        if (!defaultRecord) {
-            // return null 相当于 return any，还是用 false 比较好
-            return false;
+        if (!defaultRecord || !reverseRecord || !intersectionRecord) {
+            return null;
         }
 
         return defaultRecord.map((record, i) => record + reverseRecord[i] - intersectionRecord[i]);
     }
 
     async findRangeBasicTypeProjectRecord(params: QueryRangeProjectRecordOfTypeDto) {
-        // if (params.projectName !== ProjectName.llss) {
-        //     return false;
-        // }
+        if (params.projectName !== ProjectName.llss) {
+            return null;
+        }
         // 普通类型 record
         return this.findRangeProjectRecordEntityInDB(BasicType.couple, params);
     }

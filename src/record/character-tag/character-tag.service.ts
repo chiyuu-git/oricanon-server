@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BasicType, ProjectName } from '@common/root';
@@ -37,7 +37,7 @@ export class CharacterTagService extends RecordDataService {
             case ProjectName.llss:
                 return this.LLSSCharaRepository;
             default:
-                return null;
+                throw new HttpException(`CharaRepository of ${projectName} not exist`, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -48,7 +48,7 @@ export class CharacterTagService extends RecordDataService {
     /**
      * findOneCharaProjectRecord
      */
-    async findOneProjectRecord(params: QueryOneProjectRecord): Promise<false |number[]> {
+    async findOneProjectRecord(params: QueryOneProjectRecord): Promise<null |number[]> {
         const { recordType } = params;
 
         // 聚合类型 record
@@ -69,7 +69,7 @@ export class CharacterTagService extends RecordDataService {
      * 聚合 illust 和 novel，目前 character 只有一个聚合
      * 之后新增聚合此方法可以作为入口分发
      */
-    async findIllustWithNovel(params: QueryOneProjectRecord): Promise<false | number[]> {
+    async findIllustWithNovel(params: QueryOneProjectRecord): Promise<null | number[]> {
         const [illustRecords, novelRecords] = await Promise.all([
             this.findOneProjectRecordInDB({
                 basicType: BasicType.chara,
@@ -81,12 +81,8 @@ export class CharacterTagService extends RecordDataService {
             }),
         ]);
 
-        if (!illustRecords) {
-            return false;
-        }
-
-        if (!novelRecords) {
-            return false;
+        if (!illustRecords || !novelRecords) {
+            return null;
         }
 
         // 聚合 pixiv_illust 和 pixiv_novel
@@ -99,11 +95,16 @@ export class CharacterTagService extends RecordDataService {
     }
 
     async findLatestWeeklyFetchDate() {
-        const characterTag = await this.LLCharaRepository.findOne({
+        const charaTag = await this.LLCharaRepository.findOne({
             order: {
                 date: 'DESC',
             },
         });
-        return characterTag.date;
+
+        if (!charaTag) {
+            throw new HttpException('Can not find latest weekly fetch date', HttpStatus.NOT_FOUND);
+        }
+
+        return charaTag.date;
     }
 }

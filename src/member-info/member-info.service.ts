@@ -1,15 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BasicType, ProjectName } from '@common/root';
 import { MemberInfoMap, GetMemberInfoByType } from '@common/member-info';
 import { Repository } from 'typeorm';
-import { CreateMemberInfoDto } from './dto/create-member-info.dto';
-import { UpdateMemberInfoDto } from './dto/update-member-info.dto';
 import { CharaInfo } from './entities/chara-info.entity';
 import { CoupleInfo } from './entities/couple-info.entity';
 import { SeiyuuInfo } from './entities/seiyuu-info.entity';
 import { MemberInfo } from './entities/member-info.entity';
-import { ProjectMemberListMap } from './common';
+import { ProjectMemberListKey, ProjectMemberListMap } from './common';
 import { MemberList } from './entities/member-list.entity';
 
 type ProjectCharaTagListMap = Record<ProjectName, {
@@ -49,7 +47,7 @@ export class MemberInfoService {
             case BasicType.couple:
                 return this.coupleRepository;
             default:
-                return null;
+                throw new HttpException(`Repository of ${basicType} not exist`, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -57,6 +55,11 @@ export class MemberInfoService {
         const member = await this.MemberListRepository.findOne({
             where: { romaName },
         });
+
+        if (!member) {
+            throw new HttpException(`Can not find member ${romaName}`, HttpStatus.NOT_FOUND);
+        }
+
         return member.memberId;
     }
 
@@ -70,22 +73,14 @@ export class MemberInfoService {
     ) {
         const repository = this.getRepositoryByType(basicType);
 
-        if (!repository) {
-            return null;
-        }
-
         return repository.find({
             where: { projectName },
         });
     }
 
     findMemberInfoListByType<Type extends BasicType>(type: Type): Promise<GetMemberInfoByType<Type>[]>
-    async findMemberInfoListByType(type: BasicType) {
+    findMemberInfoListByType(type: BasicType) {
         const repository = this.getRepositoryByType(type);
-
-        if (!repository) {
-            return null;
-        }
 
         return repository.find();
     }
@@ -176,18 +171,19 @@ export class MemberInfoService {
      * 以 projectName 为 key 整合 memberList``
      */
     async formatListWithProject() {
-        const projectMemberListMap: ProjectMemberListMap = {} as ProjectMemberListMap;
+        const projectMemberListMap = <ProjectMemberListMap>{};
 
         const pendingFormatters = Object.values(BasicType).map((type) => {
-            const formatter = this.findMemberInfoListByType(type)
+            const pendingFormatter = this.findMemberInfoListByType(type)
                 .then((memberInfoList) => {
                     for (const memberInfo of memberInfoList) {
                         const { projectName } = memberInfo;
-                        const listType = `${type}s`;
+                        const listType: ProjectMemberListKey = `${type}s`;
                         let projectMemberList = projectMemberListMap[projectName];
 
                         if (!projectMemberList) {
                             projectMemberList = {
+                                charas: [],
                                 projectName,
                             };
                             projectMemberListMap[projectName] = projectMemberList;
@@ -196,13 +192,13 @@ export class MemberInfoService {
                         if (!projectMemberList[listType]) {
                             projectMemberList[listType] = [];
                         }
-
-                        projectMemberList[listType].push(memberInfo);
+                        // 函数内部类型没必要过窄，只需要返回值类型是明确的即可
+                        (projectMemberList[listType] as MemberInfo[])?.push(memberInfo);
                     }
                     return true;
                 })
                 .catch((error) => console.error(error));
-            return formatter;
+            return pendingFormatter;
         });
 
         await Promise.all(pendingFormatters);
@@ -211,11 +207,11 @@ export class MemberInfoService {
     }
 
     /**
-     * 获取基础类型的 memberInfoMap
+     * 获取基础类型的 memberInfoMap，以 romaName 为 key
      */
     async findMemberInfoMapOfType<Type extends BasicType>(type: Type) {
         const memberInfoList = await this.findMemberInfoListByType(type);
-        const memberInfoMap: MemberInfoMap<Type> = {} as MemberInfoMap<Type>;
+        const memberInfoMap = <MemberInfoMap<Type>>{};
         for (const memberInfo of memberInfoList) {
             const { romaName } = memberInfo;
             memberInfoMap[romaName] = memberInfo;

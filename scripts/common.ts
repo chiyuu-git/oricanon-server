@@ -6,7 +6,7 @@ import { HOST } from './constant';
 export async function postProjectFollowerRecord({
     projectName,
     records,
-}) {
+}: { projectName: string; records: number[];}) {
     const date = new Date();
     // 网站在第二天更新0点时的数据，标记为23：59分
     date.setDate(date.getDate() - 1);

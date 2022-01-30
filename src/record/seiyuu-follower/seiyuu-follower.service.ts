@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MemberInfoService } from 'src/member-info/member-info.service';
@@ -32,7 +32,7 @@ export class SeiyuuFollowerService extends RecordDataService {
             case ProjectName.llss:
                 return this.LLSSSeiyuuRepository;
             default:
-                return null;
+                throw new HttpException(`SeiyuuRepository of ${projectName} not exist`, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -43,9 +43,9 @@ export class SeiyuuFollowerService extends RecordDataService {
     /**
      * findOneSeiyuuProjectRecord
      */
-    async findOneProjectRecord(params: QueryOneProjectRecord): Promise<false | number[]> {
+    async findOneProjectRecord(params: QueryOneProjectRecord): Promise<null | number[]> {
         if (params.projectName === ProjectName.ll) {
-            return false;
+            return null;
         }
 
         return this.findOneProjectRecordInDB({
@@ -55,6 +55,10 @@ export class SeiyuuFollowerService extends RecordDataService {
     }
 
     async findRangeBasicTypeProjectRecord(params: QueryRangeProjectRecordOfTypeDto) {
+        if (params.projectName === ProjectName.ll) {
+            return null;
+        }
+
         // 普通类型 record
         return this.findRangeProjectRecordEntityInDB(BasicType.seiyuu, params);
     }
@@ -65,6 +69,11 @@ export class SeiyuuFollowerService extends RecordDataService {
                 date: 'DESC',
             },
         });
+
+        if (!seiyuuFollower) {
+            throw new HttpException('Can not find latest daily fetch date', HttpStatus.NOT_FOUND);
+        }
+
         return seiyuuFollower.date;
     }
 }

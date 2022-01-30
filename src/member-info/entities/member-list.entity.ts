@@ -15,7 +15,7 @@ export class MemberList {
         type: 'tinyint',
         name: 'project_id',
     })
-    projectId;
+    projectId: number;
 
     @Column({ type: 'varchar' })
     name: string;

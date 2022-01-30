@@ -5,9 +5,9 @@
 import { Repository } from 'typeorm';
 import { BasicType, ProjectName } from '@common/root';
 import { RecordType } from '@common/record';
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { MemberInfoService } from 'src/member-info/member-info.service';
-import { ProjectMemberListMap } from 'src/member-info/common';
+import { ProjectMemberListKey, ProjectMemberListMap } from 'src/member-info/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MemberInfo } from '@src/member-info/entities/member-info.entity';
 import {
@@ -84,16 +84,22 @@ export class RecordDataService implements OnApplicationBootstrap {
         basicType: BasicType,
         { date, projectName, recordType, records }: CreateRecordOfProjectDto,
     ) {
-        const projectMember: MemberInfo[] = this.projectMemberListMap[projectName][`${basicType}s`];
+        // eslint-disable-next-line max-len
+        const projectMember = this.projectMemberListMap[projectName][`${basicType}s` as ProjectMemberListKey];
 
-        const repository = this.getRepositoryByProject(projectName);
-        if (!repository) {
-            return `${projectName} do not exists basicType table`;
+        if (!projectMember) {
+            throw new HttpException(`Record of ${basicType} and ${projectName} not exist`, HttpStatus.NOT_FOUND);
         }
 
-        const { recordTypeId } = await this.recordTypeRepository.findOne({
+        const repository = this.getRepositoryByProject(projectName);
+
+        const recordTypeEntity = await this.recordTypeRepository.findOne({
             where: { name: recordType },
         });
+
+        if (!recordTypeEntity) {
+            throw new HttpException(`RecordType of ${recordType} not exist`, HttpStatus.NOT_FOUND);
+        }
 
         for (const [i, record] of records.entries()) {
             const memberInfo = projectMember[i];
@@ -101,7 +107,7 @@ export class RecordDataService implements OnApplicationBootstrap {
 
             const data = {
                 date,
-                typeId: recordTypeId,
+                typeId: recordTypeEntity.recordTypeId,
                 memberId,
                 record,
             };
@@ -114,7 +120,7 @@ export class RecordDataService implements OnApplicationBootstrap {
     /**
      * 由各个基础 service 各自实现，查询单个 projectRecord
      */
-    async findOneProjectRecord(params: QueryOneProjectRecord): Promise<false | number[]> {
+    async findOneProjectRecord(params: QueryOneProjectRecord): Promise<null | number[]> {
         throw new Error('Method not implemented.');
     }
 
@@ -124,10 +130,6 @@ export class RecordDataService implements OnApplicationBootstrap {
     async findOneProjectRecordInDB({ basicType, date, projectName, recordType }: QueryOneProjectRecordInDB) {
         const idType = basicType === BasicType.couple ? 'couple_id' : 'member_id';
         const repository = this.getRepositoryByProject(projectName);
-
-        if (!repository) {
-            return false;
-        }
 
         // member_id 顺序就是 fetch_order
         const projectRecordStr: ProjectRecordStr[] = await repository.query(`
@@ -142,7 +144,7 @@ export class RecordDataService implements OnApplicationBootstrap {
         `);
 
         if (projectRecordStr.length === 0) {
-            return false;
+            return null;
         }
 
         return formatProjectRecordStr(projectRecordStr)[0].records;
@@ -150,7 +152,7 @@ export class RecordDataService implements OnApplicationBootstrap {
 
     async findRangeBasicTypeProjectRecord(
         params: QueryRangeProjectRecordOfTypeDto,
-    ): Promise<ProjectRecordEntity[]> {
+    ): Promise<null | ProjectRecordEntity[]> {
         throw new Error('Method not implemented.');
     }
 
@@ -165,10 +167,6 @@ export class RecordDataService implements OnApplicationBootstrap {
 
         const repository = this.getRepositoryByProject(projectName);
 
-        if (!repository) {
-            return [];
-        }
-
         const projectRecordStr: ProjectRecordStr[] = await repository.query(`
             SELECT
                 DATE_FORMAT(date, '%Y-%m-%d') as date,
@@ -180,9 +178,8 @@ export class RecordDataService implements OnApplicationBootstrap {
             GROUP BY date;
         `);
 
-        // TODO: range 系列 稳健性处理，返回 false 更妥当
         if (projectRecordStr.length === 0) {
-            return [];
+            return null;
         }
 
         return formatProjectRecordStr(projectRecordStr);

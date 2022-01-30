@@ -16,16 +16,16 @@ type TwitterFollowerList = {
 
 // 找到每个账号对应的fo数
 // Cheerio<Element>不是常规的Element，不好做类型处理，先置为 any
-function findFollowerCount(accounts: string[], allAccountNode: any): number[] | false {
+function findFollowerCount(accounts: string[], allAccountNode: any): null | number[] {
     if (accounts.length === 0) {
-        return false;
+        return null;
     }
     return accounts.map((account) => {
         let follower = 0;
-        allAccountNode.filter((i, el) => {
+        allAccountNode.filter((i: number, el: any) => {
             const textNode = el.children[0];
             if (!textNode) {
-                return false;
+                return null;
             }
 
             const seiyuuInfo = textNode.data.split(' ');
@@ -64,10 +64,12 @@ export async function fetchTwitterFollower() {
 
             console.log('projectName:', projectName);
             console.log('fos:', records);
-            postProjectFollowerRecord({
-                projectName,
-                records,
-            });
+            if (records) {
+                postProjectFollowerRecord({
+                    projectName,
+                    records,
+                });
+            }
         }
     }
     catch (error) {

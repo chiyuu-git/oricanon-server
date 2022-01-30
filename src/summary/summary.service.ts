@@ -6,14 +6,15 @@ import { HistoricalIncrementRank, MemberIncrementInfo } from '@common/summary';
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordService } from 'src/record/record.service';
 
-import { ProjectMemberListMap } from 'src/member-info/common';
+import { ProjectMemberListKey, ProjectMemberListMap } from 'src/member-info/common';
+import { MemberInfo } from '@src/member-info/entities/member-info.entity';
 import { QueryIncrementRankOfTypeInRange, QueryRelativeIncrementOfTypeInRange } from './query-summary-info.dto';
 
-type IncrementRecordOfTypeInRange = {
+type IncrementRecordOfTypeInRange = (null | {
     projectName: ProjectName;
     recordType: RecordType;
     incrementRecordInRange: ProjectRecord[];
-}[]
+})[]
 
 @Injectable()
 export class SummaryService implements OnApplicationBootstrap {
@@ -62,20 +63,27 @@ export class SummaryService implements OnApplicationBootstrap {
         basicType: Type,
         incrementRecordOfTypeInRange: IncrementRecordOfTypeInRange,
     ) {
-        const historicalIncrementRank: HistoricalIncrementRank = {
+        // const historicalIncrementRank: HistoricalIncrementRank = {
+        //     historical: [],
+        // } as HistoricalIncrementRank;
+        const historicalIncrementRank = <HistoricalIncrementRank><unknown>{
             historical: [],
-        } as HistoricalIncrementRank;
+        };
         // 企划内排序
         for (const projectIncrementRecord of incrementRecordOfTypeInRange) {
-            const { projectName, incrementRecordInRange: IncrementRecordInRange } = projectIncrementRecord;
+            if (projectIncrementRecord) {
+                const { projectName, incrementRecordInRange } = projectIncrementRecord;
+                const memberList = this.projectMemberListMap[projectName][`${basicType}s` as ProjectMemberListKey];
 
-            const sortedProjectIncrementInfo = this.processProjectIncrementRecord<Type>(
-                IncrementRecordInRange,
-                this.projectMemberListMap[projectName][`${basicType}s`],
-            );
+                const sortedProjectIncrementInfo = this.processProjectIncrementRecord<Type>(
+                    incrementRecordInRange,
+                    // TODO: seiyuu ll 时可能为空，需要排除
+                    memberList!,
+                );
 
-            historicalIncrementRank[projectName] = sortedProjectIncrementInfo;
-            historicalIncrementRank.historical.push(...sortedProjectIncrementInfo);
+                historicalIncrementRank[projectName] = sortedProjectIncrementInfo;
+                historicalIncrementRank.historical.push(...sortedProjectIncrementInfo);
+            }
         }
 
         // 全部企划再排序
@@ -90,7 +98,7 @@ export class SummaryService implements OnApplicationBootstrap {
      */
     private processProjectIncrementRecord<Type extends BasicType>(
         IncrementRecordInRange: ProjectRecord[],
-        memberList: MemberInfoTypeMap[Type][],
+        memberList: MemberInfo[],
     ) {
         const projectIncrementInfoArray: MemberIncrementInfo[] = [];
         // 1. flatten & add member info

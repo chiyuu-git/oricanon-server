@@ -6,7 +6,8 @@ import { ProjectName, BasicType } from '@common/root';
 import { MemberInfoTypeMap } from '@common/member-info';
 import { SeiyuuRecordType } from '@common/record';
 import { RecordWeeklyInfo } from '@common/weekly';
-import { ProjectMemberListMap } from 'src/member-info/common';
+import { ProjectMemberListKey, ProjectMemberListMap } from 'src/member-info/common';
+import { MemberInfo } from '@src/member-info/entities/member-info.entity';
 import {
     QueryRecordTypeWeekly,
     QueryWeeklyDetail,
@@ -19,7 +20,7 @@ interface ProjectRelativeRecord {
     beforeLastRecord: number[];
 }
 
-type RelativeRecordOfType = ProjectRelativeRecord[];
+type RelativeRecordOfType = (ProjectRelativeRecord | null)[];
 
 interface ProjectRecord {
     records: number[];
@@ -92,16 +93,18 @@ export class WeeklyService implements OnApplicationBootstrap {
             if (projectRelativeRecord) {
                 const { projectName } = projectRelativeRecord;
                 const { projectRecord, projectInfo } = this.processProjectRelativeRecord(projectRelativeRecord);
-                const memberInfo = this.formatRecordWithMemberList<Type>(
+                const memberList = this.projectMemberListMap[projectName][`${basicType}s` as ProjectMemberListKey];
+                const memberInfo = this.formatRecordWithMemberList(
                     projectRecord,
-                    this.projectMemberListMap[projectName][`${basicType}s`],
+                    // projectRelativeRecord 已经判断过了，此时 memberList 一定是有值的
+                    memberList!,
                 );
                 moduleInfo.projectInfoList.push(projectInfo);
                 moduleInfo.memberInfoList.push(...memberInfo);
             }
-            else {
-                moduleInfo.projectInfoList.push(null);
-            }
+            // else {
+            //     moduleInfo.projectInfoList.push(null);
+            // }
         }
 
         return moduleInfo;
@@ -111,13 +114,10 @@ export class WeeklyService implements OnApplicationBootstrap {
      * moduleInfo 已经有每个企划的信息了，直接返回给前端即可
      * memberInfo 是全部企划的也属于 moduleInfo 的一部分，整理后返回
      */
-    private formatRecordWithMemberList<Type extends BasicType>(
+    private formatRecordWithMemberList(
         projectRecord: ProjectRecord,
-        memberList: MemberInfoTypeMap[Type][],
+        memberList: MemberInfo[],
     ) {
-        if (!projectRecord) {
-            return null;
-        }
         const {
             records,
             weekIncrementArr,
@@ -152,7 +152,7 @@ export class WeeklyService implements OnApplicationBootstrap {
             if (increment > 0 && lastWeekIncrement[i] > 0) {
                 return `${((increment / lastWeekIncrement[i]) * 100).toFixed(0)}%`;
             }
-            return null;
+            return '';
         });
         // 3.
         const projectWeekIncrement = weekIncrementArr.reduce((acc, val) => {

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ProjectName, BasicType, DateString } from '@common/root';
 import { RecordType, ProjectRecord } from '@common/record';
 import { getPrevWeeklyFetchDate, getRelativeDate } from 'src/utils';
@@ -7,15 +7,6 @@ import { CharacterTagService } from './character-tag/character-tag.service';
 import { CoupleTagService } from './couple-tag/couple-tag.service';
 import { SeiyuuFollowerService } from './seiyuu-follower/seiyuu-follower.service';
 import { RecordDataService } from './common/record-data-service';
-import { CreateRecordDto } from './dto/create-record.dto';
-
-const serviceMap = {
-    [BasicType.chara]: 'characterTagService',
-
-    [BasicType.couple]: 'coupleTagService',
-
-    [BasicType.seiyuu]: 'seiyuuFollowerService',
-};
 
 type RelativeDate = DateString[];
 
@@ -42,10 +33,23 @@ export class RecordService {
     constructor(
         private readonly memberInfoService: MemberInfoService,
         // RecordDataService 总共有三种 character seiyuu couple 均实现了 RecordDataService 接口
-        private readonly characterTagService: CharacterTagService,
-        private readonly seiyuuFollowerService: SeiyuuFollowerService,
+        private readonly charaTagService: CharacterTagService,
         private readonly coupleTagService: CoupleTagService,
+        private readonly seiyuuFollowerService: SeiyuuFollowerService,
     ) {}
+
+    getServiceByType(basicType: BasicType) {
+        switch (basicType) {
+            case BasicType.chara:
+                return this.charaTagService;
+            case BasicType.couple:
+                return this.coupleTagService;
+            case BasicType.seiyuu:
+                return this.seiyuuFollowerService;
+            default:
+                throw new HttpException(`Service of ${basicType} not exist`, HttpStatus.NOT_FOUND);
+        }
+    }
 
     /**
      * 获取 recordType 对应的 module 下，所有企划的相关数据
@@ -56,12 +60,6 @@ export class RecordService {
         recordType: RecordType,
         endDate?: string,
     ) {
-        const service = serviceMap[basicType];
-
-        if (!service) {
-            return false;
-        }
-
         const relativeDate = await this.findRelativeDate(endDate);
         const weekRange = {
             from: relativeDate[1],
@@ -72,7 +70,7 @@ export class RecordService {
             Object.values(ProjectName).map(async (projectName) => {
                 const [baseRecord, lastRecord, beforeLastRecord] = await this.findProjectRelativeRecord(
                     recordType,
-                    this[service],
+                    this.getServiceByType(basicType),
                     projectName,
                     relativeDate,
                 );
@@ -119,12 +117,12 @@ export class RecordService {
     /**
      * 根据 endDate 获取 上周及上上周的日期
      */
-    private async findRelativeDate(endDate: string): Promise<DateString[]> {
+    private async findRelativeDate(endDate?: string): Promise<DateString[]> {
         let baseDate = endDate;
 
         if (!baseDate) {
             // 如果 baseDate 为空，默认获取最后一条作为 baseDate
-            baseDate = await this.characterTagService.findLatestWeeklyFetchDate();
+            baseDate = await this.charaTagService.findLatestWeeklyFetchDate();
         }
 
         return getRelativeDate(baseDate);
@@ -133,7 +131,7 @@ export class RecordService {
     /**
      * 获取 baseDate 和 prevWeeklyFetchDate 两个日期，框定获取数据的范围
      */
-    async findWeekRange(endDate: string) {
+    async findWeekRange(endDate?: string) {
         let baseDate = endDate;
 
         if (!baseDate) {
@@ -160,14 +158,8 @@ export class RecordService {
         projectName,
         from,
         to,
-    }: FindRangeRecordByUnionKey): Promise<ProjectRecord[]> {
-        const service = serviceMap[basicType];
-
-        if (!service) {
-            return [];
-        }
-
-        return this[service].findRecordInRange({
+    }: FindRangeRecordByUnionKey): Promise<null | ProjectRecord[]> {
+        return this.getServiceByType(basicType).findRangeBasicTypeProjectRecord({
             recordType,
             projectName,
             from,
@@ -207,23 +199,21 @@ export class RecordService {
         from = '2020-06-06',
         to,
     }: FindProjectIncrementRecordOfTypeInRange) {
-        const service = serviceMap[basicType];
-
-        if (!service) {
-            return null;
-        }
-
         let endDate = to;
         if (!endDate) {
-            endDate = await this.characterTagService.findLatestWeeklyFetchDate();
+            endDate = await this.charaTagService.findLatestWeeklyFetchDate();
         }
 
-        const recordInRange = await (this[service] as RecordDataService).findRangeBasicTypeProjectRecord({
+        const recordInRange = await this.getServiceByType(basicType).findRangeBasicTypeProjectRecord({
             from,
             to: endDate,
             projectName,
             recordType,
         });
+
+        if (!recordInRange) {
+            return null;
+        }
 
         // 倒过来获取周增数组
         const incrementRecordInRange: ProjectRecord[] = [];

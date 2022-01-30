@@ -2,8 +2,6 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { BasicType, ProjectName } from '@common/root';
 import { MemberInfoService } from './member-info.service';
-import { CreateMemberInfoDto } from './dto/create-member-info.dto';
-import { UpdateMemberInfoDto } from './dto/update-member-info.dto';
 import { QueryMemberInfo } from './dto/query-member-info.dto';
 
 @ApiTags('member_info')
@@ -15,9 +13,8 @@ export class MemberInfoController {
     @ApiQuery({ name: 'basicType', enum: BasicType })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
     getMemberInfoByTypeAndProject(@Query() query: QueryMemberInfo) {
-        // console.log(query);
         const { basicType, projectName } = query;
-        // const res = this.service.getMemberInfoByTypeAndProject(BasicType.character, projectName);
+        // const res = this.service.findMemberInfoByTypeAndProject(BasicType.chara, projectName);
         return this.service.findMemberInfoByTypeAndProject(basicType, projectName);
     }
 

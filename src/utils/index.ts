@@ -52,7 +52,7 @@ export function getPrevWeeklyFetchDate(base: string) {
 
     // 如果是星期天，或者是大于fetchWeekday，则与抓取日是在同一个星期
     // 如果是小于等于抓取日，则需要获取上一个星期的抓取日
-    let diff = null;
+    let diff = 0;
     if (baseWeekday === 0) {
         diff = 7 - fetchWeekDay;
     }

@@ -32,6 +32,10 @@
             ],
         },
         "incremental": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        // 启用所有严格类型检查选项
+        "strict": true,
+        // nest IOC 依赖注入，无需手动初始化
+        "strictPropertyInitialization": false
     }
 }
