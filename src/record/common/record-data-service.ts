@@ -101,13 +101,28 @@ export class RecordDataService implements OnApplicationBootstrap {
             throw new HttpException(`RecordType of ${recordType} not exist`, HttpStatus.NOT_FOUND);
         }
 
+        const typeId = recordTypeEntity.recordTypeId;
+
+        // 检查是否已经存在相同日期和类型的数据
+        const result = await repository.find({
+            date,
+            typeId,
+        });
+
+        if (result.length > 0) {
+            throw new HttpException(
+                `Record of ${projectName} ${recordType} in ${date} is already exist`,
+                HttpStatus.FORBIDDEN,
+            );
+        }
+
         for (const [i, record] of records.entries()) {
             const memberInfo = projectMember[i];
             const { memberId } = memberInfo;
 
             const data = {
                 date,
-                typeId: recordTypeEntity.recordTypeId,
+                typeId,
                 memberId,
                 record,
             };

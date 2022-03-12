@@ -29,13 +29,6 @@ export interface SeiyuuInfo extends MemberCommonInfo{
     officialOrder: number;
 }
 
-// TODO: map形式和类型函数形式的区别
-export type MemberInfoTypeMap = {
-    [BasicType.chara]: CharaInfo;
-    [BasicType.couple]: CoupleInfo;
-    [BasicType.seiyuu]: SeiyuuInfo;
-}
-
 export type GetMemberInfoByType<Type extends BasicType> = Type extends BasicType.chara
     ? CharaInfo
     : Type extends BasicType.couple

@@ -2,7 +2,7 @@ import { BasicType, ProjectName } from '@common/root';
 import { RecordType } from '@common/record';
 import { Transform } from 'class-transformer';
 import { IsDateString, IsString } from 'class-validator';
-import { formatDate } from 'src/utils';
+import { formatDate } from '@utils/date';
 
 /**
  * basicType、date、projectName、recordType 可以从数据库所有表中查找到唯一的 projectRecord

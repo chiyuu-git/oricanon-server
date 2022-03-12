@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ProjectName, BasicType, DateString } from '@common/root';
 import { RecordType, ProjectRecord } from '@common/record';
-import { getPrevWeeklyFetchDate, getRelativeDate } from 'src/utils';
+import { getPrevWeeklyFetchDate, getRelativeDate } from '@common/weekly';
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { CharaTagService } from './chara-tag/chara-tag.service';
 import { CoupleTagService } from './couple-tag/couple-tag.service';

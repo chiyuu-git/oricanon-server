@@ -1,6 +1,6 @@
 import { IsArray, IsDateString, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { formatDate } from 'src/utils';
+import { formatDate } from '@utils/date';
 import { ProjectName } from '@common/root';
 import { RecordType } from '@common/record';
 

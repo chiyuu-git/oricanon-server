@@ -3,7 +3,6 @@ import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordService } from 'src/record/record.service';
 import { ProjectName, BasicType } from '@common/root';
-import { MemberInfoTypeMap } from '@common/member-info';
 import { SeiyuuRecordType } from '@common/record';
 import { RecordWeeklyInfo } from '@common/weekly';
 import { ProjectMemberListKey, ProjectMemberListMap } from 'src/member-info/common';

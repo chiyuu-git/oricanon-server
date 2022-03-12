@@ -1,7 +1,6 @@
 import { HttpException, HttpStatus, Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { BasicType, ProjectName } from '@common/root';
 import { RecordType, ProjectRecord } from '@common/record';
-import { MemberInfoTypeMap } from '@common/member-info';
 import { HistoricalIncrementRank, MemberIncrementInfo } from '@common/summary';
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordService } from 'src/record/record.service';
@@ -59,8 +58,8 @@ export class SummaryService implements OnApplicationBootstrap {
      * 获取企划内 incrementRecord 排序后的数组
      * 与 range、type 维度无关，函数内部的变量名均无 range、type
      */
-    private processIncrementRecord<Type extends BasicType>(
-        basicType: Type,
+    private processIncrementRecord(
+        basicType: BasicType,
         incrementRecordOfTypeInRange: IncrementRecordOfTypeInRange,
     ) {
         // const historicalIncrementRank: HistoricalIncrementRank = {
@@ -75,7 +74,7 @@ export class SummaryService implements OnApplicationBootstrap {
                 const { projectName, incrementRecordInRange } = projectIncrementRecord;
                 const memberList = this.projectMemberListMap[projectName][`${basicType}s` as ProjectMemberListKey];
 
-                const sortedProjectIncrementInfo = this.processProjectIncrementRecord<Type>(
+                const sortedProjectIncrementInfo = this.processProjectIncrementRecord(
                     incrementRecordInRange,
                     // TODO: seiyuu ll 时可能为空，需要排除
                     memberList!,
@@ -96,7 +95,7 @@ export class SummaryService implements OnApplicationBootstrap {
     /**
      * flatten 企划内所有的增量记录，并添加上成员信息，排序后返回
      */
-    private processProjectIncrementRecord<Type extends BasicType>(
+    private processProjectIncrementRecord(
         IncrementRecordInRange: ProjectRecord[],
         memberList: MemberInfo[],
     ) {

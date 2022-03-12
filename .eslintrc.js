@@ -12,8 +12,6 @@ module.exports = {
         'max-classes-per-file': OFF,
         // 这个建议太超前了， node 16 版本才可以使用
         'unicorn/prefer-node-protocol': OFF,
-        // 关闭 js 的检查，仅使用 ts 的以允许类方法重载
-        'lines-between-class-members': OFF,
-        '@typescript-eslint/lines-between-class-members': [ERROR, 'always', { 'exceptAfterOverload': true }],
+        'func-names': [WARN, 'as-needed'],
     },
 };

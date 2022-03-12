@@ -52,7 +52,7 @@
     "typeorm": "^0.2.36"
   },
   "devDependencies": {
-    "@chiyu-git/eslint-config-basic": "^1.0.4",
+    "@chiyu-git/eslint-config-basic": "^1.0.5",
     "@nestjs/cli": "^8.0.0",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",
@@ -67,7 +67,6 @@
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-unicorn": "^36.0.0",
     "husky": "^3.1.0",
     "jest": "27.0.6",
     "lint-staged": "^11.1.2",
