@@ -2,7 +2,7 @@ import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 // service
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordService } from 'src/record/record.service';
-import { ProjectName, BasicType } from '@common/root';
+import { ProjectName, Category } from '@common/root';
 import { SeiyuuRecordType } from '@common/record';
 import { RecordWeeklyInfo } from '@common/weekly';
 import { ProjectMemberListKey, ProjectMemberListMap } from 'src/member-info/common';
@@ -43,9 +43,9 @@ export class WeeklyService implements OnApplicationBootstrap {
         this.projectMemberListMap = await this.memberInfoService.formatListWithProject();
     }
 
-    async getRecordTypeWeekly({ basicType, recordType, endDate }: QueryRecordTypeWeekly) {
-        const result = await this.recordService.findRelativeRecordOfType(
-            basicType,
+    async getRecordTypeWeekly({ category, recordType, endDate }: QueryRecordTypeWeekly) {
+        const result = await this.recordService.findWeeklyRelativeRecord(
+            category,
             recordType,
             endDate,
         );
@@ -57,7 +57,7 @@ export class WeeklyService implements OnApplicationBootstrap {
         const { weekRange, relativeRecordOfType } = result;
 
         const recordWeeklyInfo = this.processRelativeRecordOfType(
-            basicType,
+            category,
             relativeRecordOfType,
         );
 
@@ -74,8 +74,8 @@ export class WeeklyService implements OnApplicationBootstrap {
     /**
      * 处理周报相关的数据，接受 ModuleRelativeRecord ，返回
      */
-    private processRelativeRecordOfType<Type extends BasicType>(
-        basicType: Type,
+    private processRelativeRecordOfType<Type extends Category>(
+        category: Type,
         relativeRecordOfType: RelativeRecordOfType,
     ) {
         // const moduleTotal = 0;
@@ -92,7 +92,7 @@ export class WeeklyService implements OnApplicationBootstrap {
             if (projectRelativeRecord) {
                 const { projectName } = projectRelativeRecord;
                 const { projectRecord, projectInfo } = this.processProjectRelativeRecord(projectRelativeRecord);
-                const memberList = this.projectMemberListMap[projectName][`${basicType}s` as ProjectMemberListKey];
+                const memberList = this.projectMemberListMap[projectName][`${category}s` as ProjectMemberListKey];
                 const memberInfo = this.formatRecordWithMemberList(
                     projectRecord,
                     // projectRelativeRecord 已经判断过了，此时 memberList 一定是有值的
@@ -197,8 +197,8 @@ export class WeeklyService implements OnApplicationBootstrap {
      */
     async getTwitterFollowerWeeklyDetail({ endDate }: QueryWeeklyDetail) {
         const { from, to } = await this.recordService.findWeekRange(endDate);
-        const result = await this.recordService.findRangeRecordByUnionKey({
-            basicType: BasicType.seiyuu,
+        const result = await this.recordService.findProjectRecordInRange({
+            category: Category.seiyuu,
             recordType: SeiyuuRecordType.twitterFollower,
             projectName: ProjectName.llss,
             from,

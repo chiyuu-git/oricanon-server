@@ -1,11 +1,11 @@
 import { IsString } from 'class-validator';
-import { BasicType, ProjectName } from '@common/root';
+import { Category, ProjectName } from '@common/root';
 import { RecordType } from '@common/record';
 import { ApiProperty } from '@nestjs/swagger';
 
 abstract class BaseWeeklyInfoQuery {
     @IsString()
-    basicType: BasicType;
+    category: Category;
 
     // TODO: custom validator
     // @IsDateString()

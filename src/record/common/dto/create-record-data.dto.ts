@@ -1,7 +1,7 @@
 import { IsArray, IsDateString, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { formatDate } from '@utils/date';
-import { ProjectName } from '@common/root';
+import { Category, ProjectName } from '@common/root';
 import { RecordType } from '@common/record';
 
 export class CreateRecordOfProjectDto {

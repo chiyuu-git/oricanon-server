@@ -1,14 +1,22 @@
 import { IsString } from 'class-validator';
-import { BasicType, ProjectName } from '@common/root';
+import { Category, ProjectName } from '@common/root';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class QueryMemberInfo {
+export class QueryProjectMemberInfoDto {
     @IsString()
-    basicType: BasicType;
+    category: Category;
 
     @IsString()
     @ApiProperty({
         default: ProjectName.llss,
     })
     projectName: ProjectName = ProjectName.llss;
+}
+
+export class QueryMemberInfoByRomaNameDto {
+    @IsString()
+    category: Category;
+
+    @IsString()
+    romaName: string;
 }

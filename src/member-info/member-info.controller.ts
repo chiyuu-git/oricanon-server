@@ -1,21 +1,29 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
-import { BasicType, ProjectName } from '@common/root';
+import { Category, ProjectName } from '@common/root';
 import { MemberInfoService } from './member-info.service';
-import { QueryMemberInfo } from './dto/query-member-info.dto';
+import { QueryMemberInfoByRomaNameDto, QueryProjectMemberInfoDto } from './dto/query-member-info.dto';
 
 @ApiTags('member_info')
 @Controller('member_info')
 export class MemberInfoController {
     constructor(private readonly service: MemberInfoService) {}
 
-    @Get('/member_info_of_type_and_project')
-    @ApiQuery({ name: 'basicType', enum: BasicType })
+    @Get('/project_member_info_of_category')
+    @ApiQuery({ name: 'category', enum: Category })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
-    getMemberInfoByTypeAndProject(@Query() query: QueryMemberInfo) {
-        const { basicType, projectName } = query;
-        // const res = this.service.findMemberInfoByTypeAndProject(BasicType.chara, projectName);
-        return this.service.findMemberInfoByTypeAndProject(basicType, projectName);
+    getProjectMemberInfoByCategory(@Query() query: QueryProjectMemberInfoDto) {
+        const { category, projectName } = query;
+        // const res = this.service.findMemberInfoByTypeAndProject(Category.chara, projectName);
+        return this.service.findProjectMemberInfoByCategory(category, projectName);
+    }
+
+    @Get('/member_info')
+    @ApiQuery({ name: 'category', enum: Category })
+    @ApiQuery({ name: 'projectName', enum: ProjectName })
+    getMemberInfoByRomaName(@Query() { category, romaName }: QueryMemberInfoByRomaNameDto) {
+        // const res = this.service.findMemberInfoByTypeAndProject(Category.chara, projectName);
+        return this.service.findMemberInfoByRomaName(category, romaName);
     }
 
     /**
@@ -62,9 +70,9 @@ export class MemberInfoController {
      * 返回以 projectName 为主要字段整合全部 memberList
      */
     @Get('member_info_map')
-    @ApiQuery({ name: 'type', enum: BasicType })
-    async getMemberInfoMapOfType(@Query('type') type: BasicType) {
-        if (BasicType[type]) {
+    @ApiQuery({ name: 'type', enum: Category })
+    async getMemberInfoMapOfType(@Query('type') type: Category) {
+        if (Category[type]) {
             const memberInfoMap = await this.service.findMemberInfoMapOfType(type);
 
             return memberInfoMap;

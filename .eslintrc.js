@@ -13,5 +13,8 @@ module.exports = {
         // 这个建议太超前了， node 16 版本才可以使用
         'unicorn/prefer-node-protocol': OFF,
         'func-names': [WARN, 'as-needed'],
+        // 循环引入，在 typeorm 关系的设计下无法避免
+        'import/no-cycle': OFF,
+        'lines-between-class-members': OFF,
     },
 };

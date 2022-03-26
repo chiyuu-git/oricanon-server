@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BasicType, ProjectName } from '@common/root';
-import { MemberInfoMap, GetMemberInfoByType } from '@common/member-info';
+import { Category, ProjectName } from '@common/root';
+import { MemberInfoMap, GetMemberInfoByType, MemberCommonInfo } from '@common/member-info';
 import { Repository } from 'typeorm';
 import { CharaInfo } from './entities/chara-info.entity';
 import { CoupleInfo } from './entities/couple-info.entity';
@@ -38,21 +38,27 @@ export class MemberInfoService {
         private coupleRepository: Repository<CoupleInfo>,
     ) {}
 
-    getRepositoryByType(basicType: BasicType): Repository<MemberInfo> {
-        switch (basicType) {
-            case BasicType.chara:
+    getRepositoryByType(category: Category): Repository<MemberInfo> {
+        switch (category) {
+            case Category.chara:
                 return this.charaRepository;
-            case BasicType.seiyuu:
+            case Category.seiyuu:
                 return this.seiyuuRepository;
-            case BasicType.couple:
+            case Category.couple:
                 return this.coupleRepository;
             default:
-                throw new HttpException(`Repository of ${basicType} not exist`, HttpStatus.NOT_FOUND);
+                throw new HttpException(`Repository of ${category} not exist`, HttpStatus.NOT_FOUND);
         }
     }
 
-    async findMemberInfoByRomaName(romaName: string) {
-        const member = await this.MemberListRepository.findOne({
+    findMemberInfoByRomaName<Type extends Category>(
+        category: Type,
+        romaName: string,
+    ): Promise<GetMemberInfoByType<Type>>
+    async findMemberInfoByRomaName(category: Category, romaName: string) {
+        const repository = this.getRepositoryByType(category);
+
+        const member = await repository.findOne({
             where: { romaName },
         });
 
@@ -60,26 +66,26 @@ export class MemberInfoService {
             throw new HttpException(`Can not find member ${romaName}`, HttpStatus.NOT_FOUND);
         }
 
-        return member.memberId;
+        return member;
     }
 
-    findMemberInfoByTypeAndProject<Type extends BasicType>(
-        basicType: Type,
+    findProjectMemberInfoByCategory<Type extends Category>(
+        category: Type,
         projectName: ProjectName,
     ): Promise<GetMemberInfoByType<Type>[]>
-    findMemberInfoByTypeAndProject(
-        basicType: BasicType,
+    findProjectMemberInfoByCategory(
+        category: Category,
         projectName: ProjectName,
     ) {
-        const repository = this.getRepositoryByType(basicType);
+        const repository = this.getRepositoryByType(category);
 
         return repository.find({
             where: { projectName },
         });
     }
 
-    findMemberInfoListByType<Type extends BasicType>(type: Type): Promise<GetMemberInfoByType<Type>[]>
-    findMemberInfoListByType(type: BasicType) {
+    findMemberInfoListByCategory<Type extends Category>(type: Type): Promise<GetMemberInfoByType<Type>[]>
+    findMemberInfoListByCategory(type: Category) {
         const repository = this.getRepositoryByType(type);
 
         return repository.find();
@@ -89,7 +95,7 @@ export class MemberInfoService {
      * 获取所有 角色 的 tag
      */
     async findCharaTagList() {
-        const charaList = await this.findMemberInfoListByType(BasicType.chara);
+        const charaList = await this.findMemberInfoListByCategory(Category.chara);
         const charaTagList: ProjectCharaTagListMap = {} as ProjectCharaTagListMap;
 
         for (const charaInfo of charaList) {
@@ -115,7 +121,7 @@ export class MemberInfoService {
      * 获取所有 seiyuu 的 twitter account
      */
     async findSeiyuuTwitterAccountList() {
-        const seiyuuList = await this.findMemberInfoListByType(BasicType.seiyuu);
+        const seiyuuList = await this.findMemberInfoListByCategory(Category.seiyuu);
         const seiyuuTwitterAccountList: ProjectSeiyuuTwitterAccountListMap = {} as ProjectSeiyuuTwitterAccountListMap;
 
         for (const seiyuuInfo of seiyuuList) {
@@ -141,7 +147,7 @@ export class MemberInfoService {
      * 获取所有 couple 的 tag
      */
     async findCoupleTagList() {
-        const coupleList = await this.findMemberInfoListByType(BasicType.couple);
+        const coupleList = await this.findMemberInfoListByCategory(Category.couple);
         const coupleTagList: ProjectCoupleTagListMap = {} as ProjectCoupleTagListMap;
 
         for (const charaInfo of coupleList) {
@@ -173,8 +179,8 @@ export class MemberInfoService {
     async formatListWithProject() {
         const projectMemberListMap = <ProjectMemberListMap>{};
 
-        const pendingFormatters = Object.values(BasicType).map((type) => {
-            const pendingFormatter = this.findMemberInfoListByType(type)
+        const pendingFormatters = Object.values(Category).map((type) => {
+            const pendingFormatter = this.findMemberInfoListByCategory(type)
                 .then((memberInfoList) => {
                     for (const memberInfo of memberInfoList) {
                         const { projectName } = memberInfo;
@@ -209,8 +215,8 @@ export class MemberInfoService {
     /**
      * 获取基础类型的 memberInfoMap，以 romaName 为 key
      */
-    async findMemberInfoMapOfType<Type extends BasicType>(type: Type) {
-        const memberInfoList = await this.findMemberInfoListByType(type);
+    async findMemberInfoMapOfType<Type extends Category>(type: Type) {
+        const memberInfoList = await this.findMemberInfoListByCategory(type);
         const memberInfoMap = <MemberInfoMap<Type>>{};
         for (const memberInfo of memberInfoList) {
             const { romaName } = memberInfo;

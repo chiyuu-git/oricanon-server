@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { BasicType, ProjectName } from '@common/root';
+import { Category, ProjectName } from '@common/root';
 import { RecordType, ProjectRecord } from '@common/record';
 import { HistoricalIncrementRank, MemberIncrementInfo } from '@common/summary';
 import { MemberInfoService } from 'src/member-info/member-info.service';
@@ -7,11 +7,14 @@ import { RecordService } from 'src/record/record.service';
 
 import { ProjectMemberListKey, ProjectMemberListMap } from 'src/member-info/common';
 import { MemberInfo } from '@src/member-info/entities/member-info.entity';
-import { QueryIncrementRankOfTypeInRange, QueryRelativeIncrementOfTypeInRange } from './query-summary-info.dto';
+import {
+    QueryMemberRecordInRange,
+    QueryProjectRecordInRange,
+    QueryRecordInRange,
+} from '@src/record/common/dto/query-record-data.dto';
 
 type IncrementRecordOfTypeInRange = (null | {
     projectName: ProjectName;
-    recordType: RecordType;
     incrementRecordInRange: ProjectRecord[];
 })[]
 
@@ -31,25 +34,62 @@ export class SummaryService implements OnApplicationBootstrap {
         this.projectMemberListMap = await this.memberInfoService.formatListWithProject();
     }
 
-    /**
-     * 查找历史周增数组，先整理出排序后的数组，计算百分位套用公式即可
-     * 默认维度 basicType projectName infoType
-     */
-    async getWeekIncrementRankOfTypeInRange({
-        basicType,
+    async getMemberWeekIncrementInRange({
+        category,
         recordType,
         from,
         to,
-    }: QueryIncrementRankOfTypeInRange) {
-        // 每个企划的历史周增数据
-        const incrementRecordOfTypeInRange = await this.recordService.findIncrementRecordOfTypeInRange(
-            basicType,
-            [...Object.values(ProjectName)],
+        romaName,
+    }: QueryMemberRecordInRange) {
+        const weekIncrementInRange = await this.recordService.findMemberWeekIncrementInRange({
+            category,
             recordType,
             from,
             to,
+            romaName,
+        });
+
+        return weekIncrementInRange;
+    }
+
+    async getProjectWeekIncrementInRange({
+        category,
+        recordType,
+        from,
+        to,
+        projectName,
+    }: QueryProjectRecordInRange) {
+        const weekIncrementInRange = await this.recordService.findProjectWeekIncrementInRange({
+            category,
+            recordType,
+            from,
+            to,
+            projectName,
+        });
+
+        return weekIncrementInRange?.incrementRecordInRange;
+    }
+
+    /**
+     * 查找历史周增数组，先整理出排序后的数组，计算百分位套用公式即可
+     * 默认维度 category recordType
+     * 没有指定 project 或 member，默认以 project 维度返回所有数据
+     */
+    async getWeekIncrementRankOfTypeInRange({
+        category,
+        recordType,
+        from,
+        to,
+    }: QueryRecordInRange) {
+        // 每个企划的历史周增数据
+        const incrementRecordOfTypeInRange = await this.recordService.findAllProjectWeekIncrementInRange(
+            category,
+            recordType,
+            [...Object.values(ProjectName)],
+            from,
+            to,
         );
-        const incrementRankOfTypeInRange = this.processIncrementRecord(basicType, incrementRecordOfTypeInRange);
+        const incrementRankOfTypeInRange = this.processIncrementRecord(category, incrementRecordOfTypeInRange);
 
         return incrementRankOfTypeInRange;
     }
@@ -59,7 +99,7 @@ export class SummaryService implements OnApplicationBootstrap {
      * 与 range、type 维度无关，函数内部的变量名均无 range、type
      */
     private processIncrementRecord(
-        basicType: BasicType,
+        category: Category,
         incrementRecordOfTypeInRange: IncrementRecordOfTypeInRange,
     ) {
         // const historicalIncrementRank: HistoricalIncrementRank = {
@@ -72,7 +112,7 @@ export class SummaryService implements OnApplicationBootstrap {
         for (const projectIncrementRecord of incrementRecordOfTypeInRange) {
             if (projectIncrementRecord) {
                 const { projectName, incrementRecordInRange } = projectIncrementRecord;
-                const memberList = this.projectMemberListMap[projectName][`${basicType}s` as ProjectMemberListKey];
+                const memberList = this.projectMemberListMap[projectName][`${category}s` as ProjectMemberListKey];
 
                 const sortedProjectIncrementInfo = this.processProjectIncrementRecord(
                     incrementRecordInRange,
@@ -123,11 +163,11 @@ export class SummaryService implements OnApplicationBootstrap {
     /**
      * 获取指定日期的相对增量
      */
-    async getRelativeIncrementOfTypeInRange(query: QueryRelativeIncrementOfTypeInRange) {
-        const recordInRange = await this.recordService.findRangeRecordByUnionKey(query);
+    async getRelativeIncrementOfTypeInRange(query: QueryProjectRecordInRange) {
+        const recordInRange = await this.recordService.findProjectRecordInRange(query);
 
         if (!recordInRange) {
-            throw new HttpException(`Service of ${query.basicType} not exist`, HttpStatus.NOT_FOUND);
+            throw new HttpException(`Service of ${query.category} not exist`, HttpStatus.NOT_FOUND);
         }
 
         const compareTarget = recordInRange[0].records;

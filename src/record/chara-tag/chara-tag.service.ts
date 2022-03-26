@@ -1,12 +1,12 @@
 import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { BasicType, ProjectName } from '@common/root';
+import { Category, ProjectName } from '@common/root';
 import { CharaRecordType } from '@common/record';
 import { RecordDataService } from '../common/record-data-service';
 import {
-    QueryOneProjectRecord,
-    QueryRangeProjectRecordOfTypeDto,
+    QueryOneProjectRecordOfType,
+    FindProjectRecordInRange,
 } from '../common/dto/query-record-data.dto';
 import { LLChara, LLNChara, LLSChara, LLSSChara } from './chara-tag.entity';
 import { MemberRecordEntity } from '../common/record.entity';
@@ -14,6 +14,8 @@ import { CreateRecordOfProjectDto } from '../common/dto/create-record-data.dto';
 
 @Injectable()
 export class CharaTagService extends RecordDataService {
+    category = Category.chara;
+
     @InjectRepository(LLChara)
     LLCharaRepository: Repository<LLChara>;
 
@@ -41,14 +43,10 @@ export class CharaTagService extends RecordDataService {
         }
     }
 
-    createCharaRecordOfProject(createProjectCharaRecordDto: CreateRecordOfProjectDto) {
-        return this.createRecordOfProject(BasicType.chara, createProjectCharaRecordDto);
-    }
-
     /**
      * findOneCharaProjectRecord
      */
-    async findOneProjectRecord(params: QueryOneProjectRecord): Promise<null |number[]> {
+    async findOneProjectRecord(params: QueryOneProjectRecordOfType): Promise<null |number[]> {
         const { recordType } = params;
 
         // 聚合类型 record
@@ -60,7 +58,6 @@ export class CharaTagService extends RecordDataService {
 
         // 普通类型 record
         return this.findOneProjectRecordInDB({
-            basicType: BasicType.chara,
             ...params,
         });
     }
@@ -69,14 +66,12 @@ export class CharaTagService extends RecordDataService {
      * 聚合 illust 和 novel，目前 chara 只有一个聚合
      * 之后新增聚合此方法可以作为入口分发
      */
-    async findIllustWithNovel(params: QueryOneProjectRecord): Promise<null | number[]> {
+    async findIllustWithNovel(params: QueryOneProjectRecordOfType): Promise<null | number[]> {
         const [illustRecords, novelRecords] = await Promise.all([
             this.findOneProjectRecordInDB({
-                basicType: BasicType.chara,
                 ...params,
             }),
             this.findOneProjectRecordInDB({
-                basicType: BasicType.chara,
                 ...params,
             }),
         ]);
@@ -89,9 +84,9 @@ export class CharaTagService extends RecordDataService {
         return illustRecords.map((record, i) => record + novelRecords[i]);
     }
 
-    async findRangeBasicTypeProjectRecord(params: QueryRangeProjectRecordOfTypeDto) {
+    async findProjectRecordInRange(params: FindProjectRecordInRange) {
         // 普通类型 record
-        return this.findRangeProjectRecordEntityInDB(BasicType.chara, params);
+        return this.findRangeProjectRecordInDB(params);
     }
 
     async findLatestWeeklyFetchDate() {

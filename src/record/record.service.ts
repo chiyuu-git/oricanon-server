@@ -1,32 +1,19 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { ProjectName, BasicType, DateString } from '@common/root';
-import { RecordType, ProjectRecord } from '@common/record';
+import { ProjectName, Category, DateString } from '@common/root';
+import { RecordType, ProjectRecord, MemberRecord } from '@common/record';
 import { getPrevWeeklyFetchDate, getRelativeDate } from '@common/weekly';
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { CharaTagService } from './chara-tag/chara-tag.service';
 import { CoupleTagService } from './couple-tag/couple-tag.service';
 import { SeiyuuFollowerService } from './seiyuu-follower/seiyuu-follower.service';
 import { RecordDataService } from './common/record-data-service';
+import {
+    FindProjectRecordInRange,
+    QueryMemberRecordInRange,
+    QueryProjectRecordInRange,
+} from './common/dto/query-record-data.dto';
 
 type RelativeDate = DateString[];
-
-interface FindRangeRecordByUnionKey {
-    basicType: BasicType;
-    projectName: ProjectName;
-    recordType: RecordType;
-    from: string;
-    to: string;
-}
-
-interface FindProjectIncrementRecordOfTypeInRange {
-    basicType: BasicType;
-    projectName: ProjectName;
-    // TODO: RecordType | AggregationType 差异很大，目前仅支持 RecordType
-    recordType: RecordType;
-    from?: DateString | '2020-06-06';
-    // 默认值就是最新的获取日
-    to?: DateString;
-}
 
 @Injectable()
 export class RecordService {
@@ -38,25 +25,35 @@ export class RecordService {
         private readonly seiyuuFollowerService: SeiyuuFollowerService,
     ) {}
 
-    getServiceByType(basicType: BasicType) {
-        switch (basicType) {
-            case BasicType.chara:
+    getServiceByCategory(category: Category) {
+        switch (category) {
+            case Category.chara:
                 return this.charaTagService;
-            case BasicType.couple:
+            case Category.couple:
                 return this.coupleTagService;
-            case BasicType.seiyuu:
+            case Category.seiyuu:
                 return this.seiyuuFollowerService;
             default:
-                throw new HttpException(`Service of ${basicType} not exist`, HttpStatus.NOT_FOUND);
+                throw new HttpException(`Service of ${category} not exist`, HttpStatus.NOT_FOUND);
         }
     }
 
     /**
-     * 获取 recordType 对应的 module 下，所有企划的相关数据
-     * 默认维度 basicType infoType date
+     * 调用 service 的方法时可以省略 to，由此方法统一返回 endDate
      */
-    async findRelativeRecordOfType(
-        basicType: BasicType,
+    async getDefaultEndDate(to?: string) {
+        let endDate = to;
+        if (!endDate) {
+            endDate = await this.charaTagService.findLatestWeeklyFetchDate();
+        }
+        return endDate;
+    }
+
+    /**
+     * 获取指定 category 和 recordType 下所有企划的周相关数据
+     */
+    async findWeeklyRelativeRecord(
+        category: Category,
         recordType: RecordType,
         endDate?: string,
     ) {
@@ -70,7 +67,7 @@ export class RecordService {
             Object.values(ProjectName).map(async (projectName) => {
                 const [baseRecord, lastRecord, beforeLastRecord] = await this.findProjectRelativeRecord(
                     recordType,
-                    this.getServiceByType(basicType),
+                    this.getServiceByCategory(category),
                     projectName,
                     relativeDate,
                 );
@@ -148,63 +145,61 @@ export class RecordService {
         };
     }
 
-    /**
-     * 通过联合主键获取指定范围内的数据
-     * 默认维度 unionKey
-     */
-    async findRangeRecordByUnionKey({
-        basicType,
+    async findProjectRecordInRange({
+        category,
         recordType,
-        projectName,
         from,
         to,
-    }: FindRangeRecordByUnionKey): Promise<null | ProjectRecord[]> {
-        return this.getServiceByType(basicType).findRangeBasicTypeProjectRecord({
+        projectName,
+    }: QueryProjectRecordInRange): Promise<null | ProjectRecord[]> {
+        const endDate = await this.getDefaultEndDate(to);
+
+        return this.getServiceByCategory(category).findProjectRecordInRange({
             recordType,
             projectName,
             from,
-            to,
+            to: endDate,
         });
     }
 
     /**
      * 查找历史周增数组
-     * 默认维度 basicType projectName infoType
+     * 没有指定 project 或 member，默认以 project 维度返回所有数据
      */
-    async findIncrementRecordOfTypeInRange(
-        basicType: BasicType,
-        projectList: ProjectName[],
+    async findAllProjectWeekIncrementInRange(
+        category: Category,
         recordType: RecordType,
-        from?: string,
+        projectList: ProjectName[],
+        from: string,
         to?: string,
     ) {
-        const incrementRecordOfTypeInRange = await Promise.all(
+        const allProjectIncrementRecordInRange = await Promise.all(
             projectList
-                .map(async (projectName) => this.findProjectIncrementRecordOfTypeInRange({
-                    basicType,
+                .map(async (projectName) => this.findProjectWeekIncrementInRange({
+                    category,
                     recordType,
-                    projectName,
                     from,
                     to,
+                    projectName,
                 })),
         );
 
-        return incrementRecordOfTypeInRange;
+        return allProjectIncrementRecordInRange;
     }
 
-    async findProjectIncrementRecordOfTypeInRange({
-        basicType,
+    /**
+     * 周增数据是可以由现有数据计算得出的，因此不应该放在外部的 service
+     */
+    async findProjectWeekIncrementInRange({
+        category,
         recordType,
-        projectName,
-        from = '2020-06-06',
+        from,
         to,
-    }: FindProjectIncrementRecordOfTypeInRange) {
-        let endDate = to;
-        if (!endDate) {
-            endDate = await this.charaTagService.findLatestWeeklyFetchDate();
-        }
+        projectName,
+    }: QueryProjectRecordInRange) {
+        const endDate = await this.getDefaultEndDate(to);
 
-        const recordInRange = await this.getServiceByType(basicType).findRangeBasicTypeProjectRecord({
+        const recordInRange = await this.getServiceByCategory(category).findProjectRecordInRange({
             from,
             to: endDate,
             projectName,
@@ -242,15 +237,57 @@ export class RecordService {
                 i--;
             }
             else {
-                // 此时的 prevRecord 是周间统计的辅助数据，直接更新 i 即可
+                // 此时的 prevRecord 是周间统计的插值数据，直接更新 i 即可
                 i--;
             }
         }
 
         return {
             projectName,
-            recordType,
             incrementRecordInRange,
         };
+    }
+
+    async findMemberWeekIncrementInRange({
+        category,
+        recordType,
+        from,
+        to,
+        romaName,
+    }: QueryMemberRecordInRange) {
+        const endDate = await this.getDefaultEndDate(to);
+
+        const recordInRange = await this.getServiceByCategory(category).findMemberRecordInRange({
+            from,
+            to: endDate,
+            romaName,
+            recordType,
+        });
+
+        const incrementRecordInRange: MemberRecord[] = [];
+        let i = recordInRange.length - 1;
+        let curRecord = recordInRange[i];
+        while (i > 0) {
+            const { date, record } = curRecord;
+            const prevDate = getPrevWeeklyFetchDate(date);
+            const prevRecord = recordInRange[i - 1];
+            if (prevRecord.date === prevDate) {
+                // 当周新增了成员时，前一周对应的 index 无值
+                const incrementRecord = record - prevRecord.record;
+                incrementRecordInRange.unshift({
+                    date,
+                    record: incrementRecord,
+                });
+                // 更新循环条件
+                curRecord = prevRecord;
+                i--;
+            }
+            else {
+                // 此时的 prevRecord 是周间统计的插值数据，直接更新 i 即可
+                i--;
+            }
+        }
+
+        return incrementRecordInRange;
     }
 }

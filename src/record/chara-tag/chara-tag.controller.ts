@@ -4,11 +4,11 @@ import {
     Query,
 } from '@nestjs/common';
 import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { ProjectName } from '@common/root';
+import { Category, ProjectName } from '@common/root';
 import { CharaTagService } from './chara-tag.service';
 import {
-    QueryOneProjectRecord,
-    QueryRangeProjectRecordOfTypeDto,
+    QueryOneProjectRecordOfType,
+    FindProjectRecordInRange,
 } from '../common/dto/query-record-data.dto';
 import { CreateRecordOfProjectDto } from '../common/dto/create-record-data.dto';
 
@@ -20,15 +20,15 @@ export class CharaTagController {
     ) {}
 
     @Post('/create_project_record')
-    createProjectRecord(@Body() createProjectCharaRecordDto: CreateRecordOfProjectDto) {
-        return this.service.createCharaRecordOfProject(createProjectCharaRecordDto);
+    createProjectRecord(@Body() body: CreateRecordOfProjectDto) {
+        return this.service.createRecordOfProject(body);
     }
 
     @Get('/one_project_record')
     @ApiQuery({ name: 'date', type: 'string' })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
     @ApiQuery({ name: 'recordType', type: 'string' })
-    findOneBasicTypeProjectRecord(@Query() query: QueryOneProjectRecord) {
+    findOneBasicTypeProjectRecord(@Query() query: QueryOneProjectRecordOfType) {
         return this.service.findOneProjectRecord(query);
     }
 
@@ -37,7 +37,7 @@ export class CharaTagController {
     @ApiQuery({ name: 'to', type: 'string' })
     @ApiQuery({ name: 'recordType', type: 'string' })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
-    findRangeBasicTypeProjectRecord(@Query() query: QueryRangeProjectRecordOfTypeDto) {
-        return this.service.findRangeBasicTypeProjectRecord(query);
+    findRangeBasicTypeProjectRecord(@Query() query: FindProjectRecordInRange) {
+        return this.service.findProjectRecordInRange(query);
     }
 }

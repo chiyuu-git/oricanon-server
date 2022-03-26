@@ -1,14 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { BasicType, ProjectName } from '@common/root';
+import { Category, ProjectName } from '@common/root';
 import { CoupleRecordType } from '@common/record';
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordDataService } from '../common/record-data-service';
 import {
-    QueryOneProjectRecord,
-    QueryOneProjectRecordInDB,
-    QueryRangeProjectRecordOfTypeDto,
+    QueryOneProjectRecordOfType,
+    FindOneProjectRecord,
+    FindProjectRecordInRange,
 } from '../common/dto/query-record-data.dto';
 import { LLSSCouple } from './couple-tag.entity';
 import { CoupleRecordEntity } from '../common/record.entity';
@@ -21,6 +21,8 @@ interface QueryUnionList {
 }
 @Injectable()
 export class CoupleTagService extends RecordDataService {
+    category = Category.couple
+
     @InjectRepository(LLSSCouple)
     LLSSCoupleRepository: Repository<LLSSCouple>
 
@@ -33,15 +35,11 @@ export class CoupleTagService extends RecordDataService {
         }
     }
 
-    createCoupleRecordOfProject(createProjectCoupleRecordDto: CreateRecordOfProjectDto) {
-        return this.createRecordOfProject(BasicType.couple, createProjectCoupleRecordDto);
-    }
-
     /**
      * findOneCoupleProjectRecord
      * couple 聚合入口，根据 aggregationType 调用不同的聚合方法
      */
-    async findOneProjectRecord(params: QueryOneProjectRecord): Promise<null |number[]> {
+    async findOneProjectRecord(params: QueryOneProjectRecordOfType): Promise<null |number[]> {
         const { recordType, projectName } = params;
 
         if (projectName !== ProjectName.llss) {
@@ -59,12 +57,11 @@ export class CoupleTagService extends RecordDataService {
         }
 
         return this.findOneProjectRecordInDB({
-            basicType: BasicType.couple,
             ...params,
         });
     }
 
-    async findIllustWithNovel(params: QueryOneProjectRecord) {
+    async findIllustWithNovel(params: QueryOneProjectRecordOfType) {
         const [unionIllustRecord, unionNovelRecord] = await Promise.all(
             [
                 this.findUnionIllust(params),
@@ -78,7 +75,7 @@ export class CoupleTagService extends RecordDataService {
         return null;
     }
 
-    async findUnionNovel(params: QueryOneProjectRecord) {
+    async findUnionNovel(params: QueryOneProjectRecordOfType) {
         return this.findUnion(params, {
             default: CoupleRecordType.novel,
             reverse: CoupleRecordType.novelReverse,
@@ -86,7 +83,7 @@ export class CoupleTagService extends RecordDataService {
         });
     }
 
-    async findUnionIllust(params: QueryOneProjectRecord) {
+    async findUnionIllust(params: QueryOneProjectRecordOfType) {
         return this.findUnion(params, {
             default: CoupleRecordType.illust,
             reverse: CoupleRecordType.illustReverse,
@@ -94,10 +91,10 @@ export class CoupleTagService extends RecordDataService {
         });
     }
 
-    async findUnion(params: QueryOneProjectRecord, typeList: QueryUnionList) {
-        const findOptionList: QueryOneProjectRecordInDB[] = Object.values(typeList)
+    async findUnion(params: QueryOneProjectRecordOfType, typeList: QueryUnionList) {
+        const findOptionList: FindOneProjectRecord[] = Object.values(typeList)
             .map((recordType) => ({
-                basicType: BasicType.couple,
+                category: Category.couple,
                 ...params,
                 recordType,
             }));
@@ -117,11 +114,11 @@ export class CoupleTagService extends RecordDataService {
         return defaultRecord.map((record, i) => record + reverseRecord[i] - intersectionRecord[i]);
     }
 
-    async findRangeBasicTypeProjectRecord(params: QueryRangeProjectRecordOfTypeDto) {
+    async findProjectRecordInRange(params: FindProjectRecordInRange) {
         if (params.projectName !== ProjectName.llss) {
             return null;
         }
         // 普通类型 record
-        return this.findRangeProjectRecordEntityInDB(BasicType.couple, params);
+        return this.findRangeProjectRecordInDB(params);
     }
 }

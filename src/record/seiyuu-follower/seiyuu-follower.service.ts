@@ -1,19 +1,19 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { MemberInfoService } from 'src/member-info/member-info.service';
-import { BasicType, ProjectName } from '@common/root';
+import { Category, ProjectName } from '@common/root';
 import {
-    QueryOneProjectRecord,
-    QueryRangeProjectRecordOfTypeDto,
+    QueryOneProjectRecordOfType,
+    FindProjectRecordInRange,
 } from '../common/dto/query-record-data.dto';
 import { LLNSeiyuu, LLSSeiyuu, LLSSSeiyuu } from './seiyuu-follower.entity';
 import { MemberRecordEntity } from '../common/record.entity';
 import { RecordDataService } from '../common/record-data-service';
-import { CreateRecordOfProjectDto } from '../common/dto/create-record-data.dto';
 
 @Injectable()
 export class SeiyuuFollowerService extends RecordDataService {
+    category = Category.seiyuu
+
     @InjectRepository(LLSSeiyuu)
     LLSSeiyuuRepository: Repository<LLSSeiyuu>;
 
@@ -36,31 +36,26 @@ export class SeiyuuFollowerService extends RecordDataService {
         }
     }
 
-    createSeiyuuRecordOfProject(createProjectSeiyuuRecordDto: CreateRecordOfProjectDto) {
-        return this.createRecordOfProject(BasicType.seiyuu, createProjectSeiyuuRecordDto);
-    }
-
     /**
      * findOneSeiyuuProjectRecord
      */
-    async findOneProjectRecord(params: QueryOneProjectRecord): Promise<null | number[]> {
+    async findOneProjectRecord(params: QueryOneProjectRecordOfType): Promise<null | number[]> {
         if (params.projectName === ProjectName.ll) {
             return null;
         }
 
         return this.findOneProjectRecordInDB({
-            basicType: BasicType.seiyuu,
             ...params,
         });
     }
 
-    async findRangeBasicTypeProjectRecord(params: QueryRangeProjectRecordOfTypeDto) {
+    async findProjectRecordInRange(params: FindProjectRecordInRange) {
         if (params.projectName === ProjectName.ll) {
             return null;
         }
 
         // 普通类型 record
-        return this.findRangeProjectRecordEntityInDB(BasicType.seiyuu, params);
+        return this.findRangeProjectRecordInDB(params);
     }
 
     async findLatestDailyFetchDate() {

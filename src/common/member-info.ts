@@ -1,6 +1,13 @@
-import { BasicType, ProjectName } from './root';
+import { Category, ProjectName } from './root';
 
-interface MemberCommonInfo {
+export enum GroupName {
+    muses = 'muses',
+    aqours = 'aqours',
+    nijigaki = 'nijigaki',
+    liella = 'liella',
+}
+
+export interface MemberCommonInfo {
     memberId: number;
     projectName: ProjectName;
     name: string;
@@ -29,14 +36,14 @@ export interface SeiyuuInfo extends MemberCommonInfo{
     officialOrder: number;
 }
 
-export type GetMemberInfoByType<Type extends BasicType> = Type extends BasicType.chara
+export type GetMemberInfoByType<Type extends Category> = Type extends Category.chara
     ? CharaInfo
-    : Type extends BasicType.couple
+    : Type extends Category.couple
         ? CoupleInfo
-        : Type extends BasicType.seiyuu
+        : Type extends Category.seiyuu
             ? SeiyuuInfo
             : never
 
-export type MemberInfoMap<Type extends BasicType > = {
+export type MemberInfoMap<Type extends Category > = {
     [romaName in string]: GetMemberInfoByType<Type>
 }

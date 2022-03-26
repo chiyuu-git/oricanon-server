@@ -1,4 +1,4 @@
-import type { BasicType, ProjectName } from '@common/root';
+import type { Category, ProjectName } from '@common/root';
 import type { CharaInfo } from './entities/chara-info.entity';
 import type { CoupleInfo } from './entities/couple-info.entity';
 import type { SeiyuuInfo } from './entities/seiyuu-info.entity';
@@ -15,7 +15,7 @@ interface ProjectMemberList {
     seiyuus?: SeiyuuInfo[];
 }
 
-export type ProjectMemberListKey = `${BasicType}s`;
+export type ProjectMemberListKey = `${Category}s`;
 
 /**
  * 以 projectName 为属性名整合全部的list

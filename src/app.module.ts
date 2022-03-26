@@ -10,6 +10,7 @@ import { WeeklyModule } from './weekly/weekly.module';
 import { RecordModule } from './record/record.module';
 import { SummaryModule } from './summary/summary.module';
 import { MemberInfoModule } from './member-info/member-info.module';
+import { EventModule } from './event/event.module';
 
 @Module({
     imports: [
@@ -21,7 +22,7 @@ import { MemberInfoModule } from './member-info/member-info.module';
             password: '',
             database: 'canon',
             autoLoadEntities: true,
-            synchronize: false,
+            // synchronize: false,
             // logging: ['query', 'error'],
         }),
         ServeStaticModule.forRoot({
@@ -34,6 +35,7 @@ import { MemberInfoModule } from './member-info/member-info.module';
         WeeklyModule,
         RecordModule,
         SummaryModule,
+        EventModule,
     ],
     controllers: [AppController],
     providers: [AppService],

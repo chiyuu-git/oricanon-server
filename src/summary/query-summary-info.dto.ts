@@ -1,32 +1,40 @@
-import { IsString } from 'class-validator';
-import { BasicType, ProjectName } from '@common/root';
-import { CharaRecordType, RecordType } from '@common/record';
+import { IsDateString, IsOptional, IsString } from 'class-validator';
+import { Category, ProjectName } from '@common/root';
+import { RecordType } from '@common/record';
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
+import { formatDate } from '@utils/date';
 
-export class QueryIncrementRankOfTypeInRange {
+abstract class QueryRecordDto {
     @IsString()
-    basicType: BasicType;
+    category: Category;
 
     @IsString()
     @ApiProperty({
         // swagger 不清楚联合类型 RecordType 的基础类型是啥，所以需要显式声明
         type: String,
-        default: CharaRecordType.illust,
+        default: 'pixiv_illust',
     })
     recordType: RecordType;
+}
 
-    @ApiProperty({
-        required: false,
-    })
+export class QueryRecordInRangeDto extends QueryRecordDto {
+    // TODO: custom validator
+    @IsString()
     from: string;
 
-    @ApiProperty({
-        required: false,
-    })
-    to: string;
+    @IsString()
+    @IsOptional()
+    to?: string;
 }
 
-export class QueryRelativeIncrementOfTypeInRange extends QueryIncrementRankOfTypeInRange {
+export class QueryProjectRecordInRangeDto extends QueryRecordInRangeDto {
     @IsString()
-    projectName: ProjectName
+    projectName: ProjectName;
 }
+
+export class QueryMemberRecordInRangeDto extends QueryRecordInRangeDto {
+    @IsString()
+    romaName: string;
+}
+

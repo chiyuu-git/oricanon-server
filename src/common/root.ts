@@ -7,7 +7,7 @@ export enum ProjectName {
     llss = 'llss',
 }
 
-export enum BasicType {
+export enum Category {
     chara = 'chara',
     seiyuu = 'seiyuu',
     couple = 'couple',
