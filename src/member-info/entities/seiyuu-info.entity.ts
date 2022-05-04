@@ -19,8 +19,8 @@ export class SeiyuuInfo extends MemberInfo {
     twitterAccount: string;
 
     @Column({
-        type: 'varchar',
-        name: 'official_order',
+        type: 'tinyint',
+        name: 'record_order',
     })
-    officialOrder: number;
+    recordOrder: number;
 }

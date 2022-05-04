@@ -1,8 +1,10 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
+    QueryHistoricalWeekIncrementOfPercentileDto,
     QueryMemberRecordInRangeDto,
     QueryProjectRecordInRangeDto,
+    QueryProjectRelativeIncrementInfoDto,
     QueryRecordInRangeDto,
 } from './query-summary-info.dto';
 import { SummaryService } from './summary.service';
@@ -12,9 +14,14 @@ import { SummaryService } from './summary.service';
 export class SummaryController {
     constructor(private readonly service: SummaryService) {}
 
-    @Get('/week_increment_rank_of_type_in_range')
-    findWeekIncrementRankOfTypeInRange(@Query() query: QueryRecordInRangeDto) {
-        return this.service.getWeekIncrementRankOfTypeInRange(query);
+    @Get('/historical_week_increment_of_percentile')
+    findHistoricalWeekIncrementOfPercentile(@Query() query: QueryHistoricalWeekIncrementOfPercentileDto) {
+        return this.service.getHistoricalWeekIncrementOfPercentile(query);
+    }
+
+    @Get('/week_increment_rank_in_range')
+    findWeekIncrementRankInRange(@Query() query: QueryRecordInRangeDto) {
+        return this.service.getWeekIncrementRankInRange(query);
     }
 
     @Get('/week_increment_of_project_in_range')
@@ -27,8 +34,19 @@ export class SummaryController {
         return this.service.getMemberWeekIncrementInRange(query);
     }
 
-    @Get('/relative_increment_of_type_in_range')
-    findRelativeIncrementOfTypeInRange(@Query() query: QueryProjectRecordInRangeDto) {
-        return this.service.getRelativeIncrementOfTypeInRange(query);
+    @Get('/project_relative_increment')
+    findProjectRelativeIncrement(@Query() query: QueryProjectRecordInRangeDto) {
+        return this.service.getProjectRelativeIncrement(query);
+    }
+
+    @Get('/project_relative_increment_info')
+    findProjectRelativeIncrementInfo(@Query() query: QueryProjectRelativeIncrementInfoDto) {
+        const { category, projectName, from, to } = query;
+        return this.service.getProjectRelativeIncrementInfo(category, projectName, from, to);
+    }
+
+    @Get('/relative_increment_in_range')
+    findRelativeIncrementInRange(@Query() query: QueryProjectRecordInRangeDto) {
+        return this.service.getRelativeIncrementInRange(query);
     }
 }

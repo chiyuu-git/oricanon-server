@@ -10,7 +10,7 @@ import { MemberInfoService } from 'src/member-info/member-info.service';
 import { ProjectMemberListKey, ProjectMemberListMap } from 'src/member-info/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-    QueryOneProjectRecordOfType,
+    QueryOneProjectRecordInCategory,
     FindOneProjectRecord,
     FindMemberRecordInRange,
     FindProjectRecordInRange,
@@ -142,7 +142,7 @@ export class RecordDataService implements OnApplicationBootstrap {
     /**
      * 由各个基础 service 各自实现，查询单个 projectRecord
      */
-    async findOneProjectRecord(params: QueryOneProjectRecordOfType): Promise<null | number[]> {
+    async findOneProjectRecord(params: QueryOneProjectRecordInCategory): Promise<null | number[]> {
         throw new Error('Method not implemented.');
     }
 

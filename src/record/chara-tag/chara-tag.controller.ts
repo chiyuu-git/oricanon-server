@@ -7,7 +7,7 @@ import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Category, ProjectName } from '@common/root';
 import { CharaTagService } from './chara-tag.service';
 import {
-    QueryOneProjectRecordOfType,
+    QueryOneProjectRecordInCategory,
     FindProjectRecordInRange,
 } from '../common/dto/query-record-data.dto';
 import { CreateRecordOfProjectDto } from '../common/dto/create-record-data.dto';
@@ -28,7 +28,7 @@ export class CharaTagController {
     @ApiQuery({ name: 'date', type: 'string' })
     @ApiQuery({ name: 'projectName', enum: ProjectName })
     @ApiQuery({ name: 'recordType', type: 'string' })
-    findOneBasicTypeProjectRecord(@Query() query: QueryOneProjectRecordOfType) {
+    findOneBasicTypeProjectRecord(@Query() query: QueryOneProjectRecordInCategory) {
         return this.service.findOneProjectRecord(query);
     }
 

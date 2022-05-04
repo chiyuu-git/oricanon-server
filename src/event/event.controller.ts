@@ -27,11 +27,6 @@ export class EventController {
         return this.eventService.createSoloEvent(createSoloEventDto);
     }
 
-    @Get()
-    findAll() {
-        return this.eventService.findAll();
-    }
-
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.eventService.findOne(+id);

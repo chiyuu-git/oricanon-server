@@ -10,9 +10,15 @@ export enum EventTypeEnum {
     animeOnAir = 'anime_on_air',
     characterBirthday = 'character_birthday',
     projectPromulgate = 'project_promulgate',
+    /**
+     * 生放送
+     */
     liveStream = 'live_stream',
     seiyuuBirthday = 'seiyuu_birthday',
     seiyuuEvent = 'seiyuu_event',
+    /**
+     * 地上波
+     */
     tvProgramOnAir = 'tv_program_on_air',
     goodsRelease = 'goods_release',
     specialEvent0 = 'special_event_0',

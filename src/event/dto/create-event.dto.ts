@@ -17,7 +17,7 @@ export class CreateEventRecordDto {
     to: string;
 
     /**
-     * 不需要包含 groupName，使用动宾短语描述即可
+     * 包含 groupName，使用动宾短语描述即可
      */
     @IsString()
     title: string;
@@ -26,6 +26,7 @@ export class CreateEventRecordDto {
      * 可包含 groupName，描述尽量完善
      */
     @IsString()
+    @IsOptional()
     content?: string;
 
     /**
@@ -36,7 +37,7 @@ export class CreateEventRecordDto {
     relativeUrlList?: string[];
 
     /**
-     * 相关内容的链接：推文、官网、新闻等
+     * 备注
      */
     @IsString()
     @IsOptional()

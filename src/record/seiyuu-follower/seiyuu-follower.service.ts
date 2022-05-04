@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Category, ProjectName } from '@common/root';
 import {
-    QueryOneProjectRecordOfType,
+    QueryOneProjectRecordInCategory,
     FindProjectRecordInRange,
 } from '../common/dto/query-record-data.dto';
 import { LLNSeiyuu, LLSSeiyuu, LLSSSeiyuu } from './seiyuu-follower.entity';
@@ -39,7 +39,7 @@ export class SeiyuuFollowerService extends RecordDataService {
     /**
      * findOneSeiyuuProjectRecord
      */
-    async findOneProjectRecord(params: QueryOneProjectRecordOfType): Promise<null | number[]> {
+    async findOneProjectRecord(params: QueryOneProjectRecordInCategory): Promise<null | number[]> {
         if (params.projectName === ProjectName.ll) {
             return null;
         }

@@ -1,9 +1,8 @@
-import { IsDateString, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Category, ProjectName } from '@common/root';
 import { RecordType } from '@common/record';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { formatDate } from '@utils/date';
 
 abstract class QueryRecordDto {
     @IsString()
@@ -28,6 +27,12 @@ export class QueryRecordInRangeDto extends QueryRecordDto {
     to?: string;
 }
 
+export class QueryHistoricalWeekIncrementOfPercentileDto extends QueryRecordInRangeDto {
+    @IsNumber()
+    @Transform(({ value }) => Number.parseInt(value, 10))
+    percentile: number;
+}
+
 export class QueryProjectRecordInRangeDto extends QueryRecordInRangeDto {
     @IsString()
     projectName: ProjectName;
@@ -38,3 +43,17 @@ export class QueryMemberRecordInRangeDto extends QueryRecordInRangeDto {
     romaName: string;
 }
 
+export class QueryProjectRelativeIncrementInfoDto {
+    @IsString()
+    category: Category;
+
+    @IsString()
+    projectName: ProjectName;
+
+    @IsString()
+    from: string;
+
+    @IsString()
+    @IsOptional()
+    to?: string;
+}

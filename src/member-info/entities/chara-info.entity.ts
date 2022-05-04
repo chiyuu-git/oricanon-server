@@ -20,8 +20,14 @@ export class CharaInfo extends MemberInfo {
 
     @Column({
         type: 'varchar',
-        name: 'official_order',
+        name: 'birthday',
     })
-    officialOrder: number;
+    birthday: string;
+
+    @Column({
+        type: 'tinyint',
+        name: 'record_order',
+    })
+    recordOrder: number;
 }
 

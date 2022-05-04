@@ -5,7 +5,7 @@ import { Category, ProjectName } from '@common/root';
 import { CharaRecordType } from '@common/record';
 import { RecordDataService } from '../common/record-data-service';
 import {
-    QueryOneProjectRecordOfType,
+    QueryOneProjectRecordInCategory,
     FindProjectRecordInRange,
 } from '../common/dto/query-record-data.dto';
 import { LLChara, LLNChara, LLSChara, LLSSChara } from './chara-tag.entity';
@@ -46,13 +46,15 @@ export class CharaTagService extends RecordDataService {
     /**
      * findOneCharaProjectRecord
      */
-    async findOneProjectRecord(params: QueryOneProjectRecordOfType): Promise<null |number[]> {
+    async findOneProjectRecord(params: QueryOneProjectRecordInCategory): Promise<null |number[]> {
         const { recordType } = params;
 
         // 聚合类型 record
         switch (recordType) {
             case CharaRecordType.illustWithNovel:
                 return this.findIllustWithNovel(params);
+            case CharaRecordType.favorSum:
+                return this.findFavorUnion(params);
             default:
         }
 
@@ -63,10 +65,9 @@ export class CharaTagService extends RecordDataService {
     }
 
     /**
-     * 聚合 illust 和 novel，目前 chara 只有一个聚合
-     * 之后新增聚合此方法可以作为入口分发
+     * 聚合 illust 和 novel
      */
-    async findIllustWithNovel(params: QueryOneProjectRecordOfType): Promise<null | number[]> {
+    async findIllustWithNovel(params: QueryOneProjectRecordInCategory): Promise<null | number[]> {
         const [illustRecords, novelRecords] = await Promise.all([
             this.findOneProjectRecordInDB({
                 ...params,
@@ -82,6 +83,40 @@ export class CharaTagService extends RecordDataService {
 
         // 聚合 pixiv_illust 和 pixiv_novel
         return illustRecords.map((record, i) => record + novelRecords[i]);
+    }
+
+    /**
+     * 聚合所有类型的 favor
+     */
+    async findFavorUnion(params: QueryOneProjectRecordInCategory): Promise<null | number[]> {
+        const [
+            fiftyRecords,
+            hundredRecords,
+            fiveHundredRecords,
+            thousandRecords,
+            fiveThousandRecords,
+            tenThousandRecords,
+        ] = await Promise.all([
+            this.findOneProjectRecordInDB({ ...params, recordType: CharaRecordType.fifty }),
+            this.findOneProjectRecordInDB({ ...params, recordType: CharaRecordType.hundred }),
+            this.findOneProjectRecordInDB({ ...params, recordType: CharaRecordType.fiveHundred }),
+            this.findOneProjectRecordInDB({ ...params, recordType: CharaRecordType.thousand }),
+            this.findOneProjectRecordInDB({ ...params, recordType: CharaRecordType.fiveThousand }),
+            this.findOneProjectRecordInDB({ ...params, recordType: CharaRecordType.tenThousand }),
+        ]);
+
+        if (!fiftyRecords || !hundredRecords || !fiveHundredRecords
+            || !thousandRecords || !fiveThousandRecords || !tenThousandRecords) {
+            return null;
+        }
+
+        // 聚合 pixiv_illust 和 pixiv_novel
+        return fiftyRecords.map((record, i) => record
+            + hundredRecords[i]
+            + fiveHundredRecords[i]
+            + thousandRecords[i]
+            + fiveThousandRecords[i]
+            + tenThousandRecords[i]);
     }
 
     async findProjectRecordInRange(params: FindProjectRecordInRange) {

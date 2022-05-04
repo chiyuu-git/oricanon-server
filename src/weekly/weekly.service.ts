@@ -4,7 +4,7 @@ import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordService } from 'src/record/record.service';
 import { ProjectName, Category } from '@common/root';
 import { SeiyuuRecordType } from '@common/record';
-import { RecordWeeklyInfo } from '@common/weekly';
+import { MemberWeeklyInfo, ProjectInfo, RecordTypeWeeklyInfo } from '@common/weekly';
 import { ProjectMemberListKey, ProjectMemberListMap } from 'src/member-info/common';
 import { MemberInfo } from '@src/member-info/entities/member-info.entity';
 import {
@@ -25,6 +25,11 @@ interface ProjectRecord {
     records: number[];
     weekIncrementArr: number[];
     weekIncrementRateArr: string[];
+}
+
+interface WeeklyRelativeInfo {
+    projectInfoList: ProjectInfo[];
+    memberInfoList: MemberWeeklyInfo[];
 }
 
 @Injectable()
@@ -56,7 +61,7 @@ export class WeeklyService implements OnApplicationBootstrap {
 
         const { weekRange, relativeRecordOfType } = result;
 
-        const recordWeeklyInfo = this.processRelativeRecordOfType(
+        const weeklyRelativeInfo = this.processRelativeRecord(
             category,
             relativeRecordOfType,
         );
@@ -66,23 +71,27 @@ export class WeeklyService implements OnApplicationBootstrap {
         const to = new Date(weekRange.to);
         const range = `${from.getMonth() + 1}/${from.getDate() + 1} 至 ${to.getMonth() + 1}/${to.getDate()}`;
 
-        recordWeeklyInfo.range = range;
+        const recordTypeWeekly: RecordTypeWeeklyInfo = {
+            range,
+            ...weeklyRelativeInfo,
+        };
 
-        return recordWeeklyInfo;
+        // 参考线的处理也融合到周榜内
+
+        return recordTypeWeekly;
     }
 
     /**
      * 处理周报相关的数据，接受 ModuleRelativeRecord ，返回
      */
-    private processRelativeRecordOfType<Type extends Category>(
+    private processRelativeRecord<Type extends Category>(
         category: Type,
         relativeRecordOfType: RelativeRecordOfType,
     ) {
         // const moduleTotal = 0;
         // const moduleWeekIncrement = 0;
         // const moduleLastWeekIncrement = 0;
-        const moduleInfo: RecordWeeklyInfo = {
-            range: '',
+        const categoryInfo: WeeklyRelativeInfo = {
             projectInfoList: [],
             memberInfoList: [],
         };
@@ -98,37 +107,15 @@ export class WeeklyService implements OnApplicationBootstrap {
                     // projectRelativeRecord 已经判断过了，此时 memberList 一定是有值的
                     memberList!,
                 );
-                moduleInfo.projectInfoList.push(projectInfo);
-                moduleInfo.memberInfoList.push(...memberInfo);
+                categoryInfo.projectInfoList.push(projectInfo);
+                categoryInfo.memberInfoList.push(...memberInfo);
             }
             // else {
             //     moduleInfo.projectInfoList.push(null);
             // }
         }
 
-        return moduleInfo;
-    }
-
-    /**
-     * moduleInfo 已经有每个企划的信息了，直接返回给前端即可
-     * memberInfo 是全部企划的也属于 moduleInfo 的一部分，整理后返回
-     */
-    private formatRecordWithMemberList(
-        projectRecord: ProjectRecord,
-        memberList: MemberInfo[],
-    ) {
-        const {
-            records,
-            weekIncrementArr,
-            weekIncrementRateArr,
-        } = projectRecord;
-
-        return memberList.map((member, i) => ({
-            romaName: member.romaName,
-            record: records[i],
-            weekIncrement: weekIncrementArr[i],
-            weekIncrementRate: weekIncrementRateArr[i],
-        }));
+        return categoryInfo;
     }
 
     /**
@@ -186,6 +173,28 @@ export class WeeklyService implements OnApplicationBootstrap {
                 projectWeekIncrementRate,
             },
         };
+    }
+
+    /**
+     * moduleInfo 已经有每个企划的信息了，直接返回给前端即可
+     * memberInfo 是全部企划的也属于 moduleInfo 的一部分，整理后返回
+     */
+    private formatRecordWithMemberList(
+        projectRecord: ProjectRecord,
+        memberList: MemberInfo[],
+    ) {
+        const {
+            records,
+            weekIncrementArr,
+            weekIncrementRateArr,
+        } = projectRecord;
+
+        return memberList.map((member, i) => ({
+            romaName: member.romaName,
+            record: records[i],
+            weekIncrement: weekIncrementArr[i],
+            weekIncrementRate: weekIncrementRateArr[i],
+        }));
     }
 
     /**

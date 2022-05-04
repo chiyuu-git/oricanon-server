@@ -20,7 +20,10 @@ export class MemberList {
     @Column({ type: 'varchar' })
     name: string;
 
-    @Column({ type: 'varchar' })
+    @Column({
+        type: 'varchar',
+        name: 'roma_name',
+    })
     romaName: string;
 }
 

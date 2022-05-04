@@ -6,7 +6,7 @@ import { CoupleRecordType } from '@common/record';
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordDataService } from '../common/record-data-service';
 import {
-    QueryOneProjectRecordOfType,
+    QueryOneProjectRecordInCategory,
     FindOneProjectRecord,
     FindProjectRecordInRange,
 } from '../common/dto/query-record-data.dto';
@@ -39,7 +39,7 @@ export class CoupleTagService extends RecordDataService {
      * findOneCoupleProjectRecord
      * couple 聚合入口，根据 aggregationType 调用不同的聚合方法
      */
-    async findOneProjectRecord(params: QueryOneProjectRecordOfType): Promise<null |number[]> {
+    async findOneProjectRecord(params: QueryOneProjectRecordInCategory): Promise<null |number[]> {
         const { recordType, projectName } = params;
 
         if (projectName !== ProjectName.llss) {
@@ -61,7 +61,7 @@ export class CoupleTagService extends RecordDataService {
         });
     }
 
-    async findIllustWithNovel(params: QueryOneProjectRecordOfType) {
+    async findIllustWithNovel(params: QueryOneProjectRecordInCategory) {
         const [unionIllustRecord, unionNovelRecord] = await Promise.all(
             [
                 this.findUnionIllust(params),
@@ -75,7 +75,7 @@ export class CoupleTagService extends RecordDataService {
         return null;
     }
 
-    async findUnionNovel(params: QueryOneProjectRecordOfType) {
+    async findUnionNovel(params: QueryOneProjectRecordInCategory) {
         return this.findUnion(params, {
             default: CoupleRecordType.novel,
             reverse: CoupleRecordType.novelReverse,
@@ -83,7 +83,7 @@ export class CoupleTagService extends RecordDataService {
         });
     }
 
-    async findUnionIllust(params: QueryOneProjectRecordOfType) {
+    async findUnionIllust(params: QueryOneProjectRecordInCategory) {
         return this.findUnion(params, {
             default: CoupleRecordType.illust,
             reverse: CoupleRecordType.illustReverse,
@@ -91,7 +91,7 @@ export class CoupleTagService extends RecordDataService {
         });
     }
 
-    async findUnion(params: QueryOneProjectRecordOfType, typeList: QueryUnionList) {
+    async findUnion(params: QueryOneProjectRecordInCategory, typeList: QueryUnionList) {
         const findOptionList: FindOneProjectRecord[] = Object.values(typeList)
             .map((recordType) => ({
                 category: Category.couple,

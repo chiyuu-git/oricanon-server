@@ -8,8 +8,8 @@ import { CoupleTagService } from './couple-tag/couple-tag.service';
 import { SeiyuuFollowerService } from './seiyuu-follower/seiyuu-follower.service';
 import { RecordDataService } from './common/record-data-service';
 import {
-    FindProjectRecordInRange,
     QueryMemberRecordInRange,
+    QueryOneProjectRecord,
     QueryProjectRecordInRange,
 } from './common/dto/query-record-data.dto';
 
@@ -47,6 +47,24 @@ export class RecordService {
             endDate = await this.charaTagService.findLatestWeeklyFetchDate();
         }
         return endDate;
+    }
+
+    /**
+     * 去 service 获取单个企划的数据
+     */
+    async findOneProjectRecord({
+        category,
+        recordType,
+        projectName,
+        date,
+    }: QueryOneProjectRecord) {
+        const targetDate = await this.getDefaultEndDate(date);
+
+        return this.getServiceByCategory(category).findOneProjectRecord({
+            projectName,
+            recordType,
+            date: targetDate,
+        });
     }
 
     /**
@@ -151,7 +169,7 @@ export class RecordService {
         from,
         to,
         projectName,
-    }: QueryProjectRecordInRange): Promise<null | ProjectRecord[]> {
+    }: QueryProjectRecordInRange) {
         const endDate = await this.getDefaultEndDate(to);
 
         return this.getServiceByCategory(category).findProjectRecordInRange({
@@ -223,14 +241,21 @@ export class RecordService {
                 const incrementRecords = records.map((val, index) => {
                     const prevVal = prevRecord.records[index];
                     if (prevVal === undefined) {
+                        // 如果成员在记录之前就已经有 100 份数据，此时若返回 val - 0 ，则相当于是周增了 100
+                        // 因此若之前没有改成员的记录，周增一律为 0
                         return 0;
                     }
 
                     return val - prevVal;
                 });
+                // 计算企划周增的平均值、50分位 and more
+                const average = Math.round(incrementRecords.reduce((acc, val) => acc + val) / incrementRecords.length);
+                // console.log('incrementRecords:', incrementRecords);
+                // console.log('average:', average);
                 incrementRecordInRange.unshift({
                     date,
                     records: incrementRecords,
+                    average,
                 });
                 // 更新循环条件
                 curRecord = prevRecord;

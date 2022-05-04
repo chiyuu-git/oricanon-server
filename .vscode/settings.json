@@ -41,5 +41,12 @@
     "[scss]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "workbench.editor.wrapTabs": true
+    "workbench.editor.wrapTabs": true,
+    // mac 自动切换输入法
+    "vim.autoSwitchInputMethod.enable": true,
+    "vim.autoSwitchInputMethod.defaultIM": "1033",
+    "vim.autoSwitchInputMethod.obtainIMCmd": "F:\\Vim\\im-select.exe", 
+    "vim.autoSwitchInputMethod.switchIMCmd": "F:\\Vim\\im-select.exe {im}",
+    "vim.vimrc.enable": true
+
 }

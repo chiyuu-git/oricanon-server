@@ -3,12 +3,13 @@ export enum CharaRecordType {
     novel = 'pixiv_novel',
     tagView = 'pixiv_tag_view',
     r18 = 'pixiv_r18',
-    fifty = 'pixiv_50',
-    hundred = 'pixiv_100',
-    fiveHundred = 'pixiv_500',
-    thousand = 'pixiv_1000',
-    fiveThousand = 'pixiv_5000',
-    tenThousand = 'pixiv_10000',
+    fifty = 'pixiv_favor_50',
+    hundred = 'pixiv_favor_100',
+    fiveHundred = 'pixiv_favor_500',
+    thousand = 'pixiv_favor_1000',
+    fiveThousand = 'pixiv_favor_5000',
+    tenThousand = 'pixiv_favor_10000',
+    favorSum = 'pixiv_favor_sum',
     illustWithNovel = 'pixiv_illust_with_novel',
 }
 
@@ -38,6 +39,7 @@ export type RecordType = CharaRecordType | CoupleRecordType| SeiyuuRecordType;
 export interface ProjectRecord {
     date: string;
     records: number[];
+    average: number;
 }
 
 export interface MemberRecord {
