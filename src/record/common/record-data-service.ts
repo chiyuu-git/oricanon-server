@@ -161,7 +161,9 @@ export class RecordDataService implements OnApplicationBootstrap {
                 GROUP_CONCAT(record ORDER BY ${idType} ASC SEPARATOR ',') as recordStr
             FROM canon_record.${projectName}_${this.category}
             JOIN canon_record.record_type t USING (type_id)
+            ${this.category !== Category.couple ? 'JOIN canon_member.member m USING (member_id)' : ''}
             WHERE date = '${date}' AND t.name = '${recordType}'
+            ${this.category !== Category.couple ? 'AND m.is_active = 1' : ''}
             GROUP BY date;
         `);
 
@@ -198,7 +200,9 @@ export class RecordDataService implements OnApplicationBootstrap {
                 GROUP_CONCAT(record ORDER BY ${idType} ASC SEPARATOR ',') as recordStr
             FROM canon_record.${projectName}_${this.category}
             JOIN canon_record.record_type t USING (type_id)
+            ${this.category !== Category.couple ? 'JOIN canon_member.member m USING (member_id)' : ''}
             WHERE date BETWEEN '${from}' AND '${to}' AND t.name = '${recordType}'
+            ${this.category !== Category.couple ? 'AND m.is_active = 1' : ''}
             GROUP BY date;
         `;
         // console.log('queryStr:', queryStr);

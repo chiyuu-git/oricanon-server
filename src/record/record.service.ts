@@ -3,6 +3,7 @@ import { ProjectName, Category, DateString } from '@common/root';
 import { RecordType, ProjectRecord, MemberRecord } from '@common/record';
 import { getPrevWeeklyFetchDate, getRelativeDate } from '@common/weekly';
 import { MemberInfoService } from 'src/member-info/member-info.service';
+import { getPercentile } from '@utils/math';
 import { CharaTagService } from './chara-tag/chara-tag.service';
 import { CoupleTagService } from './couple-tag/couple-tag.service';
 import { SeiyuuFollowerService } from './seiyuu-follower/seiyuu-follower.service';
@@ -250,12 +251,15 @@ export class RecordService {
                 });
                 // 计算企划周增的平均值、50分位 and more
                 const average = Math.round(incrementRecords.reduce((acc, val) => acc + val) / incrementRecords.length);
+                // 计算中位数
+                const median = getPercentile([...incrementRecords].sort((a, b) => a - b), 50);
                 // console.log('incrementRecords:', incrementRecords);
                 // console.log('average:', average);
                 incrementRecordInRange.unshift({
                     date,
                     records: incrementRecords,
                     average,
+                    median,
                 });
                 // 更新循环条件
                 curRecord = prevRecord;

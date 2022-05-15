@@ -40,6 +40,7 @@ export interface ProjectRecord {
     date: string;
     records: number[];
     average: number;
+    median: number;
 }
 
 export interface MemberRecord {

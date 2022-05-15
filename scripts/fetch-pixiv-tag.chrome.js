@@ -12,8 +12,8 @@
  */
 const s_type = 'artworks';
 
-const RANGE_START = '2021-04-03';
-const RANGE_END = '2021-04-09';
+const RANGE_START = '2020-01-01';
+const RANGE_END = '2020-12-13';
 const range = `&scd=${RANGE_START}&ecd=${RANGE_END}`;
 
 /**
@@ -47,18 +47,18 @@ async function fetchPixivTagCount({
             const url = `${PIXIV_HOME_PAGE}/top/${encode}?lang=ja`;
             // const url = `${PIXIV_HOME_PAGE}/artworks/${encode}?word=${encode}&s_mode=${searchMode}${others}`;
             // rangeUrl，其余与普通url一致
-            // const url = `${pixivHomePage}/artworks/${encode}?word=${encode}&s_mode=${s_mode}${range}${others}`;
+            // const url = `${PIXIV_HOME_PAGE}/artworks/${encode}?word=${encode}&s_mode=${searchMode}${range}${others}`;
             // r18;
             // const url = `${pixivHomePage}/artworks/${encode}?word=${encode}&order=date_d&mode=r18&p=1&s_mode=s_tag_full&type=all&lang=ja`;
             // novel
-            // const url = `${pixivHomePage}/novels/${encode}?word=${encode}&order=date_d&mode=all&p=1&s_mode=s_tag_full&lang=ja`;
-            console.log(`${pixivTag}fetch start：${PIXIV_HOME_PAGE}/top/${pixivTag}?lang=ja`);
+            // const url = `${PIXIV_HOME_PAGE}/novels/${encode}?word=${encode}&s_mode=${searchMode}${range}${others}`;
+            console.log(`fetch ${pixivTag}: ${url}`);
             const data = await fetch(url);
             if (data.ok) {
                 const result = await data.json();
                 // pixiv 默认也会返回 0，还是别保险了，报错发现问题
-                illusts.push(result.body.illustManga.total);
-                novels.push(result.body.novel.total);
+                illusts.push(result.body.illustManga?.total);
+                novels.push(result.body.novel?.total);
                 // tags.push(result.body.novel.total)
             }
             else {

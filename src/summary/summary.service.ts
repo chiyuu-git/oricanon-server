@@ -199,6 +199,7 @@ export class SummaryService implements OnApplicationBootstrap {
         const projectIncrementList = await Promise.all([
 
             this.getProjectRelativeIncrement({
+                // 从统计前一周开始比较好，可以规避姐姐的生日问题
                 ...commonParam, recordType: CharaRecordType.illust, from: '2021-01-01',
             }),
             this.getProjectRelativeIncrement({ ...commonParam, recordType: CharaRecordType.novel }),
