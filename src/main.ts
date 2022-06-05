@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { fetchTwitterDetail } from 'scripts/fetch-twitter-detail';
 import { AppModule } from './app.module';
 
 import { fetchTwitterFollower } from '../scripts/fetch-twitter-follower';
@@ -24,6 +25,7 @@ bootstrap()
     .then(() => {
         // 服务启动之后再执行脚本
         // fetchTwitterFollower();
+        // fetchTwitterDetail();
         const placeholder = 123;
         return true;
     })

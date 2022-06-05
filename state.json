@@ -1,0 +1,155 @@
+{
+  "cookies": [
+    {
+      "sameSite": "None",
+      "name": "guest_id_marketing",
+      "value": "v1%3A165424465485838723",
+      "domain": ".twitter.com",
+      "path": "/",
+      "expires": 1717316653.466592,
+      "httpOnly": false,
+      "secure": true
+    },
+    {
+      "sameSite": "None",
+      "name": "guest_id_ads",
+      "value": "v1%3A165424465485838723",
+      "domain": ".twitter.com",
+      "path": "/",
+      "expires": 1717316653.46677,
+      "httpOnly": false,
+      "secure": true
+    },
+    {
+      "sameSite": "None",
+      "name": "personalization_id",
+      "value": "\"v1_nSdaN5L8uaVoFEEyNZHw+w==\"",
+      "domain": ".twitter.com",
+      "path": "/",
+      "expires": 1717316653.466814,
+      "httpOnly": false,
+      "secure": true
+    },
+    {
+      "sameSite": "None",
+      "name": "guest_id",
+      "value": "v1%3A165424465485838723",
+      "domain": ".twitter.com",
+      "path": "/",
+      "expires": 1717316653.466848,
+      "httpOnly": false,
+      "secure": true
+    },
+    {
+      "sameSite": "Lax",
+      "name": "_sl",
+      "value": "1",
+      "domain": "twitter.com",
+      "path": "/",
+      "expires": 1654331057,
+      "httpOnly": false,
+      "secure": true
+    },
+    {
+      "sameSite": "Lax",
+      "name": "_twitter_sess",
+      "value": "BAh7CSIKZmxhc2hJQzonQWN0aW9uQ29udHJvbGxlcjo6Rmxhc2g6OkZsYXNo%250ASGFzaHsABjoKQHVzZWR7ADoPY3JlYXRlZF9hdGwrCEpRqiiBAToMY3NyZl9p%250AZCIlMDQ2MzNkM2QwMDQwNjk0NjNhN2JiZjJmNWFiYjY3YzI6B2lkIiVlMWUz%250ANDBmNmYyNTk3OTBmNTJkZTlhOTEwNDJjYmVmOA%253D%253D--3d46d93a2816b9eecf25abef77a0a0619a1baf8d",
+      "domain": ".twitter.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true
+    },
+    {
+      "sameSite": "None",
+      "name": "_s",
+      "value": "RxHz0Z1KaYZER3mAw8YbppCGLmbA8dHRDLOS3L7mF67LD9NmRSA0%2FmUpxy2E0Q1X",
+      "domain": ".app.link",
+      "path": "/",
+      "expires": 1685794423.683544,
+      "httpOnly": false,
+      "secure": true
+    },
+    {
+      "sameSite": "Lax",
+      "name": "_ga",
+      "value": "GA1.2.755788112.1654244660",
+      "domain": ".twitter.com",
+      "path": "/",
+      "expires": 1717330425,
+      "httpOnly": false,
+      "secure": false
+    },
+    {
+      "sameSite": "Lax",
+      "name": "_gid",
+      "value": "GA1.2.1000554730.1654244660",
+      "domain": ".twitter.com",
+      "path": "/",
+      "expires": 1654344825,
+      "httpOnly": false,
+      "secure": false
+    },
+    {
+      "sameSite": "Lax",
+      "name": "kdt",
+      "value": "M4t32YdMgGCUa4GzWNX1gmmxOig4rmPYOqC501nm",
+      "domain": ".twitter.com",
+      "path": "/",
+      "expires": 1701505467.841643,
+      "httpOnly": true,
+      "secure": true
+    },
+    {
+      "sameSite": "None",
+      "name": "auth_token",
+      "value": "996026f6755812279acc2d3d98d34d16cfd24699",
+      "domain": ".twitter.com",
+      "path": "/",
+      "expires": 1811924667.841727,
+      "httpOnly": true,
+      "secure": true
+    },
+    {
+      "sameSite": "Lax",
+      "name": "ct0",
+      "value": "018dd9bab33f38488d055a36cc351311de3eb0bcbe3525e962770f918754dcbd70786dbe610354ab973e7e361090a6e8560517093d582eec7a3717e9b98952c7fd2e66b235e47e6c2459052793883fc2",
+      "domain": ".twitter.com",
+      "path": "/",
+      "expires": 1811924668.249448,
+      "httpOnly": false,
+      "secure": true
+    },
+    {
+      "sameSite": "None",
+      "name": "att",
+      "value": "1-BxXubJPoa3XBcO9qNJcmyNrIC2ubPCAJftFRK5hC",
+      "domain": ".twitter.com",
+      "path": "/",
+      "expires": 1654331068.687686,
+      "httpOnly": true,
+      "secure": true
+    },
+    {
+      "sameSite": "None",
+      "name": "twid",
+      "value": "u%3D907567453114437632",
+      "domain": ".twitter.com",
+      "path": "/",
+      "expires": 1685794421.764932,
+      "httpOnly": false,
+      "secure": true
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://twitter.com",
+      "localStorage": [
+        {
+          "name": "branch_session_first",
+          "value": "{\"session_id\":\"1061243626997396527\",\"identity_id\":\"1061243626988663634\",\"link\":\"https://twitter.app.link?%24identity_id=1061243626988663634\",\"data\":\"{\\\"+clicked_branch_link\\\":false,\\\"+is_first_session\\\":true}\",\"browser_fingerprint_id\":\"MTA2MTE4NTg5NDA1ODIzMzEyMw==\",\"has_app\":false,\"identity\":\"/84x+If0RhetahmfP6DCaEzCdqcfuyWPz4u9QCxzJ58=\"}"
+        }
+      ]
+    }
+  ]
+}
