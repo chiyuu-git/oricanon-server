@@ -13,6 +13,15 @@ export enum CharaRecordType {
     illustWithNovel = 'pixiv_illust_with_novel',
 }
 
+export const FavorRecordTypeList = [
+    CharaRecordType.fifty,
+    CharaRecordType.hundred,
+    CharaRecordType.fiveHundred,
+    CharaRecordType.thousand,
+    CharaRecordType.fiveThousand,
+    CharaRecordType.tenThousand,
+] as const;
+
 export enum SeiyuuRecordType {
     twitterFollower = 'twitter_follower',
     youtube = 'youtube',

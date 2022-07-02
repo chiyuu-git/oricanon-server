@@ -26,7 +26,15 @@ export const DIMENSION_LIST = [
     SummaryRecordType.favorRate,
     CharaRecordType.novel,
     CharaRecordType.tagView,
-];
+] as const;
+
+export const dimensionTitleMap = {
+    [CharaRecordType.illust]: '同人图-年增量',
+    [SummaryRecordType.r18Rate]: '同人图-年增量-R18率',
+    [SummaryRecordType.favorRate]: '同人图-年增量-高收藏率',
+    [CharaRecordType.novel]: '同人文-年增量',
+    [CharaRecordType.tagView]: '角色作品浏览数-年增量',
+} as const;
 
 export type CharaMemberIncrementInfo =
     CharaInfo

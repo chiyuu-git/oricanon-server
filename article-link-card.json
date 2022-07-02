@@ -1,0 +1,631 @@
+{
+    "data": {
+        "threaded_conversation_with_injections_v2": {
+            "instructions": [
+                {
+                    "type": "TimelineAddEntries",
+                    "entries": [
+                        {
+                            "entryId": "tweet-1541047591525576705",
+                            "sortIndex": "7682324445329199102",
+                            "content": {
+                                "entryType": "TimelineTimelineItem",
+                                "itemContent": {
+                                    "itemType": "TimelineTweet",
+                                    "tweet_results": {
+                                        "result": {
+                                            "__typename": "Tweet",
+                                            "rest_id": "1541047591525576705",
+                                            "core": {
+                                                "user_results": {
+                                                    "result": {
+                                                        "__typename": "User",
+                                                        "id": "VXNlcjoxNTI3MjUwNTU1MTE4NDU2ODMy",
+                                                        "rest_id": "1527250555118456832",
+                                                        "affiliates_highlighted_label": {},
+                                                        "has_nft_avatar": false,
+                                                        "legacy": {
+                                                            "blocked_by": false,
+                                                            "blocking": false,
+                                                            "can_dm": false,
+                                                            "can_media_tag": false,
+                                                            "created_at": "Thu May 19 11:33:24 +0000 2022",
+                                                            "default_profile": true,
+                                                            "default_profile_image": false,
+                                                            "description": "みんなが知ってるあの子の、みんなが知らない物語ーー。\n不思議な世界ヌマヅを舞台にした『幻日のヨハネ』の公式アカウントです。\nシリーズアニメ制作決定！2023年展開予定！\n公式ハッシュタグ「#yohane」をつけてツイートしてね♪",
+                                                            "entities": {
+                                                                "description": {
+                                                                    "urls": []
+                                                                },
+                                                                "url": {
+                                                                    "urls": [
+                                                                        {
+                                                                            "display_url": "yohane.net",
+                                                                            "expanded_url": "https://www.yohane.net/",
+                                                                            "url": "https://t.co/cCkmjXvfPZ",
+                                                                            "indices": [
+                                                                                0,
+                                                                                23
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "fast_followers_count": 0,
+                                                            "favourites_count": 0,
+                                                            "follow_request_sent": false,
+                                                            "followed_by": false,
+                                                            "followers_count": 40942,
+                                                            "following": true,
+                                                            "friends_count": 1,
+                                                            "has_custom_timelines": false,
+                                                            "is_translator": false,
+                                                            "listed_count": 315,
+                                                            "location": "",
+                                                            "media_count": 5,
+                                                            "muting": false,
+                                                            "name": "幻日のヨハネ 公式",
+                                                            "normal_followers_count": 40942,
+                                                            "notifications": false,
+                                                            "pinned_tweet_ids_str": [
+                                                                "1541041754958630913"
+                                                            ],
+                                                            "possibly_sensitive": false,
+                                                            "profile_banner_extensions": {
+                                                                "mediaColor": {
+                                                                    "r": {
+                                                                        "ok": {
+                                                                            "palette": [
+                                                                                {
+                                                                                    "percentage": 23.58,
+                                                                                    "rgb": {
+                                                                                        "blue": 193,
+                                                                                        "green": 203,
+                                                                                        "red": 212
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 18.3,
+                                                                                    "rgb": {
+                                                                                        "blue": 215,
+                                                                                        "green": 137,
+                                                                                        "red": 70
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 10.74,
+                                                                                    "rgb": {
+                                                                                        "blue": 127,
+                                                                                        "green": 96,
+                                                                                        "red": 93
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 9.52,
+                                                                                    "rgb": {
+                                                                                        "blue": 231,
+                                                                                        "green": 204,
+                                                                                        "red": 144
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 5.92,
+                                                                                    "rgb": {
+                                                                                        "blue": 117,
+                                                                                        "green": 145,
+                                                                                        "red": 105
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "profile_banner_url": "https://pbs.twimg.com/profile_banners/1527250555118456832/1656246741",
+                                                            "profile_image_extensions": {
+                                                                "mediaColor": {
+                                                                    "r": {
+                                                                        "ok": {
+                                                                            "palette": [
+                                                                                {
+                                                                                    "percentage": 42.31,
+                                                                                    "rgb": {
+                                                                                        "blue": 90,
+                                                                                        "green": 46,
+                                                                                        "red": 0
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 38.45,
+                                                                                    "rgb": {
+                                                                                        "blue": 156,
+                                                                                        "green": 149,
+                                                                                        "red": 1
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 10.49,
+                                                                                    "rgb": {
+                                                                                        "blue": 121,
+                                                                                        "green": 96,
+                                                                                        "red": 1
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 4.28,
+                                                                                    "rgb": {
+                                                                                        "blue": 222,
+                                                                                        "green": 225,
+                                                                                        "red": 149
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 3.2,
+                                                                                    "rgb": {
+                                                                                        "blue": 182,
+                                                                                        "green": 189,
+                                                                                        "red": 6
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "profile_image_url_https": "https://pbs.twimg.com/profile_images/1541036637819666434/Q0WUMUFF_normal.jpg",
+                                                            "profile_interstitial_type": "",
+                                                            "protected": false,
+                                                            "screen_name": "GJ_yohane",
+                                                            "statuses_count": 8,
+                                                            "translator_type": "none",
+                                                            "url": "https://t.co/cCkmjXvfPZ",
+                                                            "verified": false,
+                                                            "want_retweets": true,
+                                                            "withheld_in_countries": []
+                                                        },
+                                                        "super_follow_eligible": false,
+                                                        "super_followed_by": false,
+                                                        "super_following": false
+                                                    }
+                                                }
+                                            },
+                                            "card": {
+                                                "rest_id": "https://t.co/rAxH7uDbSW",
+                                                "legacy": {
+                                                    "binding_values": [
+                                                        {
+                                                            "key": "photo_image_full_size_large",
+                                                            "value": {
+                                                                "image_value": {
+                                                                    "height": 419,
+                                                                    "width": 800,
+                                                                    "url": "https://pbs.twimg.com/card_img/1541036181495742464/JXroDxwp?format=jpg&name=800x419"
+                                                                },
+                                                                "type": "IMAGE"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "thumbnail_image",
+                                                            "value": {
+                                                                "image_value": {
+                                                                    "height": 147,
+                                                                    "width": 280,
+                                                                    "url": "https://pbs.twimg.com/card_img/1541036181495742464/JXroDxwp?format=jpg&name=280x150"
+                                                                },
+                                                                "type": "IMAGE"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "description",
+                                                            "value": {
+                                                                "string_value": "みんなが知ってるあの女の子の、みんなが知らない物語――。『幻日のヨハネ -SUNSHINE in the MIRROR-』シリーズアニメ制作決定 2023年展開予定",
+                                                                "type": "STRING"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "domain",
+                                                            "value": {
+                                                                "string_value": "www.yohane.net",
+                                                                "type": "STRING"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "thumbnail_image_large",
+                                                            "value": {
+                                                                "image_value": {
+                                                                    "height": 315,
+                                                                    "width": 600,
+                                                                    "url": "https://pbs.twimg.com/card_img/1541036181495742464/JXroDxwp?format=jpg&name=600x600"
+                                                                },
+                                                                "type": "IMAGE"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "summary_photo_image_small",
+                                                            "value": {
+                                                                "image_value": {
+                                                                    "height": 202,
+                                                                    "width": 386,
+                                                                    "url": "https://pbs.twimg.com/card_img/1541036181495742464/JXroDxwp?format=jpg&name=386x202"
+                                                                },
+                                                                "type": "IMAGE"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "thumbnail_image_original",
+                                                            "value": {
+                                                                "image_value": {
+                                                                    "height": 630,
+                                                                    "width": 1200,
+                                                                    "url": "https://pbs.twimg.com/card_img/1541036181495742464/JXroDxwp?format=jpg&name=orig"
+                                                                },
+                                                                "type": "IMAGE"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "photo_image_full_size_small",
+                                                            "value": {
+                                                                "image_value": {
+                                                                    "height": 202,
+                                                                    "width": 386,
+                                                                    "url": "https://pbs.twimg.com/card_img/1541036181495742464/JXroDxwp?format=jpg&name=386x202"
+                                                                },
+                                                                "type": "IMAGE"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "summary_photo_image_large",
+                                                            "value": {
+                                                                "image_value": {
+                                                                    "height": 419,
+                                                                    "width": 800,
+                                                                    "url": "https://pbs.twimg.com/card_img/1541036181495742464/JXroDxwp?format=jpg&name=800x419"
+                                                                },
+                                                                "type": "IMAGE"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "thumbnail_image_small",
+                                                            "value": {
+                                                                "image_value": {
+                                                                    "height": 76,
+                                                                    "width": 144,
+                                                                    "url": "https://pbs.twimg.com/card_img/1541036181495742464/JXroDxwp?format=jpg&name=144x144"
+                                                                },
+                                                                "type": "IMAGE"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "thumbnail_image_x_large",
+                                                            "value": {
+                                                                "image_value": {
+                                                                    "height": 630,
+                                                                    "width": 1200,
+                                                                    "url": "https://pbs.twimg.com/card_img/1541036181495742464/JXroDxwp?format=png&name=2048x2048_2_exp"
+                                                                },
+                                                                "type": "IMAGE"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "photo_image_full_size_original",
+                                                            "value": {
+                                                                "image_value": {
+                                                                    "height": 630,
+                                                                    "width": 1200,
+                                                                    "url": "https://pbs.twimg.com/card_img/1541036181495742464/JXroDxwp?format=jpg&name=orig"
+                                                                },
+                                                                "type": "IMAGE"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "vanity_url",
+                                                            "value": {
+                                                                "scribe_key": "vanity_url",
+                                                                "string_value": "yohane.net",
+                                                                "type": "STRING"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "photo_image_full_size",
+                                                            "value": {
+                                                                "image_value": {
+                                                                    "height": 314,
+                                                                    "width": 600,
+                                                                    "url": "https://pbs.twimg.com/card_img/1541036181495742464/JXroDxwp?format=jpg&name=600x314"
+                                                                },
+                                                                "type": "IMAGE"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "thumbnail_image_color",
+                                                            "value": {
+                                                                "image_color_value": {
+                                                                    "palette": [
+                                                                        {
+                                                                            "rgb": {
+                                                                                "blue": 217,
+                                                                                "green": 217,
+                                                                                "red": 209
+                                                                            },
+                                                                            "percentage": 24.38
+                                                                        },
+                                                                        {
+                                                                            "rgb": {
+                                                                                "blue": 217,
+                                                                                "green": 150,
+                                                                                "red": 77
+                                                                            },
+                                                                            "percentage": 11.5
+                                                                        },
+                                                                        {
+                                                                            "rgb": {
+                                                                                "blue": 108,
+                                                                                "green": 87,
+                                                                                "red": 86
+                                                                            },
+                                                                            "percentage": 11.04
+                                                                        },
+                                                                        {
+                                                                            "rgb": {
+                                                                                "blue": 151,
+                                                                                "green": 187,
+                                                                                "red": 204
+                                                                            },
+                                                                            "percentage": 7.4
+                                                                        },
+                                                                        {
+                                                                            "rgb": {
+                                                                                "blue": 142,
+                                                                                "green": 163,
+                                                                                "red": 99
+                                                                            },
+                                                                            "percentage": 6.89
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "type": "IMAGE_COLOR"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "title",
+                                                            "value": {
+                                                                "string_value": "幻日のヨハネ -SUNSHINE in the MIRROR- 公式サイト",
+                                                                "type": "STRING"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "summary_photo_image_color",
+                                                            "value": {
+                                                                "image_color_value": {
+                                                                    "palette": [
+                                                                        {
+                                                                            "rgb": {
+                                                                                "blue": 217,
+                                                                                "green": 217,
+                                                                                "red": 209
+                                                                            },
+                                                                            "percentage": 24.38
+                                                                        },
+                                                                        {
+                                                                            "rgb": {
+                                                                                "blue": 217,
+                                                                                "green": 150,
+                                                                                "red": 77
+                                                                            },
+                                                                            "percentage": 11.5
+                                                                        },
+                                                                        {
+                                                                            "rgb": {
+                                                                                "blue": 108,
+                                                                                "green": 87,
+                                                                                "red": 86
+                                                                            },
+                                                                            "percentage": 11.04
+                                                                        },
+                                                                        {
+                                                                            "rgb": {
+                                                                                "blue": 151,
+                                                                                "green": 187,
+                                                                                "red": 204
+                                                                            },
+                                                                            "percentage": 7.4
+                                                                        },
+                                                                        {
+                                                                            "rgb": {
+                                                                                "blue": 142,
+                                                                                "green": 163,
+                                                                                "red": 99
+                                                                            },
+                                                                            "percentage": 6.89
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "type": "IMAGE_COLOR"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "summary_photo_image_x_large",
+                                                            "value": {
+                                                                "image_value": {
+                                                                    "height": 630,
+                                                                    "width": 1200,
+                                                                    "url": "https://pbs.twimg.com/card_img/1541036181495742464/JXroDxwp?format=png&name=2048x2048_2_exp"
+                                                                },
+                                                                "type": "IMAGE"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "summary_photo_image",
+                                                            "value": {
+                                                                "image_value": {
+                                                                    "height": 314,
+                                                                    "width": 600,
+                                                                    "url": "https://pbs.twimg.com/card_img/1541036181495742464/JXroDxwp?format=jpg&name=600x314"
+                                                                },
+                                                                "type": "IMAGE"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "photo_image_full_size_color",
+                                                            "value": {
+                                                                "image_color_value": {
+                                                                    "palette": [
+                                                                        {
+                                                                            "rgb": {
+                                                                                "blue": 217,
+                                                                                "green": 217,
+                                                                                "red": 209
+                                                                            },
+                                                                            "percentage": 24.38
+                                                                        },
+                                                                        {
+                                                                            "rgb": {
+                                                                                "blue": 217,
+                                                                                "green": 150,
+                                                                                "red": 77
+                                                                            },
+                                                                            "percentage": 11.5
+                                                                        },
+                                                                        {
+                                                                            "rgb": {
+                                                                                "blue": 108,
+                                                                                "green": 87,
+                                                                                "red": 86
+                                                                            },
+                                                                            "percentage": 11.04
+                                                                        },
+                                                                        {
+                                                                            "rgb": {
+                                                                                "blue": 151,
+                                                                                "green": 187,
+                                                                                "red": 204
+                                                                            },
+                                                                            "percentage": 7.4
+                                                                        },
+                                                                        {
+                                                                            "rgb": {
+                                                                                "blue": 142,
+                                                                                "green": 163,
+                                                                                "red": 99
+                                                                            },
+                                                                            "percentage": 6.89
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "type": "IMAGE_COLOR"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "photo_image_full_size_x_large",
+                                                            "value": {
+                                                                "image_value": {
+                                                                    "height": 630,
+                                                                    "width": 1200,
+                                                                    "url": "https://pbs.twimg.com/card_img/1541036181495742464/JXroDxwp?format=png&name=2048x2048_2_exp"
+                                                                },
+                                                                "type": "IMAGE"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "card_url",
+                                                            "value": {
+                                                                "scribe_key": "card_url",
+                                                                "string_value": "https://t.co/rAxH7uDbSW",
+                                                                "type": "STRING"
+                                                            }
+                                                        },
+                                                        {
+                                                            "key": "summary_photo_image_original",
+                                                            "value": {
+                                                                "image_value": {
+                                                                    "height": 630,
+                                                                    "width": 1200,
+                                                                    "url": "https://pbs.twimg.com/card_img/1541036181495742464/JXroDxwp?format=jpg&name=orig"
+                                                                },
+                                                                "type": "IMAGE"
+                                                            }
+                                                        }
+                                                    ],
+                                                    "card_platform": {
+                                                        "platform": {
+                                                            "audience": {
+                                                                "name": "production"
+                                                            },
+                                                            "device": {
+                                                                "name": "Swift",
+                                                                "version": "12"
+                                                            }
+                                                        }
+                                                    },
+                                                    "name": "summary_large_image",
+                                                    "url": "https://t.co/rAxH7uDbSW",
+                                                    "user_refs_results": []
+                                                }
+                                            },
+                                            "unmention_info": {},
+                                            "legacy": {
+                                                "created_at": "Sun Jun 26 13:15:51 +0000 2022",
+                                                "conversation_id_str": "1541047591525576705",
+                                                "display_text_range": [
+                                                    0,
+                                                    140
+                                                ],
+                                                "entities": {
+                                                    "user_mentions": [],
+                                                    "urls": [
+                                                        {
+                                                            "display_url": "yohane.net",
+                                                            "expanded_url": "http://www.yohane.net",
+                                                            "url": "https://t.co/rAxH7uDbSW",
+                                                            "indices": [
+                                                                101,
+                                                                124
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "hashtags": [
+                                                        {
+                                                            "indices": [
+                                                                133,
+                                                                140
+                                                            ],
+                                                            "text": "yohane"
+                                                        }
+                                                    ],
+                                                    "symbols": []
+                                                },
+                                                "favorite_count": 6721,
+                                                "favorited": true,
+                                                "full_text": "マルチ展開中の『幻日のヨハネ』の最新情報やオススメなどは、\n今後このアカウントでお届けします✨\n\n是非フォローをよろしくお願いします\uD83C\uDF19\n\nそして作品に関する詳細は\n公式サイトをチェックしてくださいね✅\nhttps://t.co/rAxH7uDbSW\n\n当番_サラ\n\n#yohane",
+                                                "is_quote_status": false,
+                                                "lang": "ja",
+                                                "possibly_sensitive": false,
+                                                "possibly_sensitive_editable": true,
+                                                "quote_count": 73,
+                                                "reply_count": 10,
+                                                "retweet_count": 2084,
+                                                "retweeted": false,
+                                                "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+                                                "user_id_str": "1527250555118456832",
+                                                "id_str": "1541047591525576705"
+                                            },
+                                            "quick_promote_eligibility": {
+                                                "eligibility": "IneligibleNotProfessional"
+                                            }
+                                        }
+                                    },
+                                    "tweetDisplayType": "Tweet",
+                                    "hasModeratedReplies": false
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "TimelineTerminateTimeline",
+                    "direction": "Top"
+                }
+            ]
+        }
+    }
+}

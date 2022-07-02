@@ -1,0 +1,940 @@
+{
+    "data": {
+        "threaded_conversation_with_injections_v2": {
+            "instructions": [
+                {
+                    "type": "TimelineAddEntries",
+                    "entries": [
+                        {
+                            "entryId": "tweet-1134011980203696128",
+                            "sortIndex": "8089360056651079679",
+                            "content": {
+                                "entryType": "TimelineTimelineItem",
+                                "itemContent": {
+                                    "itemType": "TimelineTweet",
+                                    "tweet_results": {
+                                        "result": {
+                                            "__typename": "Tweet",
+                                            "rest_id": "1134011980203696128",
+                                            "core": {
+                                                "user_results": {
+                                                    "result": {
+                                                        "__typename": "User",
+                                                        "id": "VXNlcjozNDc4NDk5OTQ=",
+                                                        "rest_id": "347849994",
+                                                        "affiliates_highlighted_label": {},
+                                                        "has_nft_avatar": false,
+                                                        "legacy": {
+                                                            "blocked_by": false,
+                                                            "blocking": false,
+                                                            "can_dm": false,
+                                                            "can_media_tag": true,
+                                                            "created_at": "Wed Aug 03 13:26:11 +0000 2011",
+                                                            "default_profile": true,
+                                                            "default_profile_image": false,
+                                                            "description": "オールメディア展開するスクールアイドルプロジェクト、ラブライブ！シリーズの公式アカウントです。 最新のピックアップトピックスは「いいね」欄からチェック！ ■YouTubeチャンネル https://t.co/NgyjJRqpbP ■TikTok https://t.co/zZiJP3PU8T",
+                                                            "entities": {
+                                                                "description": {
+                                                                    "urls": [
+                                                                        {
+                                                                            "display_url": "urx.red/JHWe",
+                                                                            "expanded_url": "http://urx.red/JHWe",
+                                                                            "url": "https://t.co/NgyjJRqpbP",
+                                                                            "indices": [
+                                                                                91,
+                                                                                114
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "display_url": "tiktok.com/@lovelive_offi…",
+                                                                            "expanded_url": "http://tiktok.com/@lovelive_official",
+                                                                            "url": "https://t.co/zZiJP3PU8T",
+                                                                            "indices": [
+                                                                                123,
+                                                                                146
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "url": {
+                                                                    "urls": [
+                                                                        {
+                                                                            "display_url": "lovelive-anime.jp",
+                                                                            "expanded_url": "http://www.lovelive-anime.jp/",
+                                                                            "url": "https://t.co/KK4vP13OlW",
+                                                                            "indices": [
+                                                                                0,
+                                                                                23
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "fast_followers_count": 0,
+                                                            "favourites_count": 156,
+                                                            "follow_request_sent": false,
+                                                            "followed_by": false,
+                                                            "followers_count": 1079905,
+                                                            "following": true,
+                                                            "friends_count": 8,
+                                                            "has_custom_timelines": true,
+                                                            "is_translator": false,
+                                                            "listed_count": 13933,
+                                                            "location": "",
+                                                            "media_count": 21469,
+                                                            "muting": false,
+                                                            "name": "ラブライブ！シリーズ公式",
+                                                            "normal_followers_count": 1079905,
+                                                            "notifications": true,
+                                                            "pinned_tweet_ids_str": [
+                                                                "1540692074278064128"
+                                                            ],
+                                                            "possibly_sensitive": false,
+                                                            "profile_banner_extensions": {
+                                                                "mediaColor": {
+                                                                    "r": {
+                                                                        "ok": {
+                                                                            "palette": [
+                                                                                {
+                                                                                    "percentage": 49.62,
+                                                                                    "rgb": {
+                                                                                        "blue": 246,
+                                                                                        "green": 179,
+                                                                                        "red": 130
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 11.5,
+                                                                                    "rgb": {
+                                                                                        "blue": 198,
+                                                                                        "green": 187,
+                                                                                        "red": 45
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 10.14,
+                                                                                    "rgb": {
+                                                                                        "blue": 253,
+                                                                                        "green": 225,
+                                                                                        "red": 200
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 8.81,
+                                                                                    "rgb": {
+                                                                                        "blue": 215,
+                                                                                        "green": 131,
+                                                                                        "red": 161
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 8.81,
+                                                                                    "rgb": {
+                                                                                        "blue": 126,
+                                                                                        "green": 195,
+                                                                                        "red": 193
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "profile_banner_url": "https://pbs.twimg.com/profile_banners/347849994/1647321057",
+                                                            "profile_image_extensions": {
+                                                                "mediaColor": {
+                                                                    "r": {
+                                                                        "ok": {
+                                                                            "palette": [
+                                                                                {
+                                                                                    "percentage": 81.53,
+                                                                                    "rgb": {
+                                                                                        "blue": 255,
+                                                                                        "green": 255,
+                                                                                        "red": 255
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 14.57,
+                                                                                    "rgb": {
+                                                                                        "blue": 128,
+                                                                                        "green": 3,
+                                                                                        "red": 227
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 2.28,
+                                                                                    "rgb": {
+                                                                                        "blue": 216,
+                                                                                        "green": 173,
+                                                                                        "red": 237
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 1.41,
+                                                                                    "rgb": {
+                                                                                        "blue": 176,
+                                                                                        "green": 105,
+                                                                                        "red": 220
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 0.13,
+                                                                                    "rgb": {
+                                                                                        "blue": 251,
+                                                                                        "green": 254,
+                                                                                        "red": 246
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "profile_image_url_https": "https://pbs.twimg.com/profile_images/1027440922672259072/sHA_z7wD_normal.jpg",
+                                                            "profile_interstitial_type": "",
+                                                            "protected": false,
+                                                            "screen_name": "LoveLive_staff",
+                                                            "statuses_count": 32972,
+                                                            "translator_type": "none",
+                                                            "url": "https://t.co/KK4vP13OlW",
+                                                            "verified": true,
+                                                            "want_retweets": true,
+                                                            "withheld_in_countries": []
+                                                        },
+                                                        "super_follow_eligible": false,
+                                                        "super_followed_by": false,
+                                                        "super_following": false
+                                                    }
+                                                }
+                                            },
+                                            "unmention_info": {},
+                                            "legacy": {
+                                                "created_at": "Thu May 30 08:21:39 +0000 2019",
+                                                "conversation_id_str": "1134011980203696128",
+                                                "display_text_range": [
+                                                    0,
+                                                    87
+                                                ],
+                                                "entities": {
+                                                    "media": [
+                                                        {
+                                                            "display_url": "pic.twitter.com/sBhvz88sEp",
+                                                            "expanded_url": "https://twitter.com/LoveLive_staff/status/1134011980203696128/photo/1",
+                                                            "id_str": "1134011901623410688",
+                                                            "indices": [
+                                                                88,
+                                                                111
+                                                            ],
+                                                            "media_url_https": "https://pbs.twimg.com/media/D7zR0PdUIAAiR0r.jpg",
+                                                            "type": "photo",
+                                                            "url": "https://t.co/sBhvz88sEp",
+                                                            "features": {
+                                                                "large": {
+                                                                    "faces": []
+                                                                },
+                                                                "medium": {
+                                                                    "faces": []
+                                                                },
+                                                                "small": {
+                                                                    "faces": []
+                                                                },
+                                                                "orig": {
+                                                                    "faces": []
+                                                                }
+                                                            },
+                                                            "sizes": {
+                                                                "large": {
+                                                                    "h": 588,
+                                                                    "w": 600,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "medium": {
+                                                                    "h": 588,
+                                                                    "w": 600,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "small": {
+                                                                    "h": 588,
+                                                                    "w": 600,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "thumb": {
+                                                                    "h": 150,
+                                                                    "w": 150,
+                                                                    "resize": "crop"
+                                                                }
+                                                            },
+                                                            "original_info": {
+                                                                "height": 588,
+                                                                "width": 600,
+                                                                "focus_rects": [
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 252,
+                                                                        "w": 600,
+                                                                        "h": 336
+                                                                    },
+                                                                    {
+                                                                        "x": 12,
+                                                                        "y": 0,
+                                                                        "w": 588,
+                                                                        "h": 588
+                                                                    },
+                                                                    {
+                                                                        "x": 84,
+                                                                        "y": 0,
+                                                                        "w": 516,
+                                                                        "h": 588
+                                                                    },
+                                                                    {
+                                                                        "x": 197,
+                                                                        "y": 0,
+                                                                        "w": 294,
+                                                                        "h": 588
+                                                                    },
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 0,
+                                                                        "w": 600,
+                                                                        "h": 588
+                                                                    }
+                                                                ]
+                                                            }
+                                                        },
+                                                        {
+                                                            "display_url": "pic.twitter.com/sBhvz88sEp",
+                                                            "expanded_url": "https://twitter.com/LoveLive_staff/status/1134011980203696128/photo/1",
+                                                            "id_str": "1134011913686343680",
+                                                            "indices": [
+                                                                88,
+                                                                111
+                                                            ],
+                                                            "media_url_https": "https://pbs.twimg.com/media/D7zR08ZV4AAnewR.jpg",
+                                                            "type": "photo",
+                                                            "url": "https://t.co/sBhvz88sEp",
+                                                            "features": {
+                                                                "large": {
+                                                                    "faces": []
+                                                                },
+                                                                "medium": {
+                                                                    "faces": []
+                                                                },
+                                                                "small": {
+                                                                    "faces": []
+                                                                },
+                                                                "orig": {
+                                                                    "faces": []
+                                                                }
+                                                            },
+                                                            "sizes": {
+                                                                "large": {
+                                                                    "h": 588,
+                                                                    "w": 600,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "medium": {
+                                                                    "h": 588,
+                                                                    "w": 600,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "small": {
+                                                                    "h": 588,
+                                                                    "w": 600,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "thumb": {
+                                                                    "h": 150,
+                                                                    "w": 150,
+                                                                    "resize": "crop"
+                                                                }
+                                                            },
+                                                            "original_info": {
+                                                                "height": 588,
+                                                                "width": 600,
+                                                                "focus_rects": [
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 252,
+                                                                        "w": 600,
+                                                                        "h": 336
+                                                                    },
+                                                                    {
+                                                                        "x": 12,
+                                                                        "y": 0,
+                                                                        "w": 588,
+                                                                        "h": 588
+                                                                    },
+                                                                    {
+                                                                        "x": 84,
+                                                                        "y": 0,
+                                                                        "w": 516,
+                                                                        "h": 588
+                                                                    },
+                                                                    {
+                                                                        "x": 197,
+                                                                        "y": 0,
+                                                                        "w": 294,
+                                                                        "h": 588
+                                                                    },
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 0,
+                                                                        "w": 600,
+                                                                        "h": 588
+                                                                    }
+                                                                ]
+                                                            }
+                                                        },
+                                                        {
+                                                            "display_url": "pic.twitter.com/sBhvz88sEp",
+                                                            "expanded_url": "https://twitter.com/LoveLive_staff/status/1134011980203696128/photo/1",
+                                                            "id_str": "1134011926067855360",
+                                                            "indices": [
+                                                                88,
+                                                                111
+                                                            ],
+                                                            "media_url_https": "https://pbs.twimg.com/media/D7zR1qhUwAAQzv6.jpg",
+                                                            "type": "photo",
+                                                            "url": "https://t.co/sBhvz88sEp",
+                                                            "features": {
+                                                                "large": {
+                                                                    "faces": []
+                                                                },
+                                                                "medium": {
+                                                                    "faces": []
+                                                                },
+                                                                "small": {
+                                                                    "faces": []
+                                                                },
+                                                                "orig": {
+                                                                    "faces": []
+                                                                }
+                                                            },
+                                                            "sizes": {
+                                                                "large": {
+                                                                    "h": 588,
+                                                                    "w": 600,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "medium": {
+                                                                    "h": 588,
+                                                                    "w": 600,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "small": {
+                                                                    "h": 588,
+                                                                    "w": 600,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "thumb": {
+                                                                    "h": 150,
+                                                                    "w": 150,
+                                                                    "resize": "crop"
+                                                                }
+                                                            },
+                                                            "original_info": {
+                                                                "height": 588,
+                                                                "width": 600,
+                                                                "focus_rects": [
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 252,
+                                                                        "w": 600,
+                                                                        "h": 336
+                                                                    },
+                                                                    {
+                                                                        "x": 12,
+                                                                        "y": 0,
+                                                                        "w": 588,
+                                                                        "h": 588
+                                                                    },
+                                                                    {
+                                                                        "x": 84,
+                                                                        "y": 0,
+                                                                        "w": 516,
+                                                                        "h": 588
+                                                                    },
+                                                                    {
+                                                                        "x": 197,
+                                                                        "y": 0,
+                                                                        "w": 294,
+                                                                        "h": 588
+                                                                    },
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 0,
+                                                                        "w": 600,
+                                                                        "h": 588
+                                                                    }
+                                                                ]
+                                                            }
+                                                        }
+                                                    ],
+                                                    "user_mentions": [],
+                                                    "urls": [],
+                                                    "hashtags": [
+                                                        {
+                                                            "indices": [
+                                                                67,
+                                                                76
+                                                            ],
+                                                            "text": "lovelive"
+                                                        },
+                                                        {
+                                                            "indices": [
+                                                                78,
+                                                                87
+                                                            ],
+                                                            "text": "ラブライブ9周年"
+                                                        }
+                                                    ],
+                                                    "symbols": []
+                                                },
+                                                "extended_entities": {
+                                                    "media": [
+                                                        {
+                                                            "display_url": "pic.twitter.com/sBhvz88sEp",
+                                                            "expanded_url": "https://twitter.com/LoveLive_staff/status/1134011980203696128/photo/1",
+                                                            "id_str": "1134011901623410688",
+                                                            "indices": [
+                                                                88,
+                                                                111
+                                                            ],
+                                                            "media_key": "3_1134011901623410688",
+                                                            "media_url_https": "https://pbs.twimg.com/media/D7zR0PdUIAAiR0r.jpg",
+                                                            "type": "photo",
+                                                            "url": "https://t.co/sBhvz88sEp",
+                                                            "ext_media_color": {
+                                                                "palette": [
+                                                                    {
+                                                                        "percentage": 84.19,
+                                                                        "rgb": {
+                                                                            "blue": 255,
+                                                                            "green": 255,
+                                                                            "red": 255
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        "percentage": 5.62,
+                                                                        "rgb": {
+                                                                            "blue": 85,
+                                                                            "green": 124,
+                                                                            "red": 185
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        "percentage": 3.88,
+                                                                        "rgb": {
+                                                                            "blue": 97,
+                                                                            "green": 102,
+                                                                            "red": 144
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        "percentage": 1.99,
+                                                                        "rgb": {
+                                                                            "blue": 64,
+                                                                            "green": 149,
+                                                                            "red": 207
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        "percentage": 0.99,
+                                                                        "rgb": {
+                                                                            "blue": 132,
+                                                                            "green": 179,
+                                                                            "red": 210
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "ext_media_availability": {
+                                                                "status": "Available"
+                                                            },
+                                                            "features": {
+                                                                "large": {
+                                                                    "faces": []
+                                                                },
+                                                                "medium": {
+                                                                    "faces": []
+                                                                },
+                                                                "small": {
+                                                                    "faces": []
+                                                                },
+                                                                "orig": {
+                                                                    "faces": []
+                                                                }
+                                                            },
+                                                            "sizes": {
+                                                                "large": {
+                                                                    "h": 588,
+                                                                    "w": 600,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "medium": {
+                                                                    "h": 588,
+                                                                    "w": 600,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "small": {
+                                                                    "h": 588,
+                                                                    "w": 600,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "thumb": {
+                                                                    "h": 150,
+                                                                    "w": 150,
+                                                                    "resize": "crop"
+                                                                }
+                                                            },
+                                                            "original_info": {
+                                                                "height": 588,
+                                                                "width": 600,
+                                                                "focus_rects": [
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 252,
+                                                                        "w": 600,
+                                                                        "h": 336
+                                                                    },
+                                                                    {
+                                                                        "x": 12,
+                                                                        "y": 0,
+                                                                        "w": 588,
+                                                                        "h": 588
+                                                                    },
+                                                                    {
+                                                                        "x": 84,
+                                                                        "y": 0,
+                                                                        "w": 516,
+                                                                        "h": 588
+                                                                    },
+                                                                    {
+                                                                        "x": 197,
+                                                                        "y": 0,
+                                                                        "w": 294,
+                                                                        "h": 588
+                                                                    },
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 0,
+                                                                        "w": 600,
+                                                                        "h": 588
+                                                                    }
+                                                                ]
+                                                            }
+                                                        },
+                                                        {
+                                                            "display_url": "pic.twitter.com/sBhvz88sEp",
+                                                            "expanded_url": "https://twitter.com/LoveLive_staff/status/1134011980203696128/photo/1",
+                                                            "id_str": "1134011913686343680",
+                                                            "indices": [
+                                                                88,
+                                                                111
+                                                            ],
+                                                            "media_key": "3_1134011913686343680",
+                                                            "media_url_https": "https://pbs.twimg.com/media/D7zR08ZV4AAnewR.jpg",
+                                                            "type": "photo",
+                                                            "url": "https://t.co/sBhvz88sEp",
+                                                            "ext_media_color": {
+                                                                "palette": [
+                                                                    {
+                                                                        "percentage": 80.51,
+                                                                        "rgb": {
+                                                                            "blue": 255,
+                                                                            "green": 255,
+                                                                            "red": 255
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        "percentage": 11.3,
+                                                                        "rgb": {
+                                                                            "blue": 85,
+                                                                            "green": 74,
+                                                                            "red": 91
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        "percentage": 2.4,
+                                                                        "rgb": {
+                                                                            "blue": 66,
+                                                                            "green": 85,
+                                                                            "red": 119
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        "percentage": 0.5,
+                                                                        "rgb": {
+                                                                            "blue": 107,
+                                                                            "green": 144,
+                                                                            "red": 190
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        "percentage": 0.45,
+                                                                        "rgb": {
+                                                                            "blue": 162,
+                                                                            "green": 198,
+                                                                            "red": 184
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "ext_media_availability": {
+                                                                "status": "Available"
+                                                            },
+                                                            "features": {
+                                                                "large": {
+                                                                    "faces": []
+                                                                },
+                                                                "medium": {
+                                                                    "faces": []
+                                                                },
+                                                                "small": {
+                                                                    "faces": []
+                                                                },
+                                                                "orig": {
+                                                                    "faces": []
+                                                                }
+                                                            },
+                                                            "sizes": {
+                                                                "large": {
+                                                                    "h": 588,
+                                                                    "w": 600,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "medium": {
+                                                                    "h": 588,
+                                                                    "w": 600,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "small": {
+                                                                    "h": 588,
+                                                                    "w": 600,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "thumb": {
+                                                                    "h": 150,
+                                                                    "w": 150,
+                                                                    "resize": "crop"
+                                                                }
+                                                            },
+                                                            "original_info": {
+                                                                "height": 588,
+                                                                "width": 600,
+                                                                "focus_rects": [
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 252,
+                                                                        "w": 600,
+                                                                        "h": 336
+                                                                    },
+                                                                    {
+                                                                        "x": 12,
+                                                                        "y": 0,
+                                                                        "w": 588,
+                                                                        "h": 588
+                                                                    },
+                                                                    {
+                                                                        "x": 84,
+                                                                        "y": 0,
+                                                                        "w": 516,
+                                                                        "h": 588
+                                                                    },
+                                                                    {
+                                                                        "x": 197,
+                                                                        "y": 0,
+                                                                        "w": 294,
+                                                                        "h": 588
+                                                                    },
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 0,
+                                                                        "w": 600,
+                                                                        "h": 588
+                                                                    }
+                                                                ]
+                                                            }
+                                                        },
+                                                        {
+                                                            "display_url": "pic.twitter.com/sBhvz88sEp",
+                                                            "expanded_url": "https://twitter.com/LoveLive_staff/status/1134011980203696128/photo/1",
+                                                            "id_str": "1134011926067855360",
+                                                            "indices": [
+                                                                88,
+                                                                111
+                                                            ],
+                                                            "media_key": "3_1134011926067855360",
+                                                            "media_url_https": "https://pbs.twimg.com/media/D7zR1qhUwAAQzv6.jpg",
+                                                            "type": "photo",
+                                                            "url": "https://t.co/sBhvz88sEp",
+                                                            "ext_media_color": {
+                                                                "palette": [
+                                                                    {
+                                                                        "percentage": 83.2,
+                                                                        "rgb": {
+                                                                            "blue": 255,
+                                                                            "green": 255,
+                                                                            "red": 255
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        "percentage": 8.59,
+                                                                        "rgb": {
+                                                                            "blue": 100,
+                                                                            "green": 78,
+                                                                            "red": 94
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        "percentage": 2.33,
+                                                                        "rgb": {
+                                                                            "blue": 145,
+                                                                            "green": 93,
+                                                                            "red": 91
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        "percentage": 1.88,
+                                                                        "rgb": {
+                                                                            "blue": 89,
+                                                                            "green": 91,
+                                                                            "red": 135
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        "percentage": 0.59,
+                                                                        "rgb": {
+                                                                            "blue": 147,
+                                                                            "green": 169,
+                                                                            "red": 220
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "ext_media_availability": {
+                                                                "status": "Available"
+                                                            },
+                                                            "features": {
+                                                                "large": {
+                                                                    "faces": []
+                                                                },
+                                                                "medium": {
+                                                                    "faces": []
+                                                                },
+                                                                "small": {
+                                                                    "faces": []
+                                                                },
+                                                                "orig": {
+                                                                    "faces": []
+                                                                }
+                                                            },
+                                                            "sizes": {
+                                                                "large": {
+                                                                    "h": 588,
+                                                                    "w": 600,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "medium": {
+                                                                    "h": 588,
+                                                                    "w": 600,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "small": {
+                                                                    "h": 588,
+                                                                    "w": 600,
+                                                                    "resize": "fit"
+                                                                },
+                                                                "thumb": {
+                                                                    "h": 150,
+                                                                    "w": 150,
+                                                                    "resize": "crop"
+                                                                }
+                                                            },
+                                                            "original_info": {
+                                                                "height": 588,
+                                                                "width": 600,
+                                                                "focus_rects": [
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 252,
+                                                                        "w": 600,
+                                                                        "h": 336
+                                                                    },
+                                                                    {
+                                                                        "x": 12,
+                                                                        "y": 0,
+                                                                        "w": 588,
+                                                                        "h": 588
+                                                                    },
+                                                                    {
+                                                                        "x": 84,
+                                                                        "y": 0,
+                                                                        "w": 516,
+                                                                        "h": 588
+                                                                    },
+                                                                    {
+                                                                        "x": 197,
+                                                                        "y": 0,
+                                                                        "w": 294,
+                                                                        "h": 588
+                                                                    },
+                                                                    {
+                                                                        "x": 0,
+                                                                        "y": 0,
+                                                                        "w": 600,
+                                                                        "h": 588
+                                                                    }
+                                                                ]
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+                                                "favorite_count": 41045,
+                                                "favorited": false,
+                                                "full_text": "【ラブライブ！シリーズ9周年発表会】【μ's】2019年夏実施予定「グランブルーファンタジー」×「ラブライブ！」コラボ 鋭意制作中！　#lovelive  #ラブライブ9周年 https://t.co/sBhvz88sEp",
+                                                "is_quote_status": false,
+                                                "lang": "ja",
+                                                "possibly_sensitive": false,
+                                                "possibly_sensitive_editable": true,
+                                                "quote_count": 1100,
+                                                "reply_count": 195,
+                                                "retweet_count": 26837,
+                                                "retweeted": false,
+                                                "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+                                                "user_id_str": "347849994",
+                                                "id_str": "1134011980203696128"
+                                            },
+                                            "quick_promote_eligibility": {
+                                                "eligibility": "IneligibleNotProfessional"
+                                            }
+                                        }
+                                    },
+                                    "tweetDisplayType": "Tweet",
+                                    "hasModeratedReplies": false
+                                }
+                            }
+                        },
+                        {
+                            "entryId": "cursor-bottom-8463891398462225176",
+                            "sortIndex": "8089360056651079578",
+                            "content": {
+                                "entryType": "TimelineTimelineItem",
+                                "itemContent": {
+                                    "itemType": "TimelineTimelineCursor",
+                                    "value": "ZAAAAPEfHBmmgMCnhZmc67wfgoCv1b6z97wfgICm6bOU8bwfgMCqidO17LwfgsCthf3U6hIAQPXelukJAGCmhc-shL0SAEDZ6-v2NgBRto2cmuk_ANCpyL3-vB8lAhIVBAAA",
+                                    "cursorType": "Bottom"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "TimelineTerminateTimeline",
+                    "direction": "Top"
+                }
+            ]
+        }
+    }
+}

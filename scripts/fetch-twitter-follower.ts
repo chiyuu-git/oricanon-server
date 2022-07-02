@@ -6,8 +6,8 @@
 import * as superagent from 'superagent';
 import cheerio from 'cheerio';
 import { ProjectName } from '@common/root';
-import { postProjectFollowerRecord } from './common';
-import { HOST, WEEKLY_SEIYUU_SITE } from './constant';
+import { postProjectFollowerRecord } from './common/fetch';
+import { HOST, WEEKLY_SEIYUU_SITE } from './common/constant';
 
 type TwitterFollowerList = {
     projectName: ProjectName;

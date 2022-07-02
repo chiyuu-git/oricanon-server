@@ -11,6 +11,7 @@ import { RecordModule } from './record/record.module';
 import { SummaryModule } from './summary/summary.module';
 import { MemberInfoModule } from './member-info/member-info.module';
 import { EventModule } from './event/event.module';
+import { TwitterModule } from './twitter/twitter.module';
 
 @Module({
     imports: [
@@ -36,6 +37,7 @@ import { EventModule } from './event/event.module';
         RecordModule,
         SummaryModule,
         EventModule,
+        TwitterModule,
     ],
     controllers: [AppController],
     providers: [AppService],

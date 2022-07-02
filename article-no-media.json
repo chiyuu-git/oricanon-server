@@ -1,0 +1,167 @@
+{
+    "data": {
+        "threaded_conversation_with_injections_v2": {
+            "instructions": [
+                {
+                    "type": "TimelineAddEntries",
+                    "entries": [
+                        {
+                            "entryId": "tweet-1541751276203294722",
+                            "sortIndex": "7681620760651481085",
+                            "content": {
+                                "entryType": "TimelineTimelineItem",
+                                "itemContent": {
+                                    "itemType": "TimelineTweet",
+                                    "tweet_results": {
+                                        "result": {
+                                            "__typename": "Tweet",
+                                            "rest_id": "1541751276203294722",
+                                            "core": {
+                                                "user_results": {
+                                                    "result": {
+                                                        "__typename": "User",
+                                                        "id": "VXNlcjoxMzE2NTc4NTI3NDA4MzUzMjgw",
+                                                        "rest_id": "1316578527408353280",
+                                                        "affiliates_highlighted_label": {},
+                                                        "has_nft_avatar": false,
+                                                        "legacy": {
+                                                            "blocked_by": false,
+                                                            "blocking": false,
+                                                            "can_dm": false,
+                                                            "can_media_tag": true,
+                                                            "created_at": "Thu Oct 15 03:16:17 +0000 2020",
+                                                            "default_profile": true,
+                                                            "default_profile_image": false,
+                                                            "description": "ホーリーピーク所属 声優・みさき なこ公式Twitter 「ラブライブ！スーパースター!!」嵐千砂都役",
+                                                            "entities": {
+                                                                "description": {
+                                                                    "urls": []
+                                                                }
+                                                            },
+                                                            "fast_followers_count": 0,
+                                                            "favourites_count": 650,
+                                                            "follow_request_sent": false,
+                                                            "followed_by": false,
+                                                            "followers_count": 117987,
+                                                            "following": true,
+                                                            "friends_count": 69,
+                                                            "has_custom_timelines": false,
+                                                            "is_translator": false,
+                                                            "listed_count": 2976,
+                                                            "location": "",
+                                                            "media_count": 200,
+                                                            "muting": false,
+                                                            "name": "岬 なこ",
+                                                            "normal_followers_count": 117987,
+                                                            "notifications": false,
+                                                            "pinned_tweet_ids_str": [
+                                                                "1501045198474067972"
+                                                            ],
+                                                            "possibly_sensitive": false,
+                                                            "profile_banner_extensions": {
+
+                                                            },
+                                                            "profile_banner_url": "https://pbs.twimg.com/profile_banners/1316578527408353280/1607909895",
+                                                            "profile_image_extensions": {
+
+                                                            },
+                                                            "profile_image_url_https": "https://pbs.twimg.com/profile_images/1432986308448702465/tWwVOM8g_normal.jpg",
+                                                            "profile_interstitial_type": "",
+                                                            "protected": false,
+                                                            "screen_name": "MisakiNako_",
+                                                            "statuses_count": 698,
+                                                            "translator_type": "none",
+                                                            "verified": false,
+                                                            "want_retweets": true,
+                                                            "withheld_in_countries": []
+                                                        },
+                                                        "super_follow_eligible": false,
+                                                        "super_followed_by": false,
+                                                        "super_following": false
+                                                    }
+                                                }
+                                            },
+                                            "legacy": {
+                                                "created_at": "Tue Jun 28 11:52:03 +0000 2022",
+                                                "conversation_id_str": "1541751276203294722",
+                                                "display_text_range": [
+                                                    0,
+                                                    139
+                                                ],
+                                                "entities": {
+                                                    "user_mentions": [],
+                                                    "urls": [
+                                                        {
+                                                            "display_url": "radiko.jp/share/?t=20220…",
+                                                            "expanded_url": "http://radiko.jp/share/?t=20220628210000&sid=FMT",
+                                                            "url": "https://t.co/2MkS5pWAmj",
+                                                            "indices": [
+                                                                116,
+                                                                139
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "hashtags": [
+                                                        {
+                                                            "indices": [
+                                                                42,
+                                                                50
+                                                            ],
+                                                            "text": "なこなぎラジオ"
+                                                        }
+                                                    ],
+                                                    "symbols": []
+                                                },
+                                                "favorite_count": 1085,
+                                                "favorited": false,
+                                                "full_text": "本このあと21時からは…！\n『What a Wonderful Radio!!』\n\n#なこなぎラジオ をつけたみんなのツイート、楽しみにしてますっ\uD83D\uDC40\n\n連日暑い日が続いてるところも多いから、水分補給しながら！！聴いてね！！！！！\n\nhttps://t.co/2MkS5pWAmj",
+                                                "is_quote_status": true,
+                                                "lang": "ja",
+                                                "possibly_sensitive": false,
+                                                "possibly_sensitive_editable": true,
+                                                "quote_count": 3,
+                                                "quoted_status_id_str": "1541617385261637633",
+                                                "quoted_status_permalink": {
+                                                    "url": "https://t.co/5wZbpWZULD",
+                                                    "expanded": "https://twitter.com/audee_jp/status/1541617385261637633",
+                                                    "display": "twitter.com/audee_jp/statu…"
+                                                },
+                                                "reply_count": 74,
+                                                "retweet_count": 309,
+                                                "retweeted": false,
+                                                "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+                                                "user_id_str": "1316578527408353280",
+                                                "id_str": "1541751276203294722"
+                                            },
+                                            "quick_promote_eligibility": {
+                                                "eligibility": "IneligibleNotProfessional"
+                                            }
+                                        }
+                                    },
+                                    "tweetDisplayType": "Tweet",
+                                    "hasModeratedReplies": false
+                                }
+                            }
+                        },
+                        {
+                            "entryId": "cursor-bottom-540330135452383536",
+                            "sortIndex": "7681620760651480984",
+                            "content": {
+                                "entryType": "TimelineTimelineItem",
+                                "itemContent": {
+                                    "itemType": "TimelineTimelineCursor",
+                                    "value": "ZAAAAPANHBmmgsCi8cyotOUqgsCg7ZmBtOUqgMDTjf3NsxIA8RDTpbOZtOUqhICgzf2ts-UqgIDRnai1s-UqhMCt_cCtLQBBquWZij8AQdSNz-AkAOCjtZTOs-UqJQISFQQAAA",
+                                    "cursorType": "Bottom"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "TimelineTerminateTimeline",
+                    "direction": "Top"
+                }
+            ]
+        }
+    }
+}

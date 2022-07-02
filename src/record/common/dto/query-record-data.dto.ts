@@ -10,7 +10,7 @@ import { RecordType } from '@common/record';
  * 所有查询函数命名中不需要带有 category 或者 recordType，默认需要加上这两个参数
  *
  * Find 系列，不需要 category，因为是在自己内部查找，代表着参数全部明确，to不可省略，在 recordService 统一获取默认 to
- * Query 系列，需要 category，recordService 暴露额查询入口统一使用 Query 系列参数，参数可省略，to可省略
+ * Query 系列，需要 category，recordService 暴露查询入口统一使用 Query 系列参数，参数可省略，to可省略
  * QUery Dto 系列，controller 使用，带有类型校验
  *
  * From 参数不可省略，应该由客户端保证传入

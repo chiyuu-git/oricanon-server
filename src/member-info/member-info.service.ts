@@ -69,6 +69,20 @@ export class MemberInfoService {
         return member;
     }
 
+    async findSeiyuuInfoByTwitterAccount(twitterAccount: string) {
+        const repository = this.seiyuuRepository;
+
+        const member = await repository.findOne({
+            where: { twitterAccount },
+        });
+
+        if (!member) {
+            throw new HttpException(`Can not find member ${twitterAccount}`, HttpStatus.NOT_FOUND);
+        }
+
+        return member;
+    }
+
     findProjectMemberInfoByCategory<Type extends Category>(
         category: Type,
         projectName: ProjectName,
