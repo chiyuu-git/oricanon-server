@@ -135,7 +135,7 @@ export class SummaryService implements OnApplicationBootstrap {
 
                 const sortedProjectIncrementInfo = this.processProjectWeekIncrementRank(
                     incrementRecordInRange,
-                    // TODO: seiyuu ll 时可能为空，需要排除
+                    // TODO: person ll 时可能为空，需要排除
                     memberList!,
                 );
 

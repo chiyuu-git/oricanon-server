@@ -39,11 +39,11 @@ export class MemberInfoController {
     /**
      * 获取所有角色的Tags
      */
-    @Get('seiyuu_twitter_account_list')
-    async getSeiyuuTwitterAccountList() {
-        const seiyuuTwitterAccountList = await this.service.findSeiyuuTwitterAccountList();
+    @Get('person_twitter_account_list')
+    async getPersonTwitterAccountList() {
+        const personTwitterAccountList = await this.service.findPersonTwitterAccountList();
 
-        return seiyuuTwitterAccountList;
+        return personTwitterAccountList;
     }
 
     /**

@@ -49,6 +49,18 @@ function formatProjectRecordStr(projectRecordStr: ProjectRecordStr[]): ProjectRe
     }));
 }
 
+/**
+ * 根据 category 和 projectName 返回数据表名
+ * 其中 person 类型还有 rest_member_record
+ */
+function getRecordTableName(category: Category, projectName: ProjectName) {
+    if (projectName === ProjectName.rest) {
+        return projectName;
+    }
+
+    return `${category}_${projectName}`;
+}
+
 export interface RecordDataEntity {
     date: string;
 
@@ -152,6 +164,7 @@ export class RecordDataService implements OnApplicationBootstrap {
     async findOneProjectRecordInDB({ recordType, date, projectName }: FindOneProjectRecord) {
         const idType = this.category === Category.couple ? 'couple_id' : 'member_id';
         const repository = this.getRepositoryByProject(projectName);
+        const tableName = getRecordTableName(this.category, projectName);
 
         // member_id 顺序就是 fetch_order
         const projectRecordStr: ProjectRecordStr[] = await repository.query(`
@@ -159,7 +172,7 @@ export class RecordDataService implements OnApplicationBootstrap {
                 '${date}' as date,
                 '${recordType}' as recordType,
                 GROUP_CONCAT(record ORDER BY ${idType} ASC SEPARATOR ',') as recordStr
-            FROM canon_record.${projectName}_${this.category}
+            FROM canon_record.${tableName}
             JOIN canon_record.record_type t USING (type_id)
             ${this.category !== Category.couple ? 'JOIN canon_member.member m USING (member_id)' : ''}
             WHERE date = '${date}' AND t.name = '${recordType}'
@@ -190,15 +203,15 @@ export class RecordDataService implements OnApplicationBootstrap {
         recordType,
     }: FindProjectRecordInRange) {
         const idType = this.category === Category.couple ? 'couple_id' : 'member_id';
-
         const repository = this.getRepositoryByProject(projectName);
+        const tableName = getRecordTableName(this.category, projectName);
 
         const queryStr = `
             SELECT
                 DATE_FORMAT(date, '%Y-%m-%d') as date,
                 '${recordType}' as recordType,
                 GROUP_CONCAT(record ORDER BY ${idType} ASC SEPARATOR ',') as recordStr
-            FROM canon_record.${projectName}_${this.category}
+            FROM canon_record.${tableName}
             JOIN canon_record.record_type t USING (type_id)
             ${this.category !== Category.couple ? 'JOIN canon_member.member m USING (member_id)' : ''}
             WHERE date BETWEEN '${from}' AND '${to}' AND t.name = '${recordType}'

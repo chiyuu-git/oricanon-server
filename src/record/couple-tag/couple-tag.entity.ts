@@ -1,6 +1,5 @@
 import { Entity } from 'typeorm';
-import { CoupleRecordEntity } from 'src/record/common/record.entity';
-import { RECORD_DATA_BASE } from 'src/record/common';
+import { CoupleRecordEntity, RECORD_DATA_BASE } from 'src/record/common/record.entity';
 
-@Entity({ database: RECORD_DATA_BASE, name: 'llss_couple' })
+@Entity({ database: RECORD_DATA_BASE, name: 'couple_llss' })
 export class LLSSCouple extends CoupleRecordEntity {}

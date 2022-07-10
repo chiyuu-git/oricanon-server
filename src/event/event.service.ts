@@ -1,9 +1,11 @@
-import { EventTypeEnum } from '@common/event-list';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GroupList } from '@src/member-info/entities/group.entity';
+import { EventTypeEnum } from '@common/event-list';
+import { TWITTER_HOST } from '@common/twitter';
+import { Group } from '@src/member-info/entities/group.entity';
 import { MemberList } from '@src/member-info/entities/member-list.entity';
 import { Repository } from 'typeorm';
+import { ArticleService } from '@src/twitter/twitter.service';
 import { CreateEventRecordDto, CreateGroupEventDto, CreateSoloEventDto } from './dto/create-event.dto';
 import { UpdateGroupEventDto } from './dto/update-event.dto';
 import { EventList } from './entities/event-list.entity';
@@ -25,11 +27,15 @@ export class EventService {
     @InjectRepository(SoloEvent)
     SoloEventRepository: Repository<SoloEvent>;
 
-    @InjectRepository(GroupList)
-    GroupListRepository: Repository<GroupList>;
+    @InjectRepository(Group)
+    GroupRepository: Repository<Group>;
 
     @InjectRepository(GroupEvent)
     GroupEventRepository: Repository<GroupEvent>;
+
+    constructor(
+        private readonly articleService: ArticleService,
+    ) {}
 
     async getMemberEntity(romaName: string) {
         const memberEntity = await this.MemberListRepository.findOne({
@@ -47,7 +53,7 @@ export class EventService {
     }
 
     async getGroupEntity(romaName: string) {
-        const groupEntity = await this.GroupListRepository.findOne({
+        const groupEntity = await this.GroupRepository.findOne({
             romaName,
         });
 
@@ -74,6 +80,21 @@ export class EventService {
         return eventTypeEntity;
     }
 
+    /**
+     * 处理推特链接，关联推文和事件
+     * 返回推特以外的链接
+     */
+    async handleRelativeTwitterArticle(relativeUrlList: string[], eventId: number) {
+        return relativeUrlList.map((url) => {
+            console.log('url:', url);
+            if (url.startsWith(TWITTER_HOST)) {
+                this.articleService.updateArticleEventId(url, eventId);
+                return '';
+            }
+            return url;
+        }).filter((url) => url);
+    }
+
     async createEventRecord(createEventDto: CreateEventRecordDto) {
         const {
             type,
@@ -98,26 +119,35 @@ export class EventService {
             overridePriority,
         });
 
+        if (relativeUrlList && relativeUrlList.length > 0) {
+            eventRecordEntity.relativeUrlList = await this.handleRelativeTwitterArticle(
+                relativeUrlList,
+                eventRecordEntity.eventId,
+            );
+        }
+
         await this.EventListRepository.save(eventRecordEntity);
 
         return eventRecordEntity;
     }
 
     async createGroupEvent(createGroupEventDto: CreateGroupEventDto) {
-        const { romaName, absentMemberList } = createGroupEventDto;
+        const { groupList } = createGroupEventDto;
+        console.log('groupList:', groupList);
 
-        const [{ eventId }, { groupId }] = await Promise.all([
+        const [{ eventId }, ...groupEntityList] = await Promise.all([
             this.createEventRecord(createGroupEventDto),
-            this.getGroupEntity(romaName),
+            ...groupList.map((groupRomaName) => this.getGroupEntity(groupRomaName)),
         ]);
 
-        this.GroupEventRepository.insert({
-            eventId,
-            groupId,
-            absentMemberList,
-        });
+        for (const { groupId } of groupEntityList) {
+            this.GroupEventRepository.insert({
+                eventId,
+                groupId,
+            });
+        }
 
-        return 'This action adds a new group event';
+        return 'This action adds new group event';
     }
 
     async createSoloEvent(createSoloEventDto: CreateSoloEventDto) {
@@ -148,3 +178,4 @@ export class EventService {
         return `This action removes a #${id} event`;
     }
 }
+

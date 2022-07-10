@@ -3,6 +3,7 @@ import { Transform } from 'class-transformer';
 import { formatDate } from '@utils/date';
 import { GroupName } from '@common/member-info';
 import { EventTypeEnum } from '@common/event-list';
+import { transformToArray } from '@utils/transform';
 
 export class CreateEventRecordDto {
     @IsString()
@@ -33,6 +34,7 @@ export class CreateEventRecordDto {
      * 相关内容的链接：推文、官网、新闻等
      */
     @IsArray()
+    @Transform(transformToArray)
     @IsOptional()
     relativeUrlList?: string[];
 
@@ -47,20 +49,15 @@ export class CreateEventRecordDto {
      * 覆盖 eventType 默认的优先级
      */
     @IsNumber()
+    @Transform(({ value }) => +value)
     @IsOptional()
     overridePriority?: number;
 }
 
 export class CreateGroupEventDto extends CreateEventRecordDto {
-    @IsString()
-    romaName: GroupName = GroupName.liella;
-
-    /**
-     * romaNameList
-     */
     @IsArray()
-    @IsOptional()
-    absentMemberList?: string[];
+    @Transform(transformToArray)
+    groupList: GroupName[];
 }
 
 export class CreateSoloEventDto extends CreateEventRecordDto {

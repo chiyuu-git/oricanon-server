@@ -6,7 +6,7 @@ import { MemberInfoService } from 'src/member-info/member-info.service';
 import { getPercentile } from '@utils/math';
 import { CharaTagService } from './chara-tag/chara-tag.service';
 import { CoupleTagService } from './couple-tag/couple-tag.service';
-import { SeiyuuFollowerService } from './seiyuu-follower/seiyuu-follower.service';
+import { PersonFollowerService } from './person/person.service';
 import { RecordDataService } from './common/record-data-service';
 import {
     QueryMemberRecordInRange,
@@ -20,10 +20,10 @@ type RelativeDate = DateString[];
 export class RecordService {
     constructor(
         private readonly memberInfoService: MemberInfoService,
-        // RecordDataService 总共有三种 chara seiyuu couple 均实现了 RecordDataService 接口
+        // RecordDataService 总共有三种 chara person couple 均实现了 RecordDataService 接口
         private readonly charaTagService: CharaTagService,
         private readonly coupleTagService: CoupleTagService,
-        private readonly seiyuuFollowerService: SeiyuuFollowerService,
+        private readonly personFollowerService: PersonFollowerService,
     ) {}
 
     getServiceByCategory(category: Category) {
@@ -32,8 +32,8 @@ export class RecordService {
                 return this.charaTagService;
             case Category.couple:
                 return this.coupleTagService;
-            case Category.seiyuu:
-                return this.seiyuuFollowerService;
+            case Category.person:
+                return this.personFollowerService;
             default:
                 throw new HttpException(`Service of ${category} not exist`, HttpStatus.NOT_FOUND);
         }
@@ -90,9 +90,9 @@ export class RecordService {
                     projectName,
                     relativeDate,
                 );
-                    // ts 4.4 支持
-                    // const legalRecord = baseRecord && lastRecord && beforeLastRecord;
-                    // record 为 false， 则 project 为空
+                // ts 4.4 支持
+                // const legalRecord = baseRecord && lastRecord && beforeLastRecord;
+                // record 为 false， 则 project 为空
                 if (baseRecord && lastRecord && beforeLastRecord) {
                     return {
                         projectName,
@@ -152,7 +152,7 @@ export class RecordService {
 
         if (!baseDate) {
             // 如果 baseDate 为空，默认获取最后一条作为 baseDate
-            baseDate = await this.seiyuuFollowerService.findLatestDailyFetchDate();
+            baseDate = await this.personFollowerService.findLatestDailyFetchDate();
         }
 
         // 从上一个获取日到 baseDate，以上一个获取日的数据作为起点

@@ -10,6 +10,7 @@ import { Account } from './entities/account.entity';
 
 @Module({
     imports: [TypeOrmModule.forFeature([Account, PlatformType, Article, ArticleInteractData, AppendixType])],
+    exports: [ArticleService],
     controllers: [TwitterController],
     providers: [ArticleService],
 })

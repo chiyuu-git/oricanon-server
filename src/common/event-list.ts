@@ -6,6 +6,10 @@ export enum EventTypeEnum {
     liveAdditional = 'live_additional',
     fanMeeting = 'fan_meeting',
     miniLive = 'mini_live',
+    /**
+     * 拼盘 live，优先级不固定
+     */
+    fesLive = 'fes_live',
     releaseEvent = 'release_event',
     animeOnAir = 'anime_on_air',
     characterBirthday = 'character_birthday',
@@ -14,8 +18,8 @@ export enum EventTypeEnum {
      * 生放送
      */
     liveStream = 'live_stream',
-    seiyuuBirthday = 'seiyuu_birthday',
-    seiyuuEvent = 'seiyuu_event',
+    personBirthday = 'person_birthday',
+    personEvent = 'person_event',
     /**
      * 地上波
      */

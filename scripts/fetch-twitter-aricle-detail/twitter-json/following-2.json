@@ -1,0 +1,1431 @@
+{
+    "data": {
+        "user": {
+            "result": {
+                "__typename": "User",
+                "timeline": {
+                    "timeline": {
+                        "instructions": [
+                            {
+                                "type": "TimelineTerminateTimeline",
+                                "direction": "Bottom"
+                            },
+                            {
+                                "type": "TimelineAddEntries",
+                                "entries": [
+                                    {
+                                        "entryId": "user-1346933186",
+                                        "sortIndex": "1543432706774269930",
+                                        "content": {
+                                            "entryType": "TimelineTimelineItem",
+                                            "itemContent": {
+                                                "itemType": "TimelineUser",
+                                                "user_results": {
+                                                    "result": {
+                                                        "__typename": "User",
+                                                        "id": "VXNlcjoxMzQ2OTMzMTg2",
+                                                        "rest_id": "1346933186",
+                                                        "affiliates_highlighted_label": {},
+                                                        "has_nft_avatar": false,
+                                                        "legacy": {
+                                                            "blocked_by": false,
+                                                            "blocking": false,
+                                                            "can_dm": false,
+                                                            "can_media_tag": true,
+                                                            "created_at": "Fri Apr 12 14:16:50 +0000 2013",
+                                                            "default_profile": true,
+                                                            "default_profile_image": false,
+                                                            "description": "スマートフォン向けリズムアクション＆アドベンチャーゲーム『ラブライブ！スクールアイドルフェスティバル』の公式アカウントです。アプリに関するご質問・ご要望はユーザーサポート【info-lovelive@klab.com】宛てにご連絡ください。ツイッターでは個別のお返事をしておりません。",
+                                                            "entities": {
+                                                                "description": {
+                                                                    "urls": []
+                                                                },
+                                                                "url": {
+                                                                    "urls": [
+                                                                        {
+                                                                            "display_url": "lovelive.bushimo.jp",
+                                                                            "expanded_url": "http://lovelive.bushimo.jp/",
+                                                                            "url": "https://t.co/CKpQTscoLd",
+                                                                            "indices": [
+                                                                                0,
+                                                                                23
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "fast_followers_count": 0,
+                                                            "favourites_count": 0,
+                                                            "follow_request_sent": false,
+                                                            "followed_by": false,
+                                                            "followers_count": 633915,
+                                                            "following": true,
+                                                            "friends_count": 5,
+                                                            "has_custom_timelines": true,
+                                                            "is_translator": false,
+                                                            "listed_count": 7284,
+                                                            "location": "",
+                                                            "media_count": 2389564,
+                                                            "muting": false,
+                                                            "name": "【公式】ラブライブ！スクフェス事務局",
+                                                            "normal_followers_count": 633915,
+                                                            "notifications": false,
+                                                            "pinned_tweet_ids_str": [],
+                                                            "possibly_sensitive": false,
+                                                            "profile_banner_extensions": {
+                                                                "mediaColor": {
+                                                                    "r": {
+                                                                        "ok": {
+                                                                            "palette": [
+                                                                                {
+                                                                                    "percentage": 34.27,
+                                                                                    "rgb": {
+                                                                                        "blue": 207,
+                                                                                        "green": 211,
+                                                                                        "red": 241
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 16.08,
+                                                                                    "rgb": {
+                                                                                        "blue": 168,
+                                                                                        "green": 231,
+                                                                                        "red": 243
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 10.66,
+                                                                                    "rgb": {
+                                                                                        "blue": 120,
+                                                                                        "green": 234,
+                                                                                        "red": 245
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 8.18,
+                                                                                    "rgb": {
+                                                                                        "blue": 207,
+                                                                                        "green": 230,
+                                                                                        "red": 214
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 6.36,
+                                                                                    "rgb": {
+                                                                                        "blue": 195,
+                                                                                        "green": 172,
+                                                                                        "red": 247
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "profile_banner_url": "https://pbs.twimg.com/profile_banners/1346933186/1647573411",
+                                                            "profile_image_extensions": {
+                                                                "mediaColor": {
+                                                                    "r": {
+                                                                        "ok": {
+                                                                            "palette": [
+                                                                                {
+                                                                                    "percentage": 77.5,
+                                                                                    "rgb": {
+                                                                                        "blue": 255,
+                                                                                        "green": 255,
+                                                                                        "red": 255
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 10.65,
+                                                                                    "rgb": {
+                                                                                        "blue": 127,
+                                                                                        "green": 2,
+                                                                                        "red": 228
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 4.69,
+                                                                                    "rgb": {
+                                                                                        "blue": 186,
+                                                                                        "green": 125,
+                                                                                        "red": 240
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 2.28,
+                                                                                    "rgb": {
+                                                                                        "blue": 15,
+                                                                                        "green": 164,
+                                                                                        "red": 245
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 1.23,
+                                                                                    "rgb": {
+                                                                                        "blue": 10,
+                                                                                        "green": 207,
+                                                                                        "red": 246
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "profile_image_url_https": "https://pbs.twimg.com/profile_images/3519444353/8b039a130fd789078f04ab067b1010c1_normal.png",
+                                                            "profile_interstitial_type": "",
+                                                            "protected": false,
+                                                            "screen_name": "lovelive_SIF",
+                                                            "statuses_count": 2393927,
+                                                            "translator_type": "none",
+                                                            "url": "https://t.co/CKpQTscoLd",
+                                                            "verified": true,
+                                                            "want_retweets": true,
+                                                            "withheld_in_countries": []
+                                                        },
+                                                        "super_follow_eligible": false,
+                                                        "super_followed_by": false,
+                                                        "super_following": false
+                                                    }
+                                                },
+                                                "userDisplayType": "User"
+                                            },
+                                            "clientEventInfo": {
+                                                "component": "FollowingSgs",
+                                                "element": "user"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "entryId": "user-260986258",
+                                        "sortIndex": "1543432706774269929",
+                                        "content": {
+                                            "entryType": "TimelineTimelineItem",
+                                            "itemContent": {
+                                                "itemType": "TimelineUser",
+                                                "user_results": {
+                                                    "result": {
+                                                        "__typename": "User",
+                                                        "id": "VXNlcjoyNjA5ODYyNTg=",
+                                                        "rest_id": "260986258",
+                                                        "affiliates_highlighted_label": {},
+                                                        "has_nft_avatar": false,
+                                                        "legacy": {
+                                                            "blocked_by": false,
+                                                            "blocking": false,
+                                                            "can_dm": false,
+                                                            "can_media_tag": false,
+                                                            "created_at": "Sat Mar 05 00:58:36 +0000 2011",
+                                                            "default_profile": false,
+                                                            "default_profile_image": false,
+                                                            "description": "あいきゃん /#lovelive #Aqours #yohane  津島善子役 / #yipyip / #ハムリハ / #特命あいきゃん / FC「and」 / \uD83D\uDCF7https://t.co/D7UmZ8EbkX \uD83D\uDD7A https://t.co/0PKHZlCmBZ",
+                                                            "entities": {
+                                                                "description": {
+                                                                    "urls": [
+                                                                        {
+                                                                            "display_url": "instagram.com/kyanstagram_/",
+                                                                            "expanded_url": "https://www.instagram.com/kyanstagram_/",
+                                                                            "url": "https://t.co/D7UmZ8EbkX",
+                                                                            "indices": [
+                                                                                82,
+                                                                                105
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "display_url": "vt.tiktok.com/ZSehTP7Hs/",
+                                                                            "expanded_url": "https://vt.tiktok.com/ZSehTP7Hs/",
+                                                                            "url": "https://t.co/0PKHZlCmBZ",
+                                                                            "indices": [
+                                                                                108,
+                                                                                131
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "url": {
+                                                                    "urls": [
+                                                                        {
+                                                                            "display_url": "kobayashiaika.jp",
+                                                                            "expanded_url": "https://kobayashiaika.jp/",
+                                                                            "url": "https://t.co/RmXXqjUFbP",
+                                                                            "indices": [
+                                                                                0,
+                                                                                23
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "fast_followers_count": 0,
+                                                            "favourites_count": 3791,
+                                                            "follow_request_sent": false,
+                                                            "followed_by": false,
+                                                            "followers_count": 363761,
+                                                            "following": true,
+                                                            "friends_count": 256,
+                                                            "has_custom_timelines": true,
+                                                            "is_translator": false,
+                                                            "listed_count": 8620,
+                                                            "location": "",
+                                                            "media_count": 1796,
+                                                            "muting": false,
+                                                            "name": "小林 愛香",
+                                                            "normal_followers_count": 363761,
+                                                            "notifications": true,
+                                                            "pinned_tweet_ids_str": [
+                                                                "1311522774129623040"
+                                                            ],
+                                                            "possibly_sensitive": false,
+                                                            "profile_banner_extensions": {
+                                                                "mediaColor": {
+                                                                    "r": {
+                                                                        "ok": {
+                                                                            "palette": [
+                                                                                {
+                                                                                    "percentage": 73.4,
+                                                                                    "rgb": {
+                                                                                        "blue": 165,
+                                                                                        "green": 161,
+                                                                                        "red": 228
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 9.74,
+                                                                                    "rgb": {
+                                                                                        "blue": 97,
+                                                                                        "green": 78,
+                                                                                        "red": 74
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 8.38,
+                                                                                    "rgb": {
+                                                                                        "blue": 244,
+                                                                                        "green": 244,
+                                                                                        "red": 252
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 6.47,
+                                                                                    "rgb": {
+                                                                                        "blue": 136,
+                                                                                        "green": 144,
+                                                                                        "red": 228
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 1.02,
+                                                                                    "rgb": {
+                                                                                        "blue": 71,
+                                                                                        "green": 71,
+                                                                                        "red": 199
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "profile_banner_url": "https://pbs.twimg.com/profile_banners/260986258/1623506311",
+                                                            "profile_image_extensions": {
+                                                                "mediaColor": {
+                                                                    "r": {
+                                                                        "ok": {
+                                                                            "palette": [
+                                                                                {
+                                                                                    "percentage": 59.25,
+                                                                                    "rgb": {
+                                                                                        "blue": 198,
+                                                                                        "green": 181,
+                                                                                        "red": 225
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 13.25,
+                                                                                    "rgb": {
+                                                                                        "blue": 123,
+                                                                                        "green": 100,
+                                                                                        "red": 239
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 7.75,
+                                                                                    "rgb": {
+                                                                                        "blue": 182,
+                                                                                        "green": 158,
+                                                                                        "red": 253
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 7.21,
+                                                                                    "rgb": {
+                                                                                        "blue": 21,
+                                                                                        "green": 26,
+                                                                                        "red": 40
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 3.69,
+                                                                                    "rgb": {
+                                                                                        "blue": 79,
+                                                                                        "green": 29,
+                                                                                        "red": 235
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "profile_image_url_https": "https://pbs.twimg.com/profile_images/1403712650744270854/FvTmgXMt_normal.jpg",
+                                                            "profile_interstitial_type": "",
+                                                            "protected": false,
+                                                            "screen_name": "Aikyan_",
+                                                            "statuses_count": 11762,
+                                                            "translator_type": "none",
+                                                            "url": "https://t.co/RmXXqjUFbP",
+                                                            "verified": false,
+                                                            "want_retweets": true,
+                                                            "withheld_in_countries": []
+                                                        },
+                                                        "super_follow_eligible": false,
+                                                        "super_followed_by": false,
+                                                        "super_following": false
+                                                    }
+                                                },
+                                                "userDisplayType": "User"
+                                            },
+                                            "clientEventInfo": {
+                                                "component": "FollowingSgs",
+                                                "element": "user"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "entryId": "user-2598273120",
+                                        "sortIndex": "1543432706774269928",
+                                        "content": {
+                                            "entryType": "TimelineTimelineItem",
+                                            "itemContent": {
+                                                "itemType": "TimelineUser",
+                                                "user_results": {
+                                                    "result": {
+                                                        "__typename": "User",
+                                                        "id": "VXNlcjoyNTk4MjczMTIw",
+                                                        "rest_id": "2598273120",
+                                                        "affiliates_highlighted_label": {},
+                                                        "has_nft_avatar": false,
+                                                        "legacy": {
+                                                            "blocked_by": false,
+                                                            "blocking": false,
+                                                            "can_dm": false,
+                                                            "can_media_tag": false,
+                                                            "created_at": "Tue Jul 01 17:17:39 +0000 2014",
+                                                            "default_profile": false,
+                                                            "default_profile_image": false,
+                                                            "description": "⑅⃛声優⑅⃛ https://t.co/EJ4FJvq3fK ⑅⃛音楽⑅⃛ @staff_nanaka ⑅⃛FC⑅⃛ https://t.co/lXY1peO17F ⑅⃛Instagram⑅⃛ https://t.co/zoGollqsfq写真等転載❎ All Reprint❎",
+                                                            "entities": {
+                                                                "description": {
+                                                                    "urls": [
+                                                                        {
+                                                                            "display_url": "stay-luck.com/talent/suwa-na…",
+                                                                            "expanded_url": "http://stay-luck.com/talent/suwa-nanaka/",
+                                                                            "url": "https://t.co/EJ4FJvq3fK",
+                                                                            "indices": [
+                                                                                7,
+                                                                                30
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "display_url": "suwananakafc.com",
+                                                                            "expanded_url": "http://suwananakafc.com",
+                                                                            "url": "https://t.co/lXY1peO17F",
+                                                                            "indices": [
+                                                                                59,
+                                                                                82
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "display_url": "instagram.com/n.suwawagram/",
+                                                                            "expanded_url": "http://www.instagram.com/n.suwawagram/",
+                                                                            "url": "https://t.co/zoGollqsfq",
+                                                                            "indices": [
+                                                                                97,
+                                                                                120
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "url": {
+                                                                    "urls": [
+                                                                        {
+                                                                            "display_url": "columbia.jp/suwananaka/",
+                                                                            "expanded_url": "https://columbia.jp/suwananaka/",
+                                                                            "url": "https://t.co/zdh9E8fGGl",
+                                                                            "indices": [
+                                                                                0,
+                                                                                23
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "fast_followers_count": 0,
+                                                            "favourites_count": 2571,
+                                                            "follow_request_sent": false,
+                                                            "followed_by": false,
+                                                            "followers_count": 302843,
+                                                            "following": true,
+                                                            "friends_count": 516,
+                                                            "has_custom_timelines": false,
+                                                            "is_translator": false,
+                                                            "listed_count": 8376,
+                                                            "location": "ひだまり荘101号室✩",
+                                                            "media_count": 495,
+                                                            "muting": false,
+                                                            "name": "諏訪ななかofficial",
+                                                            "normal_followers_count": 302843,
+                                                            "notifications": true,
+                                                            "pinned_tweet_ids_str": [],
+                                                            "possibly_sensitive": false,
+                                                            "profile_banner_extensions": {
+                                                                "mediaColor": {
+                                                                    "r": {
+                                                                        "ok": {
+                                                                            "palette": [
+                                                                                {
+                                                                                    "percentage": 29.29,
+                                                                                    "rgb": {
+                                                                                        "blue": 211,
+                                                                                        "green": 204,
+                                                                                        "red": 217
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 28.23,
+                                                                                    "rgb": {
+                                                                                        "blue": 21,
+                                                                                        "green": 23,
+                                                                                        "red": 23
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 9.81,
+                                                                                    "rgb": {
+                                                                                        "blue": 174,
+                                                                                        "green": 157,
+                                                                                        "red": 208
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 6.78,
+                                                                                    "rgb": {
+                                                                                        "blue": 46,
+                                                                                        "green": 63,
+                                                                                        "red": 96
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 5.8,
+                                                                                    "rgb": {
+                                                                                        "blue": 132,
+                                                                                        "green": 89,
+                                                                                        "red": 222
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "profile_banner_url": "https://pbs.twimg.com/profile_banners/2598273120/1521553840",
+                                                            "profile_image_extensions": {
+                                                                "mediaColor": {
+                                                                    "r": {
+                                                                        "ok": {
+                                                                            "palette": [
+                                                                                {
+                                                                                    "percentage": 59.95,
+                                                                                    "rgb": {
+                                                                                        "blue": 228,
+                                                                                        "green": 223,
+                                                                                        "red": 220
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 24.61,
+                                                                                    "rgb": {
+                                                                                        "blue": 89,
+                                                                                        "green": 91,
+                                                                                        "red": 89
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 6.31,
+                                                                                    "rgb": {
+                                                                                        "blue": 161,
+                                                                                        "green": 180,
+                                                                                        "red": 207
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 2.27,
+                                                                                    "rgb": {
+                                                                                        "blue": 239,
+                                                                                        "green": 196,
+                                                                                        "red": 162
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 1.85,
+                                                                                    "rgb": {
+                                                                                        "blue": 216,
+                                                                                        "green": 197,
+                                                                                        "red": 119
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "profile_image_url_https": "https://pbs.twimg.com/profile_images/1491789648665866242/9P-BDtFY_normal.jpg",
+                                                            "profile_interstitial_type": "",
+                                                            "protected": false,
+                                                            "screen_name": "suwananaka",
+                                                            "statuses_count": 6191,
+                                                            "translator_type": "none",
+                                                            "url": "https://t.co/zdh9E8fGGl",
+                                                            "verified": false,
+                                                            "want_retweets": true,
+                                                            "withheld_in_countries": []
+                                                        },
+                                                        "professional": {
+                                                            "rest_id": "1461698970388873223",
+                                                            "professional_type": "Creator",
+                                                            "category": []
+                                                        },
+                                                        "super_follow_eligible": false,
+                                                        "super_followed_by": false,
+                                                        "super_following": false
+                                                    }
+                                                },
+                                                "userDisplayType": "User"
+                                            },
+                                            "clientEventInfo": {
+                                                "component": "FollowingSgs",
+                                                "element": "user"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "entryId": "user-4065828913",
+                                        "sortIndex": "1543432706774269927",
+                                        "content": {
+                                            "entryType": "TimelineTimelineItem",
+                                            "itemContent": {
+                                                "itemType": "TimelineUser",
+                                                "user_results": {
+                                                    "result": {
+                                                        "__typename": "User",
+                                                        "id": "VXNlcjo0MDY1ODI4OTEz",
+                                                        "rest_id": "4065828913",
+                                                        "affiliates_highlighted_label": {},
+                                                        "has_nft_avatar": false,
+                                                        "legacy": {
+                                                            "blocked_by": false,
+                                                            "blocking": false,
+                                                            "can_dm": false,
+                                                            "can_media_tag": false,
+                                                            "created_at": "Fri Oct 30 06:25:44 +0000 2015",
+                                                            "default_profile": true,
+                                                            "default_profile_image": false,
+                                                            "description": "歌・声優 / #BRSDF「Before the Nightmare」/「ラブライブ！サンシャイン!!」Aqours 国木田花丸役 / atmos pink × TK2 / 公式FC『たかつき王国』 高槻かなことスタッフが呟きます。https://t.co/sJe0ue6YCr",
+                                                            "entities": {
+                                                                "description": {
+                                                                    "urls": [
+                                                                        {
+                                                                            "display_url": "Instagram.com/kanako.tktk",
+                                                                            "expanded_url": "http://Instagram.com/kanako.tktk",
+                                                                            "url": "https://t.co/sJe0ue6YCr",
+                                                                            "indices": [
+                                                                                116,
+                                                                                139
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "url": {
+                                                                    "urls": [
+                                                                        {
+                                                                            "display_url": "takatsukikanako.com",
+                                                                            "expanded_url": "https://takatsukikanako.com",
+                                                                            "url": "https://t.co/6fAINYbj0d",
+                                                                            "indices": [
+                                                                                0,
+                                                                                23
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "fast_followers_count": 0,
+                                                            "favourites_count": 360,
+                                                            "follow_request_sent": false,
+                                                            "followed_by": false,
+                                                            "followers_count": 291578,
+                                                            "following": true,
+                                                            "friends_count": 357,
+                                                            "has_custom_timelines": false,
+                                                            "is_translator": false,
+                                                            "listed_count": 8195,
+                                                            "location": "たかつき王国",
+                                                            "media_count": 1137,
+                                                            "muting": false,
+                                                            "name": "高槻かなこ&STAFF",
+                                                            "normal_followers_count": 291578,
+                                                            "notifications": true,
+                                                            "pinned_tweet_ids_str": [
+                                                                "1540176651144769538"
+                                                            ],
+                                                            "possibly_sensitive": false,
+                                                            "profile_banner_extensions": {
+                                                                "mediaColor": {
+                                                                    "r": {
+                                                                        "ok": {
+                                                                            "palette": [
+                                                                                {
+                                                                                    "percentage": 25.73,
+                                                                                    "rgb": {
+                                                                                        "blue": 210,
+                                                                                        "green": 198,
+                                                                                        "red": 186
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 18.02,
+                                                                                    "rgb": {
+                                                                                        "blue": 32,
+                                                                                        "green": 35,
+                                                                                        "red": 50
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 12.39,
+                                                                                    "rgb": {
+                                                                                        "blue": 204,
+                                                                                        "green": 179,
+                                                                                        "red": 129
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 9.57,
+                                                                                    "rgb": {
+                                                                                        "blue": 111,
+                                                                                        "green": 149,
+                                                                                        "red": 179
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 6.45,
+                                                                                    "rgb": {
+                                                                                        "blue": 75,
+                                                                                        "green": 71,
+                                                                                        "red": 47
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "profile_banner_url": "https://pbs.twimg.com/profile_banners/4065828913/1514550004",
+                                                            "profile_image_extensions": {
+                                                                "mediaColor": {
+                                                                    "r": {
+                                                                        "ok": {
+                                                                            "palette": [
+                                                                                {
+                                                                                    "percentage": 29.49,
+                                                                                    "rgb": {
+                                                                                        "blue": 220,
+                                                                                        "green": 213,
+                                                                                        "red": 235
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 18.95,
+                                                                                    "rgb": {
+                                                                                        "blue": 233,
+                                                                                        "green": 167,
+                                                                                        "red": 252
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 17.49,
+                                                                                    "rgb": {
+                                                                                        "blue": 134,
+                                                                                        "green": 107,
+                                                                                        "red": 38
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 7.67,
+                                                                                    "rgb": {
+                                                                                        "blue": 217,
+                                                                                        "green": 123,
+                                                                                        "red": 247
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 5.58,
+                                                                                    "rgb": {
+                                                                                        "blue": 47,
+                                                                                        "green": 40,
+                                                                                        "red": 98
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "profile_image_url_https": "https://pbs.twimg.com/profile_images/1201691956956450816/vVwCMhx3_normal.jpg",
+                                                            "profile_interstitial_type": "",
+                                                            "protected": false,
+                                                            "screen_name": "Kanako_tktk",
+                                                            "statuses_count": 8716,
+                                                            "translator_type": "none",
+                                                            "url": "https://t.co/6fAINYbj0d",
+                                                            "verified": false,
+                                                            "want_retweets": true,
+                                                            "withheld_in_countries": []
+                                                        },
+                                                        "super_follow_eligible": false,
+                                                        "super_followed_by": false,
+                                                        "super_following": false
+                                                    }
+                                                },
+                                                "userDisplayType": "User"
+                                            },
+                                            "clientEventInfo": {
+                                                "component": "FollowingSgs",
+                                                "element": "user"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "entryId": "user-3801397033",
+                                        "sortIndex": "1543432706774269926",
+                                        "content": {
+                                            "entryType": "TimelineTimelineItem",
+                                            "itemContent": {
+                                                "itemType": "TimelineUser",
+                                                "user_results": {
+                                                    "result": {
+                                                        "__typename": "User",
+                                                        "id": "VXNlcjozODAxMzk3MDMz",
+                                                        "rest_id": "3801397033",
+                                                        "affiliates_highlighted_label": {},
+                                                        "has_nft_avatar": false,
+                                                        "legacy": {
+                                                            "blocked_by": false,
+                                                            "blocking": false,
+                                                            "can_dm": false,
+                                                            "can_media_tag": false,
+                                                            "created_at": "Tue Oct 06 08:36:22 +0000 2015",
+                                                            "default_profile": false,
+                                                            "default_profile_image": false,
+                                                            "description": "斉藤朱夏 公式！声優/アーティスト◎！。#lovelive #Aqours 渡辺曜/ #俺好き サザンカ/ #ワンエグ 川井リカ/ #明日ちゃんのセーラー服 福元幹 /ライブ Blu-ray「#つぎはぎのステージ」release / 2nd 写真集「#朱夏休み」発売中/ツアー「#キミとはだしの青春」開催決定",
+                                                            "entities": {
+                                                                "description": {
+                                                                    "urls": []
+                                                                },
+                                                                "url": {
+                                                                    "urls": [
+                                                                        {
+                                                                            "display_url": "saitoshuka.jp",
+                                                                            "expanded_url": "https://www.saitoshuka.jp",
+                                                                            "url": "https://t.co/70hovEvlA8",
+                                                                            "indices": [
+                                                                                0,
+                                                                                23
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "fast_followers_count": 0,
+                                                            "favourites_count": 4150,
+                                                            "follow_request_sent": false,
+                                                            "followed_by": false,
+                                                            "followers_count": 385816,
+                                                            "following": true,
+                                                            "friends_count": 365,
+                                                            "has_custom_timelines": false,
+                                                            "is_translator": false,
+                                                            "listed_count": 8771,
+                                                            "location": "",
+                                                            "media_count": 1338,
+                                                            "muting": false,
+                                                            "name": "斉藤 朱夏",
+                                                            "normal_followers_count": 385816,
+                                                            "notifications": true,
+                                                            "pinned_tweet_ids_str": [
+                                                                "1540299679610548224"
+                                                            ],
+                                                            "possibly_sensitive": false,
+                                                            "profile_banner_extensions": {
+                                                                "mediaColor": {
+                                                                    "r": {
+                                                                        "ok": {
+                                                                            "palette": [
+                                                                                {
+                                                                                    "percentage": 53.56,
+                                                                                    "rgb": {
+                                                                                        "blue": 37,
+                                                                                        "green": 32,
+                                                                                        "red": 34
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 15.5,
+                                                                                    "rgb": {
+                                                                                        "blue": 37,
+                                                                                        "green": 34,
+                                                                                        "red": 107
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 12.85,
+                                                                                    "rgb": {
+                                                                                        "blue": 45,
+                                                                                        "green": 45,
+                                                                                        "red": 200
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 8.68,
+                                                                                    "rgb": {
+                                                                                        "blue": 119,
+                                                                                        "green": 158,
+                                                                                        "red": 205
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 4.07,
+                                                                                    "rgb": {
+                                                                                        "blue": 95,
+                                                                                        "green": 141,
+                                                                                        "red": 251
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "profile_banner_url": "https://pbs.twimg.com/profile_banners/3801397033/1651413051",
+                                                            "profile_image_extensions": {
+                                                                "mediaColor": {
+                                                                    "r": {
+                                                                        "ok": {
+                                                                            "palette": [
+                                                                                {
+                                                                                    "percentage": 43.46,
+                                                                                    "rgb": {
+                                                                                        "blue": 219,
+                                                                                        "green": 225,
+                                                                                        "red": 242
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 11.24,
+                                                                                    "rgb": {
+                                                                                        "blue": 58,
+                                                                                        "green": 45,
+                                                                                        "red": 189
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 7.2,
+                                                                                    "rgb": {
+                                                                                        "blue": 162,
+                                                                                        "green": 157,
+                                                                                        "red": 223
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 6.9,
+                                                                                    "rgb": {
+                                                                                        "blue": 39,
+                                                                                        "green": 27,
+                                                                                        "red": 108
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 5.58,
+                                                                                    "rgb": {
+                                                                                        "blue": 38,
+                                                                                        "green": 39,
+                                                                                        "red": 56
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "profile_image_url_https": "https://pbs.twimg.com/profile_images/1515708054750212099/vjgRJ7wm_normal.jpg",
+                                                            "profile_interstitial_type": "",
+                                                            "protected": false,
+                                                            "screen_name": "Saito_Shuka",
+                                                            "statuses_count": 6746,
+                                                            "translator_type": "none",
+                                                            "url": "https://t.co/70hovEvlA8",
+                                                            "verified": false,
+                                                            "want_retweets": true,
+                                                            "withheld_in_countries": []
+                                                        },
+                                                        "super_follow_eligible": false,
+                                                        "super_followed_by": false,
+                                                        "super_following": false
+                                                    }
+                                                },
+                                                "userDisplayType": "User"
+                                            },
+                                            "clientEventInfo": {
+                                                "component": "FollowingSgs",
+                                                "element": "user"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "entryId": "user-347849994",
+                                        "sortIndex": "1543432706774269925",
+                                        "content": {
+                                            "entryType": "TimelineTimelineItem",
+                                            "itemContent": {
+                                                "itemType": "TimelineUser",
+                                                "user_results": {
+                                                    "result": {
+                                                        "__typename": "User",
+                                                        "id": "VXNlcjozNDc4NDk5OTQ=",
+                                                        "rest_id": "347849994",
+                                                        "affiliates_highlighted_label": {},
+                                                        "has_nft_avatar": false,
+                                                        "legacy": {
+                                                            "blocked_by": false,
+                                                            "blocking": false,
+                                                            "can_dm": false,
+                                                            "can_media_tag": true,
+                                                            "created_at": "Wed Aug 03 13:26:11 +0000 2011",
+                                                            "default_profile": true,
+                                                            "default_profile_image": false,
+                                                            "description": "オールメディア展開するスクールアイドルプロジェクト、ラブライブ！シリーズの公式アカウントです。 最新のピックアップトピックスは「いいね」欄からチェック！ ■YouTubeチャンネル https://t.co/NgyjJRqpbP ■TikTok https://t.co/zZiJP3PU8T",
+                                                            "entities": {
+                                                                "description": {
+                                                                    "urls": [
+                                                                        {
+                                                                            "display_url": "urx.red/JHWe",
+                                                                            "expanded_url": "http://urx.red/JHWe",
+                                                                            "url": "https://t.co/NgyjJRqpbP",
+                                                                            "indices": [
+                                                                                91,
+                                                                                114
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "display_url": "tiktok.com/@lovelive_offi…",
+                                                                            "expanded_url": "http://tiktok.com/@lovelive_official",
+                                                                            "url": "https://t.co/zZiJP3PU8T",
+                                                                            "indices": [
+                                                                                123,
+                                                                                146
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "url": {
+                                                                    "urls": [
+                                                                        {
+                                                                            "display_url": "lovelive-anime.jp",
+                                                                            "expanded_url": "http://www.lovelive-anime.jp/",
+                                                                            "url": "https://t.co/KK4vP13OlW",
+                                                                            "indices": [
+                                                                                0,
+                                                                                23
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "fast_followers_count": 0,
+                                                            "favourites_count": 136,
+                                                            "follow_request_sent": false,
+                                                            "followed_by": false,
+                                                            "followers_count": 1080752,
+                                                            "following": true,
+                                                            "friends_count": 8,
+                                                            "has_custom_timelines": true,
+                                                            "is_translator": false,
+                                                            "listed_count": 13938,
+                                                            "location": "",
+                                                            "media_count": 21536,
+                                                            "muting": false,
+                                                            "name": "ラブライブ！シリーズ公式",
+                                                            "normal_followers_count": 1080752,
+                                                            "notifications": true,
+                                                            "pinned_tweet_ids_str": [
+                                                                "1540692074278064128"
+                                                            ],
+                                                            "possibly_sensitive": false,
+                                                            "profile_banner_extensions": {
+                                                                "mediaColor": {
+                                                                    "r": {
+                                                                        "ok": {
+                                                                            "palette": [
+                                                                                {
+                                                                                    "percentage": 49.62,
+                                                                                    "rgb": {
+                                                                                        "blue": 246,
+                                                                                        "green": 179,
+                                                                                        "red": 130
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 11.5,
+                                                                                    "rgb": {
+                                                                                        "blue": 198,
+                                                                                        "green": 187,
+                                                                                        "red": 45
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 10.14,
+                                                                                    "rgb": {
+                                                                                        "blue": 253,
+                                                                                        "green": 225,
+                                                                                        "red": 200
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 8.81,
+                                                                                    "rgb": {
+                                                                                        "blue": 215,
+                                                                                        "green": 131,
+                                                                                        "red": 161
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 8.81,
+                                                                                    "rgb": {
+                                                                                        "blue": 126,
+                                                                                        "green": 195,
+                                                                                        "red": 193
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "profile_banner_url": "https://pbs.twimg.com/profile_banners/347849994/1647321057",
+                                                            "profile_image_extensions": {
+                                                                "mediaColor": {
+                                                                    "r": {
+                                                                        "ok": {
+                                                                            "palette": [
+                                                                                {
+                                                                                    "percentage": 81.53,
+                                                                                    "rgb": {
+                                                                                        "blue": 255,
+                                                                                        "green": 255,
+                                                                                        "red": 255
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 14.57,
+                                                                                    "rgb": {
+                                                                                        "blue": 128,
+                                                                                        "green": 3,
+                                                                                        "red": 227
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 2.28,
+                                                                                    "rgb": {
+                                                                                        "blue": 216,
+                                                                                        "green": 173,
+                                                                                        "red": 237
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 1.41,
+                                                                                    "rgb": {
+                                                                                        "blue": 176,
+                                                                                        "green": 105,
+                                                                                        "red": 220
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 0.13,
+                                                                                    "rgb": {
+                                                                                        "blue": 251,
+                                                                                        "green": 254,
+                                                                                        "red": 246
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "profile_image_url_https": "https://pbs.twimg.com/profile_images/1027440922672259072/sHA_z7wD_normal.jpg",
+                                                            "profile_interstitial_type": "",
+                                                            "protected": false,
+                                                            "screen_name": "LoveLive_staff",
+                                                            "statuses_count": 33062,
+                                                            "translator_type": "none",
+                                                            "url": "https://t.co/KK4vP13OlW",
+                                                            "verified": true,
+                                                            "want_retweets": true,
+                                                            "withheld_in_countries": []
+                                                        },
+                                                        "super_follow_eligible": false,
+                                                        "super_followed_by": false,
+                                                        "super_following": false
+                                                    }
+                                                },
+                                                "userDisplayType": "User"
+                                            },
+                                            "clientEventInfo": {
+                                                "component": "FollowingSgs",
+                                                "element": "user"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "entryId": "user-1393924040",
+                                        "sortIndex": "1543432706774269924",
+                                        "content": {
+                                            "entryType": "TimelineTimelineItem",
+                                            "itemContent": {
+                                                "itemType": "TimelineUser",
+                                                "user_results": {
+                                                    "result": {
+                                                        "__typename": "User",
+                                                        "id": "VXNlcjoxMzkzOTI0MDQw",
+                                                        "rest_id": "1393924040",
+                                                        "affiliates_highlighted_label": {},
+                                                        "has_nft_avatar": false,
+                                                        "legacy": {
+                                                            "blocked_by": false,
+                                                            "blocking": false,
+                                                            "can_dm": false,
+                                                            "can_media_tag": false,
+                                                            "created_at": "Wed May 01 06:26:02 +0000 2013",
+                                                            "default_profile": false,
+                                                            "default_profile_image": false,
+                                                            "description": "ソニー・ミュージックアーティスツ所属 伊波杏樹の 各種出演情報等を、本人・スタッフがお届けする Official Twitterとなります！よろしくお願いします！ «出演作品» こちらから→ https://t.co/te61HErQ6F",
+                                                            "entities": {
+                                                                "description": {
+                                                                    "urls": [
+                                                                        {
+                                                                            "display_url": "anjuinami.com/profile/",
+                                                                            "expanded_url": "http://anjuinami.com/profile/",
+                                                                            "url": "https://t.co/te61HErQ6F",
+                                                                            "indices": [
+                                                                                96,
+                                                                                119
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "url": {
+                                                                    "urls": [
+                                                                        {
+                                                                            "display_url": "anjuinami.com",
+                                                                            "expanded_url": "http://anjuinami.com/",
+                                                                            "url": "https://t.co/g8KX8JtGQU",
+                                                                            "indices": [
+                                                                                0,
+                                                                                23
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "fast_followers_count": 0,
+                                                            "favourites_count": 1164,
+                                                            "follow_request_sent": false,
+                                                            "followed_by": false,
+                                                            "followers_count": 347151,
+                                                            "following": true,
+                                                            "friends_count": 220,
+                                                            "has_custom_timelines": true,
+                                                            "is_translator": false,
+                                                            "listed_count": 8970,
+                                                            "location": "",
+                                                            "media_count": 777,
+                                                            "muting": false,
+                                                            "name": "伊波 杏樹",
+                                                            "normal_followers_count": 347151,
+                                                            "notifications": true,
+                                                            "pinned_tweet_ids_str": [
+                                                                "1519648240328900609"
+                                                            ],
+                                                            "possibly_sensitive": false,
+                                                            "profile_banner_extensions": {
+                                                                "mediaColor": {
+                                                                    "r": {
+                                                                        "ok": {
+                                                                            "palette": [
+                                                                                {
+                                                                                    "percentage": 75.78,
+                                                                                    "rgb": {
+                                                                                        "blue": 186,
+                                                                                        "green": 198,
+                                                                                        "red": 202
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 8.45,
+                                                                                    "rgb": {
+                                                                                        "blue": 44,
+                                                                                        "green": 51,
+                                                                                        "red": 51
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 4.56,
+                                                                                    "rgb": {
+                                                                                        "blue": 79,
+                                                                                        "green": 148,
+                                                                                        "red": 145
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 2.43,
+                                                                                    "rgb": {
+                                                                                        "blue": 189,
+                                                                                        "green": 187,
+                                                                                        "red": 195
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 2.38,
+                                                                                    "rgb": {
+                                                                                        "blue": 83,
+                                                                                        "green": 119,
+                                                                                        "red": 109
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "profile_banner_url": "https://pbs.twimg.com/profile_banners/1393924040/1643457695",
+                                                            "profile_image_extensions": {
+                                                                "mediaColor": {
+                                                                    "r": {
+                                                                        "ok": {
+                                                                            "palette": [
+                                                                                {
+                                                                                    "percentage": 74.98,
+                                                                                    "rgb": {
+                                                                                        "blue": 215,
+                                                                                        "green": 206,
+                                                                                        "red": 201
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 5.51,
+                                                                                    "rgb": {
+                                                                                        "blue": 206,
+                                                                                        "green": 164,
+                                                                                        "red": 144
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 5.01,
+                                                                                    "rgb": {
+                                                                                        "blue": 96,
+                                                                                        "green": 79,
+                                                                                        "red": 80
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 4.2,
+                                                                                    "rgb": {
+                                                                                        "blue": 202,
+                                                                                        "green": 176,
+                                                                                        "red": 214
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "percentage": 2.08,
+                                                                                    "rgb": {
+                                                                                        "blue": 166,
+                                                                                        "green": 182,
+                                                                                        "red": 205
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "profile_image_url_https": "https://pbs.twimg.com/profile_images/1478729333074464768/bBSEofrF_normal.jpg",
+                                                            "profile_interstitial_type": "",
+                                                            "protected": false,
+                                                            "screen_name": "anju_inami",
+                                                            "statuses_count": 5896,
+                                                            "translator_type": "none",
+                                                            "url": "https://t.co/g8KX8JtGQU",
+                                                            "verified": true,
+                                                            "want_retweets": true,
+                                                            "withheld_in_countries": []
+                                                        },
+                                                        "super_follow_eligible": false,
+                                                        "super_followed_by": false,
+                                                        "super_following": false
+                                                    }
+                                                },
+                                                "userDisplayType": "User"
+                                            },
+                                            "clientEventInfo": {
+                                                "component": "FollowingSgs",
+                                                "element": "user"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "entryId": "cursor-bottom-1543432706774269923",
+                                        "sortIndex": "1543432706774269923",
+                                        "content": {
+                                            "entryType": "TimelineTimelineCursor",
+                                            "value": "0|1543432706774269921",
+                                            "cursorType": "Bottom"
+                                        }
+                                    },
+                                    {
+                                        "entryId": "cursor-top-1543432706774269931",
+                                        "sortIndex": "1543432706774269931",
+                                        "content": {
+                                            "entryType": "TimelineTimelineCursor",
+                                            "value": "-1|1543432706774269931",
+                                            "cursorType": "Top"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

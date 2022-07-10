@@ -1,4 +1,6 @@
-import { Column, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
+
+export const RECORD_DATA_BASE = 'canon_record';
 
 export abstract class RecordEntity {
     @PrimaryColumn({
@@ -40,3 +42,5 @@ export abstract class CoupleRecordEntity extends RecordEntity {
     memberId: number;
 }
 
+@Entity({ database: RECORD_DATA_BASE, name: 'rest' })
+export class RestMember extends MemberRecordEntity {}

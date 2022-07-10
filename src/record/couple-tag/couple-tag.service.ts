@@ -53,12 +53,10 @@ export class CoupleTagService extends RecordDataService {
                 return this.findUnionNovel(params);
             case CoupleRecordType.illustWithNovel:
                 return this.findIllustWithNovel(params);
+            // 普通类型 record
             default:
+                return this.findOneProjectRecordInDB(params);
         }
-
-        return this.findOneProjectRecordInDB({
-            ...params,
-        });
     }
 
     async findIllustWithNovel(params: QueryOneProjectRecordInCategory) {

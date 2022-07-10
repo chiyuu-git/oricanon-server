@@ -84,14 +84,17 @@ export async function enhanceFetch(
         console.log('Request Error:', error);
     }
 
-    if (!response.ok) {
-        console.log('Request Error:', response);
-    }
     const contentType = response.headers.get('content-type');
-    if (contentType && contentType.includes('application/json')) {
-        return response.json();
+    const isJson = contentType && contentType.includes('application/json');
+
+    if (!response.ok) {
+        if (isJson) {
+            console.log('Request Error:', await response.json());
+        }
+        console.log('Request Error:', await response.text());
     }
-    return response.text();
+
+    return isJson ? response.json() : response.text();
 }
 
 export async function postProjectFollowerRecord({
@@ -102,7 +105,7 @@ export async function postProjectFollowerRecord({
     // 网站在第二天更新0点时的数据，标记为23：59分
     date.setDate(date.getDate() - 1);
 
-    const url = `${HOST}/seiyuu_follower/create_project_record`;
+    const url = `${HOST}/person_follower/create_project_record`;
     const res = await fetch(url, {
         method: 'post',
         headers: {
@@ -125,4 +128,9 @@ export async function createArticleInteractData(createArticleInteractDataDto: Cr
     const result = await enhanceFetch(url, createArticleInteractDataDto, 'POST');
     console.log('createArticleInteractDataResult:', result);
     return result;
+}
+
+export async function getLiellaTwitterAccountList() {
+    const result = await enhanceFetch(`${HOST}/member_info/person_twitter_account_list`);
+    return result[3].twitterAccounts;
 }

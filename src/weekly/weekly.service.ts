@@ -3,7 +3,7 @@ import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordService } from 'src/record/record.service';
 import { ProjectName, Category } from '@common/root';
-import { SeiyuuRecordType } from '@common/record';
+import { PersonRecordType } from '@common/record';
 import { MemberWeeklyInfo, ProjectInfo, RecordTypeWeeklyInfo } from '@common/weekly';
 import { ProjectMemberListKey, ProjectMemberListMap } from 'src/member-info/common';
 import { MemberInfo } from '@src/member-info/entities/member-info.entity';
@@ -207,8 +207,8 @@ export class WeeklyService implements OnApplicationBootstrap {
     async getTwitterFollowerWeeklyDetail({ endDate }: QueryWeeklyDetail) {
         const { from, to } = await this.recordService.findWeekRange(endDate);
         const result = await this.recordService.findProjectRecordInRange({
-            category: Category.seiyuu,
-            recordType: SeiyuuRecordType.twitterFollower,
+            category: Category.person,
+            recordType: PersonRecordType.twitterFollower,
             projectName: ProjectName.llss,
             from,
             to,

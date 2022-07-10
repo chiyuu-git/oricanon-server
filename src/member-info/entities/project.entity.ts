@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
-    database: 'canon_root',
+    database: 'canon_member',
     name: 'project',
 })
 export class ProjectList {

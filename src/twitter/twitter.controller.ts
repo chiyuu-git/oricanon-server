@@ -12,33 +12,11 @@ export class TwitterController {
 
     @Post('/create_article')
     createArticle(@Body() createArticleDto: CreateArticleDto) {
-        console.log('createArticleDto:', createArticleDto);
-        return this.twitterService.createArticle(createArticleDto);
+        return this.twitterService.updateArticleInfo(createArticleDto);
     }
 
     @Post('/create_article_interact_data')
     createArticleInteractData(@Body() createArticleInteractDataDto: CreateArticleInteractDataDto) {
-        console.log('createArticleInteractDataDto:', createArticleInteractDataDto);
         return this.twitterService.createArticleInteractData(createArticleInteractDataDto);
-    }
-
-    @Get()
-    findAll() {
-        return this.twitterService.findAll();
-    }
-
-    // @Get(':id')
-    // findOne(@Param('id') id: string) {
-    //     return this.twitterService.findOne(+id);
-    // }
-
-    @Patch(':id')
-    update(@Param('id') id: string, @Body() updateTwitterDto: UpdateArticleDto) {
-        return this.twitterService.update(+id, updateTwitterDto);
-    }
-
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.twitterService.remove(+id);
     }
 }

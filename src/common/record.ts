@@ -22,7 +22,7 @@ export const FavorRecordTypeList = [
     CharaRecordType.tenThousand,
 ] as const;
 
-export enum SeiyuuRecordType {
+export enum PersonRecordType {
     twitterFollower = 'twitter_follower',
     youtube = 'youtube',
     ins = 'ins'
@@ -43,7 +43,7 @@ export enum CoupleRecordType {
     coupleUnionNovel = 'pixiv_couple_union_novel'
 }
 
-export type RecordType = CharaRecordType | CoupleRecordType| SeiyuuRecordType;
+export type RecordType = CharaRecordType | CoupleRecordType| PersonRecordType;
 
 export interface ProjectRecord {
     date: string;

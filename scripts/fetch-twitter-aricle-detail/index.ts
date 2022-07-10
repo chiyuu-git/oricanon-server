@@ -4,9 +4,18 @@
 /* eslint-disable unicorn/prefer-dom-node-text-content */
 import { getPrevWeeklyFetchDate } from '@common/weekly';
 import { formatDate } from '@utils/date';
-import { chromium } from 'playwright';
+import { BrowserContext, chromium } from 'playwright';
+import { getLiellaTwitterAccountList } from 'scripts/common/fetch';
 import { DOWNLOAD_PATH, getFileName } from '../common/file';
 import { processHighFavorArticle } from './process-high-favor-article';
+
+interface TwitterAricleSearchOptions {
+    account: string;
+    minFaves: number;
+    since: string;
+    until: string;
+    saveFaves: number;
+}
 
 /**
  * 解析推特互动数据文本
@@ -20,39 +29,13 @@ function parseInteractData(data: string) {
     return Number.parseFloat(data.replace(',', ''));
 }
 
-// https://playwright.dev/docs/api/class-page#page-fill
-export async function fetchTwitterArticleDetail() {
-    const browser = await chromium.launch({
-        // 'chrome' or 'msedge', 'chrome-beta', 'msedge-beta', 'msedge-dev', etc.
-        channel: 'msedge',
-        headless: false,
-        slowMo: 300,
-    });
-    const context = await browser.newContext({ storageState: 'state.json' });
+async function getTwitterArticleOfAccount(context: BrowserContext, searchOptions: TwitterAricleSearchOptions) {
     const page = await context.newPage();
     await page.goto('https://twitter.com/home');
     // 有可能会过期的，每次登录都刷新一下
     await context.storageState({ path: 'state.json' });
 
-    // 获取搜索参数
-    // const account = 'lovelive_staff';
-    const account = 'AoyamaNagisa';
-    // 查询的标准是 1000，可以保证看到所有有意义的推特
-    // 记录的标准是 7000，低于 7000 的直接删掉就好。
-    const minFaves = 1000;
-    // 可以默认日期后跟着的时间是 00:00，即 since 值是包括当天的，可以获取到当天的推文，until 值是不包括
-    // 如果是周五准时回溯，那么 PWFD + 1 是 until 值， PWFD - 6 是 since 值
-    // const fetchDate = getPrevWeeklyFetchDate(formatDate(new Date()));
-    // const untilDate = new Date(fetchDate);
-    // untilDate.setDate(untilDate.getDate() + 1);
-    // const sinceDate = new Date(fetchDate);
-    // sinceDate.setDate(sinceDate.getDate() - 6);
-    // const until = formatDate(untilDate);
-    // const since = formatDate(sinceDate);
-
-    // 如果是周五以外的时间回溯，那么我需要手动指定 since 和 since + 7
-    const since = '2022-01-01';
-    const until = '2022-05-16';
+    const { account, minFaves, since, until, saveFaves } = searchOptions;
     // from:lovelive_staff min_faves:5000 since:2022-06-12 until:2022-06-17
     const searchTrick = `from:${account} min_faves:${minFaves} since:${since} until:${until}`;
     // const searchTrick = `from:${account} min_faves:10000`;
@@ -70,13 +53,6 @@ export async function fetchTwitterArticleDetail() {
             node?.removeChild(siblingDiv);
         }
     });
-    // await sectionEL.evaluate((sectionNode) => {
-    //     const parentNode = sectionNode.parentNode?.parentNode?.parentNode;
-    //     const siblingDiv = parentNode?.childNodes[0];
-    //     if (siblingDiv) {
-    //         parentNode?.removeChild(siblingDiv);
-    //     }
-    // });
 
     let currentArticle = await page.locator('article >> nth=0');
     await currentArticle.waitFor();
@@ -94,7 +70,7 @@ export async function fetchTwitterArticleDetail() {
         const isNormalCase = /^\d/.test(lastLine);
         const faveStr = isNormalCase ? lastLine : lines.at(-2);
 
-        if (parseInteractData(faveStr) > 7000) {
+        if (parseInteractData(faveStr) > saveFaves) {
             const { isFetchTweetDetailSuccess, url, createdAt } = await processHighFavorArticle({
                 context,
                 currentArticle,
@@ -119,7 +95,63 @@ export async function fetchTwitterArticleDetail() {
         articleCount = await currentArticle.count();
         await page.waitForTimeout(500);
     }
-    console.log('fetchFailedList:', fetchFailedList);
+
+    console.log('fetchFailedList:', account, fetchFailedList);
+}
+
+// https://playwright.dev/docs/api/class-page#page-fill
+export async function fetchTwitterArticleDetail() {
+    const browser = await chromium.launch({
+        // 'chrome' or 'msedge', 'chrome-beta', 'msedge-beta', 'msedge-dev', etc.
+        channel: 'msedge',
+        headless: false,
+        slowMo: 300,
+    });
+    const context = await browser.newContext({ storageState: 'state.json' });
+
+    // "twitterAccounts": [
+    //     "SayuriDate",
+    //     "Liyu0109",
+    //     "MisakiNako_",
+    //     "_Naomi_Payton_",
+    //     "AoyamaNagisa",
+    //     "NozomiSuzuhara",
+    //     "a_yabushima",
+    //     "AyaEmori_BOX"
+    //   ]
+    // const account = 'lovelive_staff';
+    // 获取搜索参数
+    const account = 'SayuriDate';
+    // 查询的标准是 1000，可以保证看到所有有意义的推特
+    // 记录的标准是 7000，低于 7000 的直接删掉就好。
+    const minFaves = 1000;
+    // 可以默认日期后跟着的时间是 00:00，即 since 值是包括当天的，可以获取到当天的推文，until 值是不包括
+    // 如果是周五准时回溯，那么 PWFD + 1 是 until 值， PWFD - 6 是 since 值
+    // const fetchDate = getPrevWeeklyFetchDate(formatDate(new Date()));
+    // const untilDate = new Date(fetchDate);
+    // untilDate.setDate(untilDate.getDate() + 1);
+    // const sinceDate = new Date(fetchDate);
+    // sinceDate.setDate(sinceDate.getDate() - 6);
+    // const until = formatDate(untilDate);
+    // const since = formatDate(sinceDate);
+
+    // 如果是周五以外的时间回溯，那么我需要手动指定 since 和 since + 7
+    // 动画之前的 6000 就要保存了，再早的 5000 就要保存
+    const since = '2020-01-01';
+    const until = '2021-01-01';
+    await getTwitterArticleOfAccount(context, {
+        account,
+        minFaves,
+        since,
+        until,
+        saveFaves: 5000,
+    });
+    // const liellaTwitterAccountList: string[] = await getLiellaTwitterAccountList();
+    // console.log('liellaTwitterAccountList:', liellaTwitterAccountList);
+    // for (const account of liellaTwitterAccountList) {
+    //     await getTwitterArticleOfAccount(account, context);
+    // }
+
     console.log('done');
 
     // await browser.close();

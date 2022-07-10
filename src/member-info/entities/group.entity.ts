@@ -4,7 +4,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
     database: 'canon_member',
     name: 'group',
 })
-export class GroupList {
+export class Group {
     @PrimaryGeneratedColumn({
         type: 'int',
         name: 'group_id',

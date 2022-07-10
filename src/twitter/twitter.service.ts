@@ -41,7 +41,6 @@ export class ArticleService {
         // 不存在，则创建一个
         if (!entity) {
             const newEntity = await repository.create({ name });
-            console.log('newEntity:', newEntity);
             await repository.save(newEntity);
             return newEntity.id;
         }
@@ -49,7 +48,31 @@ export class ArticleService {
         return entity?.id;
     }
 
-    async createArticle(createArticleDto: CreateArticleDto) {
+    findOneArticle(uri: string) {
+        return this.ArticleRepository.findOne({ uri });
+    }
+
+    async createArticle(account: string, uri: string) {
+        const accountId = await this.findOrCreateArticleInfo(account, this.AccountRepository);
+        const articleEntity = await this.ArticleRepository.create({
+            accountId,
+            uri,
+        });
+
+        await this.ArticleRepository.save(articleEntity);
+        return articleEntity;
+    }
+
+    async findOrCreateArticle(account: string, uri: string) {
+        let articleEntity = await this.findOneArticle(uri);
+
+        if (!articleEntity) {
+            articleEntity = await this.createArticle(account, uri);
+        }
+        return articleEntity;
+    }
+
+    async updateArticleInfo(createArticleDto: CreateArticleDto) {
         const {
             account,
             uri,
@@ -58,40 +81,28 @@ export class ArticleService {
             platformType,
         } = createArticleDto;
 
-        const result = await this.findOneArticle(uri);
+        const articleEntity = await this.findOrCreateArticle(account, uri);
 
-        if (result) {
-            return 'This twitter article is already exist';
-        }
-
-        const [accountId, platformTypeId] = await Promise.all([
-            this.findOrCreateArticleInfo(account, this.AccountRepository),
-            this.findOrCreateArticleInfo(platformType, this.PlatformTypeRepository),
-        ]);
-
+        const platformTypeId = await this.findOrCreateArticleInfo(platformType, this.PlatformTypeRepository);
         let appendixTypeId: number | null = null;
         if (appendixType) {
             appendixTypeId = await this.findOrCreateArticleInfo(appendixType, this.AppendixTypeRepository);
         }
 
-        const articleEntity = await this.ArticleRepository.create({
-            accountId,
-            uri,
+        // 更新实体的字段
+        Object.assign(articleEntity, {
             createdAt,
-            appendixTypeId,
             platformTypeId,
+            appendixTypeId,
         });
 
         await this.ArticleRepository.save(articleEntity);
-        return 'This action create a twitter article';
+
+        return 'This action update twitter articleInfo';
     }
 
     findAll() {
         return 'This action returns all twitter';
-    }
-
-    findOneArticle(uri: string) {
-        return this.ArticleRepository.findOne({ uri });
     }
 
     update(id: number, updateTwitterDto: UpdateArticleDto) {
@@ -139,5 +150,17 @@ export class ArticleService {
         }
 
         return `Can not find the article, please make sure article ${uri} is exist`;
+    }
+
+    async updateArticleEventId(url: string, eventId: number) {
+        const splitArr = url.split('/');
+        const account = splitArr.at(-3) as string;
+        const uri = splitArr.at(-1) as string;
+
+        await this.findOrCreateArticle(account, uri);
+        // 返回的 entity 改动后 save 也无法触发更新，只能用 update 处理下
+        await this.ArticleRepository.update({ uri }, { eventId });
+
+        return 'This action update twitter article eventId';
     }
 }

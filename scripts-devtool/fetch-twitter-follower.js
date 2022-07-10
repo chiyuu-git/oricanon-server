@@ -14,7 +14,7 @@ async function postFollowerRecord({
     // 网站在第二天更新0点时的数据，标记为23：59分
     date.setDate(date.getDate() - 1);
 
-    const url = `${HOST}/seiyuu_follower`;
+    const url = `${HOST}/person_follower`;
     const res = await fetch(url, {
         method: 'post',
         mode: 'cors',
@@ -41,9 +41,9 @@ function findFollowerCount(accounts, allAccountNode) {
                 return false;
             }
 
-            const seiyuuInfo = textNode.split(' ');
-            const name = seiyuuInfo[3];
-            if (account === seiyuuInfo[2]) {
+            const personInfo = textNode.split(' ');
+            const name = personInfo[3];
+            if (account === personInfo[2]) {
                 // 找到记录fo数的节点
                 follower = el.parentElement.parentElement.children[3].textContent * 1;
                 return true;
@@ -56,10 +56,10 @@ function findFollowerCount(accounts, allAccountNode) {
 
 async function fetchTwitterFollower() {
     try {
-        const response = await fetch(`${HOST}/member_info/seiyuu_twitter_account_list`);
+        const response = await fetch(`${HOST}/member_info/person_twitter_account_list`);
         const twitterFollowerList = response.body;
 
-        // 获取 seiyuu twitterAccount
+        // 获取 person twitterAccount
         const allAccountNode = document.querySelectorAll('#f_rank>tbody>tr>td>a');
 
         for (const { projectName, twitterAccounts } of twitterFollowerList) {

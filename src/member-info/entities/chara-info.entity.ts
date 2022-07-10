@@ -23,11 +23,5 @@ export class CharaInfo extends MemberInfo {
         name: 'birthday',
     })
     birthday: string;
-
-    @Column({
-        type: 'tinyint',
-        name: 'record_order',
-    })
-    recordOrder: number;
 }
 

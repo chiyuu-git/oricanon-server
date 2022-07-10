@@ -21,7 +21,6 @@ export interface MemberCommonInfo {
 export interface CharaInfo extends MemberCommonInfo {
     pixivTag: string;
     birthday: string;
-    recordOrder: number;
 }
 export interface CoupleInfo extends MemberCommonInfo {
     pixivTag: string;
@@ -29,17 +28,16 @@ export interface CoupleInfo extends MemberCommonInfo {
     // pixivIntersectionTag 由前两个字段计算得出即可
     // pixivIntersectionTag: string;
 }
-export interface SeiyuuInfo extends MemberCommonInfo{
+export interface PersonInfo extends MemberCommonInfo{
     twitterAccount: string;
-    recordOrder: number;
 }
 
 export type GetMemberInfoByType<Type extends Category> = Type extends Category.chara
     ? CharaInfo
     : Type extends Category.couple
         ? CoupleInfo
-        : Type extends Category.seiyuu
-            ? SeiyuuInfo
+        : Type extends Category.person
+            ? PersonInfo
             : never
 
 export type MemberInfoMap<Type extends Category > = {

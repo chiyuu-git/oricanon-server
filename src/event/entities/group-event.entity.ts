@@ -22,11 +22,4 @@ export class GroupEvent {
         name: 'group_id',
     })
     groupId: number;
-
-    @Column({
-        type: 'json',
-        name: 'absent_member_list',
-        nullable: true,
-    })
-    absentMemberList: string[];
 }

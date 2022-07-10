@@ -28,9 +28,9 @@ function findFollowerCount(accounts: string[], allAccountNode: any): null | numb
                 return null;
             }
 
-            const seiyuuInfo = textNode.data.split(' ');
-            const name = seiyuuInfo[3];
-            if (account === seiyuuInfo[2]) {
+            const personInfo = textNode.data.split(' ');
+            const name = personInfo[3];
+            if (account === personInfo[2]) {
                 // 找到记录fo数的节点
                 follower = el.parent.next.next.children[0].data * 1;
                 return true;
@@ -43,8 +43,8 @@ function findFollowerCount(accounts: string[], allAccountNode: any): null | numb
 
 export async function fetchTwitterFollower() {
     try {
-    // 获取 seiyuu twitterAccount
-        const response = await superagent.get(`${HOST}/member_info/seiyuu_twitter_account_list`);
+        // 获取 person twitterAccount
+        const response = await superagent.get(`${HOST}/member_info/person_twitter_account_list`);
 
         const twitterAccountList: TwitterFollowerList = response.body;
 

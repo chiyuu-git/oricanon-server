@@ -25,7 +25,7 @@ bootstrap()
     .then(() => {
         // 服务启动之后再执行脚本;
         // fetchTwitterFollower();
-        fetchTwitterArticleDetail();
+        // fetchTwitterArticleDetail();
         const placeholder = 123;
         return true;
     })

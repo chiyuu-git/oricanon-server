@@ -5,7 +5,7 @@ import { MemberInfoMap, GetMemberInfoByType, MemberCommonInfo } from '@common/me
 import { Repository } from 'typeorm';
 import { CharaInfo } from './entities/chara-info.entity';
 import { CoupleInfo } from './entities/couple-info.entity';
-import { SeiyuuInfo } from './entities/seiyuu-info.entity';
+import { PersonInfo } from './entities/person-info.entity';
 import { MemberInfo } from './entities/member-info.entity';
 import { ProjectMemberListKey, ProjectMemberListMap } from './common';
 import { MemberList } from './entities/member-list.entity';
@@ -14,7 +14,7 @@ type ProjectCharaTagListMap = Record<ProjectName, {
     projectName: ProjectName;
     pixivTags: string[];
 }>
-type ProjectSeiyuuTwitterAccountListMap = Record<ProjectName, {
+type ProjectPersonTwitterAccountListMap = Record<ProjectName, {
     projectName: ProjectName;
     twitterAccounts: string[];
 }>
@@ -32,8 +32,8 @@ export class MemberInfoService {
         private MemberListRepository: Repository<MemberList>,
         @InjectRepository(CharaInfo)
         private charaRepository: Repository<CharaInfo>,
-        @InjectRepository(SeiyuuInfo)
-        private seiyuuRepository: Repository<SeiyuuInfo>,
+        @InjectRepository(PersonInfo)
+        private personRepository: Repository<PersonInfo>,
         @InjectRepository(CoupleInfo)
         private coupleRepository: Repository<CoupleInfo>,
     ) {}
@@ -42,8 +42,8 @@ export class MemberInfoService {
         switch (category) {
             case Category.chara:
                 return this.charaRepository;
-            case Category.seiyuu:
-                return this.seiyuuRepository;
+            case Category.person:
+                return this.personRepository;
             case Category.couple:
                 return this.coupleRepository;
             default:
@@ -69,8 +69,8 @@ export class MemberInfoService {
         return member;
     }
 
-    async findSeiyuuInfoByTwitterAccount(twitterAccount: string) {
-        const repository = this.seiyuuRepository;
+    async findPersonInfoByTwitterAccount(twitterAccount: string) {
+        const repository = this.personRepository;
 
         const member = await repository.findOne({
             where: { twitterAccount },
@@ -132,15 +132,15 @@ export class MemberInfoService {
     }
 
     /**
-     * 获取所有 seiyuu 的 twitter account
+     * 获取所有 person 的 twitter account
      */
-    async findSeiyuuTwitterAccountList() {
-        const seiyuuList = await this.findMemberInfoListByCategory(Category.seiyuu);
-        const seiyuuTwitterAccountList: ProjectSeiyuuTwitterAccountListMap = {} as ProjectSeiyuuTwitterAccountListMap;
+    async findPersonTwitterAccountList() {
+        const personList = await this.findMemberInfoListByCategory(Category.person);
+        const personTwitterAccountList: ProjectPersonTwitterAccountListMap = {} as ProjectPersonTwitterAccountListMap;
 
-        for (const seiyuuInfo of seiyuuList) {
-            const { projectName, twitterAccount } = seiyuuInfo;
-            let listOfProject = seiyuuTwitterAccountList[projectName];
+        for (const personInfo of personList) {
+            const { projectName, twitterAccount } = personInfo;
+            let listOfProject = personTwitterAccountList[projectName];
 
             if (!listOfProject) {
                 listOfProject = {
@@ -148,13 +148,13 @@ export class MemberInfoService {
                     twitterAccounts: [],
                 };
 
-                seiyuuTwitterAccountList[projectName] = listOfProject;
+                personTwitterAccountList[projectName] = listOfProject;
             }
 
             listOfProject.twitterAccounts.push(twitterAccount);
         }
 
-        return Object.values(seiyuuTwitterAccountList);
+        return Object.values(personTwitterAccountList);
     }
 
     /**

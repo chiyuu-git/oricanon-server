@@ -9,7 +9,7 @@ import {
     FindProjectRecordInRange,
 } from '../common/dto/query-record-data.dto';
 import { LLChara, LLNChara, LLSChara, LLSSChara } from './chara-tag.entity';
-import { MemberRecordEntity } from '../common/record.entity';
+import { MemberRecordEntity, RestMember } from '../common/record.entity';
 import { CreateRecordOfProjectDto } from '../common/dto/create-record-data.dto';
 
 @Injectable()
@@ -28,6 +28,9 @@ export class CharaTagService extends RecordDataService {
     @InjectRepository(LLSSChara)
     LLSSCharaRepository: Repository<LLSSChara>;
 
+    @InjectRepository(RestMember)
+    RestMemberRepository: Repository<RestMember>;
+
     getRepositoryByProject(projectName: ProjectName): Repository<MemberRecordEntity> {
         switch (projectName) {
             case ProjectName.ll:
@@ -39,7 +42,7 @@ export class CharaTagService extends RecordDataService {
             case ProjectName.llss:
                 return this.LLSSCharaRepository;
             default:
-                throw new HttpException(`CharaRepository of ${projectName} not exist`, HttpStatus.NOT_FOUND);
+                return this.RestMemberRepository;
         }
     }
 
@@ -49,19 +52,16 @@ export class CharaTagService extends RecordDataService {
     async findOneProjectRecord(params: QueryOneProjectRecordInCategory): Promise<null |number[]> {
         const { recordType } = params;
 
-        // 聚合类型 record
         switch (recordType) {
+            // 聚合类型 record
             case CharaRecordType.illustWithNovel:
                 return this.findIllustWithNovel(params);
             case CharaRecordType.favorSum:
                 return this.findFavorUnion(params);
+            // 普通类型 record
             default:
+                return this.findOneProjectRecordInDB(params);
         }
-
-        // 普通类型 record
-        return this.findOneProjectRecordInDB({
-            ...params,
-        });
     }
 
     /**
@@ -71,9 +71,11 @@ export class CharaTagService extends RecordDataService {
         const [illustRecords, novelRecords] = await Promise.all([
             this.findOneProjectRecordInDB({
                 ...params,
+                recordType: CharaRecordType.illust,
             }),
             this.findOneProjectRecordInDB({
                 ...params,
+                recordType: CharaRecordType.novel,
             }),
         ]);
 

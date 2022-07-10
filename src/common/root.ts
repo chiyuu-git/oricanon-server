@@ -5,10 +5,11 @@ export enum ProjectName {
     lls = 'lls',
     lln = 'lln',
     llss = 'llss',
+    rest = 'rest'
 }
 
 export enum Category {
     chara = 'chara',
-    seiyuu = 'seiyuu',
+    person = 'person',
     couple = 'couple',
 }

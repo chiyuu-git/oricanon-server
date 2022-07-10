@@ -26,19 +26,4 @@ export class EventController {
     createSoloEvent(@Query() createSoloEventDto: CreateSoloEventDto) {
         return this.eventService.createSoloEvent(createSoloEventDto);
     }
-
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.eventService.findOne(+id);
-    }
-
-    @Patch(':id')
-    update(@Param('id') id: string, @Body() updateEventDto: UpdateGroupEventDto) {
-        return this.eventService.update(+id, updateEventDto);
-    }
-
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.eventService.remove(+id);
-    }
 }
