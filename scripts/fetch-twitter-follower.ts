@@ -7,12 +7,14 @@ import * as superagent from 'superagent';
 import cheerio from 'cheerio';
 import { ProjectName } from '@common/root';
 import { postProjectFollowerRecord } from './common/fetch';
-import { HOST, WEEKLY_SEIYUU_SITE } from './common/constant';
+import { HOST } from './common/constant';
 
 type TwitterFollowerList = {
     projectName: ProjectName;
     twitterAccounts: string[];
 }[]
+
+export const WEEKLY_SEIYUU_SITE = 'https://headline.client.jp/ranking_f.html';
 
 // 找到每个账号对应的fo数
 // Cheerio<Element>不是常规的Element，不好做类型处理，先置为 any
@@ -59,16 +61,18 @@ export async function fetchTwitterFollower() {
         const allAccountNode = $('#f_rank>tbody>tr>td>a');
 
         for (const { projectName, twitterAccounts } of twitterAccountList) {
-            // map 推特账号数组
-            const records = findFollowerCount(twitterAccounts, allAccountNode);
+            if (projectName !== ProjectName.rest) {
+                // map 推特账号数组
+                const records = findFollowerCount(twitterAccounts, allAccountNode);
 
-            console.log('projectName:', projectName);
-            console.log('fos:', records);
-            if (records) {
-                postProjectFollowerRecord({
-                    projectName,
-                    records,
-                });
+                console.log('projectName:', projectName);
+                console.log('fos:', records);
+                if (records) {
+                    postProjectFollowerRecord({
+                        projectName,
+                        records,
+                    });
+                }
             }
         }
     }

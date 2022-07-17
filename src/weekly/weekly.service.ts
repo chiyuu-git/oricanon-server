@@ -2,11 +2,12 @@ import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 // service
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordService } from 'src/record/record.service';
-import { ProjectName, Category } from '@common/root';
-import { PersonRecordType } from '@common/record';
+import { ProjectName, Category, DateString } from '@common/root';
+import { PersonRecordType, RecordType } from '@common/record';
 import { MemberWeeklyInfo, ProjectInfo, RecordTypeWeeklyInfo } from '@common/weekly';
 import { ProjectMemberListKey, ProjectMemberListMap } from 'src/member-info/common';
 import { MemberInfo } from '@src/member-info/entities/member-info.entity';
+
 import {
     QueryRecordTypeWeekly,
     QueryWeeklyDetail,
@@ -33,7 +34,7 @@ interface WeeklyRelativeInfo {
 }
 
 @Injectable()
-export class WeeklyService implements OnApplicationBootstrap {
+export class WeeklyService {
     projectMemberListMap: ProjectMemberListMap;
 
     constructor(
@@ -41,15 +42,16 @@ export class WeeklyService implements OnApplicationBootstrap {
         private readonly memberInfoService: MemberInfoService,
     ) {}
 
-    /**
-     * 生命周期 初始化
-     */
-    async onApplicationBootstrap() {
-        this.projectMemberListMap = await this.memberInfoService.formatListWithProject();
+    getProjectMemberList(category: Category, projectName: ProjectName) {
+        return this.memberInfoService.findProjectMemberListOfCategory(
+            category,
+            projectName,
+            { onlyActive: false },
+        );
     }
 
     async getRecordTypeWeekly({ category, recordType, endDate }: QueryRecordTypeWeekly) {
-        const result = await this.recordService.findWeeklyRelativeRecord(
+        const result = await this.findWeeklyRelativeRecord(
             category,
             recordType,
             endDate,
@@ -61,7 +63,7 @@ export class WeeklyService implements OnApplicationBootstrap {
 
         const { weekRange, relativeRecordOfType } = result;
 
-        const weeklyRelativeInfo = this.processRelativeRecord(
+        const weeklyRelativeInfo = await this.processRelativeRecord(
             category,
             relativeRecordOfType,
         );
@@ -82,9 +84,58 @@ export class WeeklyService implements OnApplicationBootstrap {
     }
 
     /**
+     * 获取指定 category 和 recordType 的 activeMember 的周相关数据
+     */
+    async findWeeklyRelativeRecord(
+        category: Category,
+        recordType: RecordType,
+        endDate?: string,
+    ) {
+        const relativeDate = await this.recordService.findRelativeDate(endDate);
+        const weekRange = {
+            from: relativeDate[1],
+            to: relativeDate[0],
+        };
+
+        const relativeRecordOfType = await Promise.all(
+            Object.values(ProjectName).map(async (projectName) => {
+                const memberList = await this.getProjectMemberList(category, projectName);
+
+                const [baseRecord, lastRecord, beforeLastRecord] = await Promise.all(
+                    relativeDate.map((date) => this.recordService.findMemberListRecord({
+                        category,
+                        projectName,
+                        recordType,
+                        memberList,
+                        date,
+                    })),
+                );
+                    // ts 4.4 支持
+                    // const legalRecord = baseRecord && lastRecord && beforeLastRecord;
+                    // record 为 false， 则 project 为空
+                if (baseRecord && lastRecord && beforeLastRecord) {
+                    return {
+                        projectName,
+                        recordType,
+                        baseRecord,
+                        lastRecord,
+                        beforeLastRecord,
+                    };
+                }
+                return null;
+            }),
+        );
+
+        return {
+            weekRange,
+            relativeRecordOfType,
+        };
+    }
+
+    /**
      * 处理周报相关的数据，接受 ModuleRelativeRecord ，返回
      */
-    private processRelativeRecord<Type extends Category>(
+    private async processRelativeRecord<Type extends Category>(
         category: Type,
         relativeRecordOfType: RelativeRecordOfType,
     ) {
@@ -101,11 +152,12 @@ export class WeeklyService implements OnApplicationBootstrap {
             if (projectRelativeRecord) {
                 const { projectName } = projectRelativeRecord;
                 const { projectRecord, projectInfo } = this.processProjectRelativeRecord(projectRelativeRecord);
-                const memberList = this.projectMemberListMap[projectName][`${category}s` as ProjectMemberListKey];
+                // eslint-disable-next-line no-await-in-loop
+                const memberList = await this.getProjectMemberList(category, projectName);
                 const memberInfo = this.formatRecordWithMemberList(
                     projectRecord,
                     // projectRelativeRecord 已经判断过了，此时 memberList 一定是有值的
-                    memberList!,
+                    memberList,
                 );
                 categoryInfo.projectInfoList.push(projectInfo);
                 categoryInfo.memberInfoList.push(...memberInfo);
@@ -204,12 +256,17 @@ export class WeeklyService implements OnApplicationBootstrap {
      * 3. 星/虹动画期间的日增线，平均线，这些线似乎可以加到 incrementRank，需要一个均线服务
      * 4. 需要一个分位线服务
      */
-    async getTwitterFollowerWeeklyDetail({ endDate }: QueryWeeklyDetail) {
+    async getTwitterFollowerWeeklyDetail({ projectName, endDate }: QueryWeeklyDetail) {
         const { from, to } = await this.recordService.findWeekRange(endDate);
-        const result = await this.recordService.findProjectRecordInRange({
+        const memberList = await this.getProjectMemberList(
+            Category.person,
+            projectName,
+        );
+        const result = await this.recordService.findMemberListRecordInRange({
             category: Category.person,
             recordType: PersonRecordType.twitterFollower,
-            projectName: ProjectName.llss,
+            projectName,
+            memberList,
             from,
             to,
         });

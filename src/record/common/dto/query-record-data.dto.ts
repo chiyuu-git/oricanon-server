@@ -1,4 +1,5 @@
 import { Category, ProjectName } from '@common/root';
+import { MemberCommonInfo } from '@common/member-info';
 import { RecordType } from '@common/record';
 
 /**
@@ -15,27 +16,30 @@ import { RecordType } from '@common/record';
  *
  * From 参数不可省略，应该由客户端保证传入
  */
-abstract class FindRecordInDB {
-    recordType: RecordType;
-}
-
-/**
- * category、date、projectName、recordType 可以从数据库所有表中查找到唯一的 projectRecord
- */
-export class FindOneProjectRecord extends FindRecordInDB {
-    date: string;
-
+abstract class FindRecordInDBParams {
     projectName: ProjectName;
+
+    recordType: RecordType;
+
+    date: string;
 }
 
-export class FindRecordInRange extends FindRecordInDB {
+export class FindMemberListRecord extends FindRecordInDBParams {
+    memberList: MemberCommonInfo[];
+}
+
+class FindRecordInRange {
+    recordType: RecordType;
+
     from: string;
 
     to: string;
 }
 
-export class FindProjectRecordInRange extends FindRecordInRange {
+export class FindMemberListRecordInRange extends FindRecordInRange {
     projectName: ProjectName;
+
+    memberList: MemberCommonInfo[];
 }
 export class FindMemberRecordInRange extends FindRecordInRange {
     romaName: string;
@@ -51,8 +55,10 @@ export class QueryOneRecord extends QueryRecord {
     date?: string;
 }
 
-export class QueryOneProjectRecord extends QueryOneRecord {
+export class QueryMemberListRecord extends QueryOneRecord {
     projectName: ProjectName;
+
+    memberList: MemberCommonInfo[];
 }
 
 export class QueryRecordInRange extends QueryRecord {
@@ -65,6 +71,12 @@ export class QueryProjectRecordInRange extends QueryRecordInRange {
     projectName: ProjectName;
 }
 
+export class QueryMemberListRecordInRange extends QueryRecordInRange {
+    projectName: ProjectName;
+
+    memberList: MemberCommonInfo[];
+}
+
 export class QueryMemberRecordInRange extends QueryRecordInRange {
     romaName: string;
 }
@@ -72,10 +84,12 @@ export class QueryMemberRecordInRange extends QueryRecordInRange {
 /**
  * 在某个基础类别下，查询单个 projectRecord 需要 date、projectName、recordType 三个参数
  */
-export class QueryOneProjectRecordInCategory {
+export class QueryMemberListRecordInCategory {
     date: string;
 
     projectName: ProjectName;
 
     recordType: RecordType;
+
+    memberList: MemberCommonInfo[];
 }

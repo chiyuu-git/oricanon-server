@@ -1,10 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { fetchTwitterFollower } from 'scripts/fetch-twitter-follower';
 import { fetchTwitterArticleDetail } from 'scripts/fetch-twitter-aricle-detail';
+import { fetchPixivTagCount } from 'scripts/fetch-pixiv-tag';
+import { fetchPixivTagViewCount } from 'scripts/fetch-pixiv-tag-view';
 import { AppModule } from './app.module';
-
-import { fetchTwitterFollower } from '../scripts/fetch-twitter-follower';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -26,6 +27,8 @@ bootstrap()
         // 服务启动之后再执行脚本;
         // fetchTwitterFollower();
         // fetchTwitterArticleDetail();
+        // fetchPixivTagCount();
+        // fetchPixivTagViewCount();
         const placeholder = 123;
         return true;
     })

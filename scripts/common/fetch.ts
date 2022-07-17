@@ -1,5 +1,8 @@
 // https://stackoverflow.com/questions/69087292/requirenode-fetch-gives-err-require-esm
 // v3 不支持 commonjs
+import { GetMemberInfoByType } from '@common/member-info';
+import { RecordType } from '@common/record';
+import { Category, ProjectName } from '@common/root';
 import fetch from 'node-fetch';
 import { HOST } from './constant';
 
@@ -18,6 +21,20 @@ type CreateArticleInteractDataDto = {
     quoteCount: number;
     favoriteCount: number;
     recordDate: string;
+}
+
+type QueryProjectMemberListDto = {
+    category: Category;
+    projectName: ProjectName;
+    onlyActive: boolean;
+}
+
+export type PostProjectRecord = {
+    route: string;
+    projectName: ProjectName;
+    recordType: RecordType;
+    records: number[];
+    onlyActive: boolean;
 }
 
 /**
@@ -47,9 +64,9 @@ export async function enhanceFetch(
     // 无论是GET还是POST都需要拼接参数
     let query = '';
     for (const [key, value] of Object.entries(params)) {
-        if (value) {
-            query += `${key}=${value}&`;
-        }
+        // 即使 value 为 undefined 也照样拼接
+        const valStr = typeof value === 'object' ? JSON.stringify(value) : value;
+        query += `${key}=${valStr}&`;
     }
     // 去除最后一个 &
     if (query) {
@@ -61,27 +78,21 @@ export async function enhanceFetch(
     }
 
     // 不同的请求不同的fetch
-    try {
-        switch (method) {
-            case 'GET':
-                response = await fetch(url);
-                break;
-            case 'POST':
-                response = await fetch(url, {
-                    method,
-                    headers: {
-                        'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                    },
-                    body: query,
-                    mode: 'cors',
-                });
-                break;
-            default:
-        }
-    }
-    // TODO: 服务器返回 error 不一定会触发 catch ，需要额外做判断
-    catch (error) {
-        console.log('Request Error:', error);
+    switch (method) {
+        case 'GET':
+            response = await fetch(url);
+            break;
+        case 'POST':
+            response = await fetch(url, {
+                method,
+                headers: {
+                    'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                },
+                body: query,
+                mode: 'cors',
+            });
+            break;
+        default:
     }
 
     const contentType = response.headers.get('content-type');
@@ -92,6 +103,7 @@ export async function enhanceFetch(
             console.log('Request Error:', await response.json());
         }
         console.log('Request Error:', await response.text());
+        return null;
     }
 
     return isJson ? response.json() : response.text();
@@ -117,20 +129,46 @@ export async function postProjectFollowerRecord({
     console.log(`${projectName} response:`, result);
 }
 
-export async function createArticle(createArticleDto: CreateArticle) {
-    const url = `${HOST}/twitter/create_article`;
-    const result = await enhanceFetch(url, createArticleDto, 'POST');
+export async function createArticle(body: CreateArticle) {
+    const url = `${HOST}/twitter/update_article`;
+    const result = await enhanceFetch(url, body, 'POST');
     console.log('createArticleResult:', result);
     return result;
 }
-export async function createArticleInteractData(createArticleInteractDataDto: CreateArticleInteractDataDto) {
+export async function createArticleInteractData(body: CreateArticleInteractDataDto) {
     const url = `${HOST}/twitter/create_article_interact_data`;
-    const result = await enhanceFetch(url, createArticleInteractDataDto, 'POST');
+    const result = await enhanceFetch(url, body, 'POST');
     console.log('createArticleInteractDataResult:', result);
     return result;
 }
 
 export async function getLiellaTwitterAccountList() {
     const result = await enhanceFetch(`${HOST}/member_info/person_twitter_account_list`);
-    return result[3].twitterAccounts;
+    return result[2].twitterAccounts;
+}
+
+export function getProjectMemberListOfCategory<Type extends Category>(
+    query: QueryProjectMemberListDto,
+): Promise<GetMemberInfoByType<Type>[]> {
+    return enhanceFetch(`${HOST}/member_info/project_member_list_of_category`, query);
+}
+
+export async function postProjectRecord(body: PostProjectRecord) {
+    const {
+        projectName,
+        records,
+        recordType,
+        route,
+        onlyActive,
+    } = body;
+    const date = '2022-07-15';
+    const url = `${HOST}/${route}`;
+    const res = await enhanceFetch(url, {
+        projectName,
+        recordType,
+        records,
+        date,
+        onlyActive,
+    }, 'POST');
+    console.log(`${projectName} ${recordType} response:`, res);
 }

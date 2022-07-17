@@ -5,8 +5,8 @@ import { Category, ProjectName } from '@common/root';
 import { CharaRecordType } from '@common/record';
 import { RecordDataService } from '../common/record-data-service';
 import {
-    QueryOneProjectRecordInCategory,
-    FindProjectRecordInRange,
+    FindMemberListRecordInRange,
+    QueryMemberListRecordInCategory,
 } from '../common/dto/query-record-data.dto';
 import { LLChara, LLNChara, LLSChara, LLSSChara } from './chara-tag.entity';
 import { MemberRecordEntity, RestMember } from '../common/record.entity';
@@ -49,7 +49,7 @@ export class CharaTagService extends RecordDataService {
     /**
      * findOneCharaProjectRecord
      */
-    async findOneProjectRecord(params: QueryOneProjectRecordInCategory): Promise<null |number[]> {
+    async findMemberListRecord(params: QueryMemberListRecordInCategory): Promise<null |number[]> {
         const { recordType } = params;
 
         switch (recordType) {
@@ -60,20 +60,20 @@ export class CharaTagService extends RecordDataService {
                 return this.findFavorUnion(params);
             // 普通类型 record
             default:
-                return this.findOneProjectRecordInDB(params);
+                return this.findMemberListRecordInDB(params);
         }
     }
 
     /**
      * 聚合 illust 和 novel
      */
-    async findIllustWithNovel(params: QueryOneProjectRecordInCategory): Promise<null | number[]> {
+    async findIllustWithNovel(params: QueryMemberListRecordInCategory): Promise<null | number[]> {
         const [illustRecords, novelRecords] = await Promise.all([
-            this.findOneProjectRecordInDB({
+            this.findMemberListRecordInDB({
                 ...params,
                 recordType: CharaRecordType.illust,
             }),
-            this.findOneProjectRecordInDB({
+            this.findMemberListRecordInDB({
                 ...params,
                 recordType: CharaRecordType.novel,
             }),
@@ -90,7 +90,7 @@ export class CharaTagService extends RecordDataService {
     /**
      * 聚合所有类型的 favor
      */
-    async findFavorUnion(params: QueryOneProjectRecordInCategory): Promise<null | number[]> {
+    async findFavorUnion(params: QueryMemberListRecordInCategory): Promise<null | number[]> {
         const [
             fiftyRecords,
             hundredRecords,
@@ -99,12 +99,12 @@ export class CharaTagService extends RecordDataService {
             fiveThousandRecords,
             tenThousandRecords,
         ] = await Promise.all([
-            this.findOneProjectRecordInDB({ ...params, recordType: CharaRecordType.fifty }),
-            this.findOneProjectRecordInDB({ ...params, recordType: CharaRecordType.hundred }),
-            this.findOneProjectRecordInDB({ ...params, recordType: CharaRecordType.fiveHundred }),
-            this.findOneProjectRecordInDB({ ...params, recordType: CharaRecordType.thousand }),
-            this.findOneProjectRecordInDB({ ...params, recordType: CharaRecordType.fiveThousand }),
-            this.findOneProjectRecordInDB({ ...params, recordType: CharaRecordType.tenThousand }),
+            this.findMemberListRecordInDB({ ...params, recordType: CharaRecordType.fifty }),
+            this.findMemberListRecordInDB({ ...params, recordType: CharaRecordType.hundred }),
+            this.findMemberListRecordInDB({ ...params, recordType: CharaRecordType.fiveHundred }),
+            this.findMemberListRecordInDB({ ...params, recordType: CharaRecordType.thousand }),
+            this.findMemberListRecordInDB({ ...params, recordType: CharaRecordType.fiveThousand }),
+            this.findMemberListRecordInDB({ ...params, recordType: CharaRecordType.tenThousand }),
         ]);
 
         if (!fiftyRecords || !hundredRecords || !fiveHundredRecords
@@ -121,7 +121,7 @@ export class CharaTagService extends RecordDataService {
             + tenThousandRecords[i]);
     }
 
-    async findProjectRecordInRange(params: FindProjectRecordInRange) {
+    async findMemberListRecordInRange(params: FindMemberListRecordInRange) {
         // 普通类型 record
         return this.findRangeProjectRecordInDB(params);
     }

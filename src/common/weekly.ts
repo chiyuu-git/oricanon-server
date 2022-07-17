@@ -154,3 +154,23 @@ export function getWeeklyFetchDate(dateStr: string) {
         // 非 fetchDate，一律属于nextFetchDate
         : getNextWeeklyFetchDate(dateStr);
 }
+
+/**
+ * 整理月榜的日子：
+ * 1. fetchDate 刚好是这个月的最后一天
+ * 2. fetchDate 是这个月的第一个 fetchDate
+ */
+export function isMonthlyDate(dateStr?: string | Date) {
+    const date = dateStr ? new Date(dateStr) : new Date();
+    if (isFetchDate(date)) {
+        // 判断是否是这个月的最后一天
+        const lastDate = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+        if (date.getDate() === lastDate) {
+            return true;
+        }
+        // 判断是否是这个月的第一个 fetchDate
+        // 如果小于等于6号，那么7天前的上一个 fetchDate
+        return date.getDate() <= 6;
+    }
+    return false;
+}

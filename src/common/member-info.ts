@@ -16,6 +16,7 @@ export interface MemberCommonInfo {
      */
     romaName: string;
     supportColor: string;
+    isActive: boolean;
 }
 
 export interface CharaInfo extends MemberCommonInfo {
@@ -42,4 +43,8 @@ export type GetMemberInfoByType<Type extends Category> = Type extends Category.c
 
 export type MemberInfoMap<Type extends Category > = {
     [romaName in string]: GetMemberInfoByType<Type>
+}
+
+export interface FindMemberListOptions {
+    onlyActive: boolean;
 }

@@ -24,5 +24,11 @@ export abstract class MemberInfo {
         name: 'support_color',
     })
     supportColor: string;
+
+    @Column({
+        type: 'boolean',
+        name: 'is_active',
+    })
+    isActive: boolean;
 }
 

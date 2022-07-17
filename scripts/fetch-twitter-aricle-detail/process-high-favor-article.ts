@@ -5,7 +5,7 @@ import { Locator, Response, BrowserContext } from 'playwright';
 import * as fs from 'fs';
 import { formatDate } from '@utils/date';
 import { createArticle, createArticleInteractData } from '../common/fetch';
-import { DOWNLOAD_PATH, getFileName } from '../common/file';
+import { DOWNLOAD_PATH, getTwitterPhotoFileName } from '../common/file';
 
 interface TweetDetailResult {
     /**
@@ -145,7 +145,7 @@ export async function processHighFavorArticle({
         source,
     } = articleInfo as unknown as ArticleInfo;
     const createdAt = new Date(created_at);
-    const fileNameCommon = getFileName(account, createdAt, uri);
+    const fileNameCommon = getTwitterPhotoFileName(account, createdAt, uri);
     const platformRegex = />([^<]*)</;
     const platformType = (platformRegex.exec(source) as RegExpExecArray)[1];
     const appendixType = extended_entities ? extended_entities.media[0].type : null;

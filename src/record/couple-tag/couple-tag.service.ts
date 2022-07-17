@@ -6,9 +6,9 @@ import { CoupleRecordType } from '@common/record';
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { RecordDataService } from '../common/record-data-service';
 import {
-    QueryOneProjectRecordInCategory,
-    FindOneProjectRecord,
-    FindProjectRecordInRange,
+    FindMemberListRecordInRange,
+    QueryMemberListRecordInCategory,
+    FindMemberListRecord,
 } from '../common/dto/query-record-data.dto';
 import { LLSSCouple } from './couple-tag.entity';
 import { CoupleRecordEntity } from '../common/record.entity';
@@ -35,11 +35,14 @@ export class CoupleTagService extends RecordDataService {
         }
     }
 
+    // async findOneProjectRecord(params: QueryOneProjectRecordInCategory): Promise<null |number[]> {
+    //     return this.handleCustomRecordType(params, this.findOneProjectRecordInDB);
+    // }
+
     /**
-     * findOneCoupleProjectRecord
-     * couple 聚合入口，根据 aggregationType 调用不同的聚合方法
+     * couple 聚合入口，根据 recordType 调用不同的聚合方法
      */
-    async findOneProjectRecord(params: QueryOneProjectRecordInCategory): Promise<null |number[]> {
+    async findMemberListRecord(params: QueryMemberListRecordInCategory): Promise<null | number[]> {
         const { recordType, projectName } = params;
 
         if (projectName !== ProjectName.llss) {
@@ -55,11 +58,11 @@ export class CoupleTagService extends RecordDataService {
                 return this.findIllustWithNovel(params);
             // 普通类型 record
             default:
-                return this.findOneProjectRecordInDB(params);
+                return this.findMemberListRecordInDB(params);
         }
     }
 
-    async findIllustWithNovel(params: QueryOneProjectRecordInCategory) {
+    async findIllustWithNovel(params: QueryMemberListRecordInCategory) {
         const [unionIllustRecord, unionNovelRecord] = await Promise.all(
             [
                 this.findUnionIllust(params),
@@ -73,7 +76,7 @@ export class CoupleTagService extends RecordDataService {
         return null;
     }
 
-    async findUnionNovel(params: QueryOneProjectRecordInCategory) {
+    async findUnionNovel(params: QueryMemberListRecordInCategory) {
         return this.findUnion(params, {
             default: CoupleRecordType.novel,
             reverse: CoupleRecordType.novelReverse,
@@ -81,7 +84,7 @@ export class CoupleTagService extends RecordDataService {
         });
     }
 
-    async findUnionIllust(params: QueryOneProjectRecordInCategory) {
+    async findUnionIllust(params: QueryMemberListRecordInCategory) {
         return this.findUnion(params, {
             default: CoupleRecordType.illust,
             reverse: CoupleRecordType.illustReverse,
@@ -89,8 +92,8 @@ export class CoupleTagService extends RecordDataService {
         });
     }
 
-    async findUnion(params: QueryOneProjectRecordInCategory, typeList: QueryUnionList) {
-        const findOptionList: FindOneProjectRecord[] = Object.values(typeList)
+    async findUnion(params: QueryMemberListRecordInCategory, typeList: QueryUnionList) {
+        const findOptionList: FindMemberListRecord[] = Object.values(typeList)
             .map((recordType) => ({
                 category: Category.couple,
                 ...params,
@@ -103,16 +106,20 @@ export class CoupleTagService extends RecordDataService {
             defaultRecord,
             reverseRecord,
             intersectionRecord,
-        ] = await Promise.all(findOptionList.map((findOption) => this.findOneProjectRecordInDB(findOption)));
+        ] = await Promise.all(findOptionList.map((findOption) => this.findMemberListRecordInDB(findOption)));
 
-        if (!defaultRecord || !reverseRecord || !intersectionRecord) {
+        if (!defaultRecord) {
             return null;
         }
 
-        return defaultRecord.map((record, i) => record + reverseRecord[i] - intersectionRecord[i]);
+        return defaultRecord.map((record, i) => {
+            const reverse = (reverseRecord && reverseRecord[i]) || 0;
+            const intersection = (intersectionRecord && intersectionRecord[i]) || 0;
+            return record + reverse - intersection;
+        });
     }
 
-    async findProjectRecordInRange(params: FindProjectRecordInRange) {
+    async findMemberListRecordInRange(params: FindMemberListRecordInRange) {
         if (params.projectName !== ProjectName.llss) {
             return null;
         }

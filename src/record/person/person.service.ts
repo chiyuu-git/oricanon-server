@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Category, ProjectName } from '@common/root';
 import {
-    QueryOneProjectRecordInCategory,
-    FindProjectRecordInRange,
+    FindMemberListRecordInRange,
+    QueryMemberListRecordInCategory,
 } from '../common/dto/query-record-data.dto';
 import { LLNPerson, LLSPerson, LLSSPerson } from './person.entity';
 import { MemberRecordEntity, RestMember } from '../common/record.entity';
@@ -42,15 +42,15 @@ export class PersonFollowerService extends RecordDataService {
     /**
      * findOnePersonProjectRecord
      */
-    async findOneProjectRecord(params: QueryOneProjectRecordInCategory): Promise<null | number[]> {
+    async findMemberListRecord(params: QueryMemberListRecordInCategory): Promise<null | number[]> {
         if (params.projectName === ProjectName.ll) {
             return null;
         }
 
-        return this.findOneProjectRecordInDB(params);
+        return this.findMemberListRecordInDB(params);
     }
 
-    async findProjectRecordInRange(params: FindProjectRecordInRange) {
+    async findMemberListRecordInRange(params: FindMemberListRecordInRange) {
         if (params.projectName === ProjectName.ll) {
             return null;
         }

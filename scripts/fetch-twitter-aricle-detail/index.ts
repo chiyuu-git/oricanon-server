@@ -6,7 +6,7 @@ import { getPrevWeeklyFetchDate } from '@common/weekly';
 import { formatDate } from '@utils/date';
 import { BrowserContext, chromium } from 'playwright';
 import { getLiellaTwitterAccountList } from 'scripts/common/fetch';
-import { DOWNLOAD_PATH, getFileName } from '../common/file';
+import { DOWNLOAD_PATH, getTwitterPhotoFileName } from '../common/file';
 import { processHighFavorArticle } from './process-high-favor-article';
 
 interface TwitterAricleSearchOptions {
@@ -38,6 +38,7 @@ async function getTwitterArticleOfAccount(context: BrowserContext, searchOptions
     const { account, minFaves, since, until, saveFaves } = searchOptions;
     // from:lovelive_staff min_faves:5000 since:2022-06-12 until:2022-06-17
     const searchTrick = `from:${account} min_faves:${minFaves} since:${since} until:${until}`;
+    console.log('searchTrick:', searchTrick);
     // const searchTrick = `from:${account} min_faves:10000`;
 
     await page.fill('input[placeholder="搜索 Twitter"]', searchTrick);
@@ -55,7 +56,13 @@ async function getTwitterArticleOfAccount(context: BrowserContext, searchOptions
     });
 
     let currentArticle = await page.locator('article >> nth=0');
-    await currentArticle.waitFor();
+    try {
+        await currentArticle.waitFor();
+    }
+    catch (error) {
+        console.log('error:', error);
+        return;
+    }
     let articleCount = await currentArticle.count();
 
     const fetchFailedList: string[] = [];
@@ -81,7 +88,7 @@ async function getTwitterArticleOfAccount(context: BrowserContext, searchOptions
             }
             // 截图
             if (createdAt) {
-                const fileNameCommon = getFileName(account, createdAt, url.split('/').at(-1) as string);
+                const fileNameCommon = getTwitterPhotoFileName(account, createdAt, url.split('/').at(-1) as string);
                 await currentArticle.screenshot({
                     path: `./${DOWNLOAD_PATH}/${account}/${fileNameCommon}.png`,
                 });
@@ -121,7 +128,7 @@ export async function fetchTwitterArticleDetail() {
     //   ]
     // const account = 'lovelive_staff';
     // 获取搜索参数
-    const account = 'SayuriDate';
+    const account = 'AyaEmori_BOX';
     // 查询的标准是 1000，可以保证看到所有有意义的推特
     // 记录的标准是 7000，低于 7000 的直接删掉就好。
     const minFaves = 1000;
@@ -137,19 +144,26 @@ export async function fetchTwitterArticleDetail() {
 
     // 如果是周五以外的时间回溯，那么我需要手动指定 since 和 since + 7
     // 动画之前的 6000 就要保存了，再早的 5000 就要保存
-    const since = '2020-01-01';
-    const until = '2021-01-01';
+    const since = '2022-07-02';
+    const until = '2022-07-09';
     await getTwitterArticleOfAccount(context, {
         account,
         minFaves,
         since,
         until,
-        saveFaves: 5000,
+        saveFaves: 6000,
     });
     // const liellaTwitterAccountList: string[] = await getLiellaTwitterAccountList();
     // console.log('liellaTwitterAccountList:', liellaTwitterAccountList);
-    // for (const account of liellaTwitterAccountList) {
-    //     await getTwitterArticleOfAccount(account, context);
+    // for (const [index, account] of Object.entries(liellaTwitterAccountList)) {
+    //     const saveFaves = +index <= 4 ? 7000 : 6000;
+    //     await getTwitterArticleOfAccount(context, {
+    //         account,
+    //         minFaves,
+    //         since,
+    //         until,
+    //         saveFaves,
+    //     });
     // }
 
     console.log('done');

@@ -24,6 +24,8 @@ export abstract class RecordEntity {
         type: 'int',
     })
     record: number;
+
+    memberId: number;
 }
 
 export abstract class MemberRecordEntity extends RecordEntity {
@@ -31,7 +33,7 @@ export abstract class MemberRecordEntity extends RecordEntity {
         type: 'int',
         name: 'member_id',
     })
-    memberId: number;
+    declare memberId: number;
 }
 
 export abstract class CoupleRecordEntity extends RecordEntity {
@@ -39,7 +41,7 @@ export abstract class CoupleRecordEntity extends RecordEntity {
         type: 'int',
         name: 'couple_id',
     })
-    memberId: number;
+    declare memberId: number;
 }
 
 @Entity({ database: RECORD_DATA_BASE, name: 'rest' })

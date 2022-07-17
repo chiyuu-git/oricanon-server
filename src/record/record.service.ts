@@ -9,12 +9,11 @@ import { CoupleTagService } from './couple-tag/couple-tag.service';
 import { PersonFollowerService } from './person/person.service';
 import { RecordDataService } from './common/record-data-service';
 import {
+    QueryMemberListRecord,
+    QueryMemberListRecordInRange,
     QueryMemberRecordInRange,
-    QueryOneProjectRecord,
-    QueryProjectRecordInRange,
-} from './common/dto/query-record-data.dto';
 
-type RelativeDate = DateString[];
+} from './common/dto/query-record-data.dto';
 
 @Injectable()
 export class RecordService {
@@ -26,7 +25,7 @@ export class RecordService {
         private readonly personFollowerService: PersonFollowerService,
     ) {}
 
-    getServiceByCategory(category: Category) {
+    private getServiceByCategory(category: Category) {
         switch (category) {
             case Category.chara:
                 return this.charaTagService;
@@ -51,89 +50,9 @@ export class RecordService {
     }
 
     /**
-     * 去 service 获取单个企划的数据
-     */
-    async findOneProjectRecord({
-        category,
-        recordType,
-        projectName,
-        date,
-    }: QueryOneProjectRecord) {
-        const targetDate = await this.getDefaultEndDate(date);
-
-        return this.getServiceByCategory(category).findOneProjectRecord({
-            projectName,
-            recordType,
-            date: targetDate,
-        });
-    }
-
-    /**
-     * 获取指定 category 和 recordType 下所有企划的周相关数据
-     */
-    async findWeeklyRelativeRecord(
-        category: Category,
-        recordType: RecordType,
-        endDate?: string,
-    ) {
-        const relativeDate = await this.findRelativeDate(endDate);
-        const weekRange = {
-            from: relativeDate[1],
-            to: relativeDate[0],
-        };
-
-        const relativeRecordOfType = await Promise.all(
-            Object.values(ProjectName).map(async (projectName) => {
-                const [baseRecord, lastRecord, beforeLastRecord] = await this.findProjectRelativeRecord(
-                    recordType,
-                    this.getServiceByCategory(category),
-                    projectName,
-                    relativeDate,
-                );
-                // ts 4.4 支持
-                // const legalRecord = baseRecord && lastRecord && beforeLastRecord;
-                // record 为 false， 则 project 为空
-                if (baseRecord && lastRecord && beforeLastRecord) {
-                    return {
-                        projectName,
-                        recordType,
-                        baseRecord,
-                        lastRecord,
-                        beforeLastRecord,
-                    };
-                }
-                return null;
-            }),
-        );
-
-        return {
-            weekRange,
-            relativeRecordOfType,
-        };
-    }
-
-    /**
-     * 去 service 获取单个企划的数据
-     */
-    async findProjectRelativeRecord(
-        recordType: RecordType,
-        service: RecordDataService,
-        projectName: ProjectName,
-        relativeDate: RelativeDate,
-    ) {
-        return Promise.all(
-            relativeDate.map((date) => service.findOneProjectRecord({
-                projectName,
-                recordType,
-                date,
-            })),
-        );
-    }
-
-    /**
      * 根据 endDate 获取 上周及上上周的日期
      */
-    private async findRelativeDate(endDate?: string): Promise<DateString[]> {
+    async findRelativeDate(endDate?: string): Promise<DateString[]> {
         let baseDate = endDate;
 
         if (!baseDate) {
@@ -164,65 +83,76 @@ export class RecordService {
         };
     }
 
-    async findProjectRecordInRange({
+    /**
+     * 去 service 获取单个企划的数据
+     */
+    async findMemberListRecord({
         category,
         recordType,
+        projectName,
+        memberList,
+        date,
+    }: QueryMemberListRecord) {
+        const targetDate = await this.getDefaultEndDate(date);
+
+        if (memberList.length === 0) {
+            return null;
+        }
+
+        return this.getServiceByCategory(category).findMemberListRecord({
+            projectName,
+            recordType,
+            memberList,
+            date: targetDate,
+        });
+    }
+
+    async findMemberListRecordInRange({
+        category,
+        recordType,
+        projectName,
+        memberList,
         from,
         to,
-        projectName,
-    }: QueryProjectRecordInRange) {
+    }: QueryMemberListRecordInRange) {
         const endDate = await this.getDefaultEndDate(to);
 
-        return this.getServiceByCategory(category).findProjectRecordInRange({
+        if (memberList.length === 0) {
+            return null;
+        }
+
+        return this.getServiceByCategory(category).findMemberListRecordInRange({
             recordType,
             projectName,
+            memberList,
             from,
             to: endDate,
         });
     }
 
     /**
-     * 查找历史周增数组
-     * 没有指定 project 或 member，默认以 project 维度返回所有数据
-     */
-    async findAllProjectWeekIncrementInRange(
-        category: Category,
-        recordType: RecordType,
-        projectList: ProjectName[],
-        from: string,
-        to?: string,
-    ) {
-        const allProjectIncrementRecordInRange = await Promise.all(
-            projectList
-                .map(async (projectName) => this.findProjectWeekIncrementInRange({
-                    category,
-                    recordType,
-                    from,
-                    to,
-                    projectName,
-                })),
-        );
-
-        return allProjectIncrementRecordInRange;
-    }
-
-    /**
      * 周增数据是可以由现有数据计算得出的，因此不应该放在外部的 service
      */
-    async findProjectWeekIncrementInRange({
+    async findMemberListWeekIncrementInRange({
         category,
         recordType,
+        projectName,
+        memberList,
         from,
         to,
-        projectName,
-    }: QueryProjectRecordInRange) {
+    }: QueryMemberListRecordInRange) {
         const endDate = await this.getDefaultEndDate(to);
 
-        const recordInRange = await this.getServiceByCategory(category).findProjectRecordInRange({
-            from,
-            to: endDate,
+        if (memberList.length === 0) {
+            return null;
+        }
+
+        const recordInRange = await this.getServiceByCategory(category).findMemberListRecordInRange({
             projectName,
             recordType,
+            memberList,
+            from,
+            to: endDate,
         });
 
         if (!recordInRange) {

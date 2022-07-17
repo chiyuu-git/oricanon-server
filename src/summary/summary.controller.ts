@@ -26,7 +26,7 @@ export class SummaryController {
 
     @Get('/week_increment_of_project_in_range')
     findWeekIncrementOfProjectInRange(@Query() query: QueryProjectRecordInRangeDto) {
-        return this.service.getProjectWeekIncrementInRange(query);
+        return this.service.getMemberListWeekIncrementInRange(query);
     }
 
     @Get('/week_increment_of_member_in_range')

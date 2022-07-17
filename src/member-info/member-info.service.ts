@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category, ProjectName } from '@common/root';
-import { MemberInfoMap, GetMemberInfoByType, MemberCommonInfo } from '@common/member-info';
+import { MemberInfoMap, GetMemberInfoByType, MemberCommonInfo, FindMemberListOptions } from '@common/member-info';
 import { Repository } from 'typeorm';
 import { CharaInfo } from './entities/chara-info.entity';
 import { CoupleInfo } from './entities/couple-info.entity';
@@ -24,6 +24,10 @@ type ProjectCoupleTagListMap = Record<ProjectName, {
     pixivReverseTags: string[];
     pixivIntersectionTags: string[];
 }>
+
+const defaultFindMemberListOptions = {
+    onlyActive: true,
+};
 
 @Injectable()
 export class MemberInfoService {
@@ -83,154 +87,46 @@ export class MemberInfoService {
         return member;
     }
 
-    findProjectMemberInfoByCategory<Type extends Category>(
+    /**
+     * 核心查询方法，查询 category 下的所有 memberInfo
+     */
+    findMemberListOfCategory<Type extends Category>(
+        type: Type,
+        options?: FindMemberListOptions
+    ): Promise<GetMemberInfoByType<Type>[]>
+    findMemberListOfCategory(type: Category, { onlyActive }: FindMemberListOptions = defaultFindMemberListOptions) {
+        const repository = this.getRepositoryByType(type);
+
+        return onlyActive
+            ? repository.find({ where: { isActive: true } })
+            : repository.find();
+    }
+
+    /**
+     * 核心查询方法，查询 category 和 project 下的 memberInfo
+     */
+    findProjectMemberListOfCategory<Type extends Category>(
         category: Type,
         projectName: ProjectName,
+        options?: FindMemberListOptions
     ): Promise<GetMemberInfoByType<Type>[]>
-    findProjectMemberInfoByCategory(
+    findProjectMemberListOfCategory(
         category: Category,
         projectName: ProjectName,
+        { onlyActive }: FindMemberListOptions = defaultFindMemberListOptions,
     ) {
         const repository = this.getRepositoryByType(category);
 
-        return repository.find({
-            where: { projectName },
-        });
-    }
-
-    findMemberInfoListByCategory<Type extends Category>(type: Type): Promise<GetMemberInfoByType<Type>[]>
-    findMemberInfoListByCategory(type: Category) {
-        const repository = this.getRepositoryByType(type);
-
-        return repository.find();
-    }
-
-    /**
-     * 获取所有 角色 的 tag
-     */
-    async findCharaTagList() {
-        const charaList = await this.findMemberInfoListByCategory(Category.chara);
-        const charaTagList: ProjectCharaTagListMap = {} as ProjectCharaTagListMap;
-
-        for (const charaInfo of charaList) {
-            const { projectName, pixivTag } = charaInfo;
-            let listOfProject = charaTagList[projectName];
-
-            if (!listOfProject) {
-                listOfProject = {
-                    projectName,
-                    pixivTags: [],
-                };
-
-                charaTagList[projectName] = listOfProject;
-            }
-
-            listOfProject.pixivTags.push(pixivTag);
-        }
-
-        return Object.values(charaTagList);
-    }
-
-    /**
-     * 获取所有 person 的 twitter account
-     */
-    async findPersonTwitterAccountList() {
-        const personList = await this.findMemberInfoListByCategory(Category.person);
-        const personTwitterAccountList: ProjectPersonTwitterAccountListMap = {} as ProjectPersonTwitterAccountListMap;
-
-        for (const personInfo of personList) {
-            const { projectName, twitterAccount } = personInfo;
-            let listOfProject = personTwitterAccountList[projectName];
-
-            if (!listOfProject) {
-                listOfProject = {
-                    projectName,
-                    twitterAccounts: [],
-                };
-
-                personTwitterAccountList[projectName] = listOfProject;
-            }
-
-            listOfProject.twitterAccounts.push(twitterAccount);
-        }
-
-        return Object.values(personTwitterAccountList);
-    }
-
-    /**
-     * 获取所有 couple 的 tag
-     */
-    async findCoupleTagList() {
-        const coupleList = await this.findMemberInfoListByCategory(Category.couple);
-        const coupleTagList: ProjectCoupleTagListMap = {} as ProjectCoupleTagListMap;
-
-        for (const charaInfo of coupleList) {
-            const { projectName, pixivTag, pixivReverseTag } = charaInfo;
-            let listOfProject = coupleTagList[projectName];
-
-            if (!listOfProject) {
-                listOfProject = {
-                    projectName,
-                    pixivTags: [],
-                    pixivReverseTags: [],
-                    pixivIntersectionTags: [],
-                };
-
-                coupleTagList[projectName] = listOfProject;
-            }
-
-            listOfProject.pixivTags.push(pixivTag);
-            listOfProject.pixivReverseTags.push(pixivReverseTag);
-            listOfProject.pixivIntersectionTags.push(`${pixivTag} ${pixivReverseTag}`);
-        }
-
-        return Object.values(coupleTagList);
-    }
-
-    /**
-     * 以 projectName 为 key 整合 memberList``
-     */
-    async formatListWithProject() {
-        const projectMemberListMap = <ProjectMemberListMap>{};
-
-        const pendingFormatters = Object.values(Category).map((type) => {
-            const pendingFormatter = this.findMemberInfoListByCategory(type)
-                .then((memberInfoList) => {
-                    for (const memberInfo of memberInfoList) {
-                        const { projectName } = memberInfo;
-                        const listType: ProjectMemberListKey = `${type}s`;
-                        let projectMemberList = projectMemberListMap[projectName];
-
-                        if (!projectMemberList) {
-                            projectMemberList = {
-                                charas: [],
-                                projectName,
-                            };
-                            projectMemberListMap[projectName] = projectMemberList;
-                        }
-
-                        if (!projectMemberList[listType]) {
-                            projectMemberList[listType] = [];
-                        }
-                        // 函数内部类型没必要过窄，只需要返回值类型是明确的即可
-                        (projectMemberList[listType] as MemberInfo[])?.push(memberInfo);
-                    }
-                    return true;
-                })
-                .catch((error) => console.error(error));
-            return pendingFormatter;
-        });
-
-        await Promise.all(pendingFormatters);
-
-        return projectMemberListMap;
+        return onlyActive
+            ? repository.find({ where: { projectName, isActive: true } })
+            : repository.find({ where: { projectName } });
     }
 
     /**
      * 获取基础类型的 memberInfoMap，以 romaName 为 key
      */
-    async findMemberInfoMapOfType<Type extends Category>(type: Type) {
-        const memberInfoList = await this.findMemberInfoListByCategory(type);
+    async findMemberInfoMapOfCategory<Type extends Category>(type: Type, options?: FindMemberListOptions) {
+        const memberInfoList = await this.findMemberListOfCategory(type, options);
         const memberInfoMap = <MemberInfoMap<Type>>{};
         for (const memberInfo of memberInfoList) {
             const { romaName } = memberInfo;

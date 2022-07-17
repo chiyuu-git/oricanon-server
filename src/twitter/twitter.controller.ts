@@ -10,7 +10,7 @@ import { CreateArticleInteractDataDto } from './dto/create-article-interact-data
 export class TwitterController {
     constructor(private readonly twitterService: ArticleService) {}
 
-    @Post('/create_article')
+    @Post('/update_article')
     createArticle(@Body() createArticleDto: CreateArticleDto) {
         return this.twitterService.updateArticleInfo(createArticleDto);
     }

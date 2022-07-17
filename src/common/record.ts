@@ -32,6 +32,8 @@ export enum CoupleRecordType {
     illust = 'pixiv_illust',
     illustReverse = 'pixiv_illust_reverse',
     illustIntersection = 'pixiv_illust_intersection',
+    tagView = 'pixiv_tag_view',
+    tagViewReverse = 'pixiv_tag_view_reverse',
     novel = 'pixiv_novel',
     novelReverse = 'pixiv_novel_reverse',
     novelIntersection = 'pixiv_novel_intersection',

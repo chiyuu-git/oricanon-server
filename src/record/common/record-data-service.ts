@@ -10,16 +10,16 @@ import { MemberInfoService } from 'src/member-info/member-info.service';
 import { ProjectMemberListKey, ProjectMemberListMap } from 'src/member-info/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-    QueryOneProjectRecordInCategory,
-    FindOneProjectRecord,
     FindMemberRecordInRange,
-    FindProjectRecordInRange,
+    FindMemberListRecordInRange,
+    QueryMemberListRecordInCategory,
+    FindMemberListRecord,
 } from './dto/query-record-data.dto';
 import { RecordEntity } from './record.entity';
 import { RecordTypeEntity } from './record-type.entity';
 import { CreateRecordOfProjectDto } from './dto/create-record-data.dto';
 
-interface ProjectRecordStr {
+interface RecordListStr {
     date: string;
     recordType: string;
     recordStr: string;
@@ -36,12 +36,13 @@ export interface ProjectRecordEntity {
     recordType: string;
     records: number[];
 }
+
 /**
  * 遍历的形式取决于是否 GROUP BY，
  * 如果类型比较复杂，GROUP BY recordType 类型会很清晰，不需要通过一个 date / recordType map 去汇聚 records
  * 如果类型很简单，GROUP BY 实际上是多了一次循环，需要 split 再 map records。此时不进行 GROUP BY，可以在单次循环生成 records
  */
-function formatProjectRecordStr(projectRecordStr: ProjectRecordStr[]): ProjectRecordEntity[] {
+function formatRecordListStr(projectRecordStr: RecordListStr[]): ProjectRecordEntity[] {
     return projectRecordStr.map(({ date, recordType, recordStr }) => ({
         date,
         recordType,
@@ -71,9 +72,8 @@ export interface RecordDataEntity {
     records: number[];
 }
 
-// TODO: 改造成泛型类，传入准确的实体
 @Injectable()
-export class RecordDataService implements OnApplicationBootstrap {
+export class RecordDataService {
     category: Category;
 
     @InjectRepository(RecordTypeEntity)
@@ -82,13 +82,6 @@ export class RecordDataService implements OnApplicationBootstrap {
     projectMemberListMap: ProjectMemberListMap;
 
     constructor(readonly memberInfoService: MemberInfoService) {}
-
-    /**
-     * 生命周期 初始化
-     */
-    async onApplicationBootstrap() {
-        this.projectMemberListMap = await this.memberInfoService.formatListWithProject();
-    }
 
     /**
      * 各基础类型 service 各自实现该方法，返回真实的 repository
@@ -102,9 +95,13 @@ export class RecordDataService implements OnApplicationBootstrap {
         projectName,
         recordType,
         records,
+        onlyActive,
     }: CreateRecordOfProjectDto) {
-        // eslint-disable-next-line max-len
-        const projectMember = this.projectMemberListMap[projectName][`${this.category}s` as ProjectMemberListKey];
+        const projectMember = await this.memberInfoService.findProjectMemberListOfCategory(
+            this.category,
+            projectName,
+            { onlyActive },
+        );
 
         if (!projectMember) {
             throw new HttpException(`Record of ${this.category} and ${projectName} not exist`, HttpStatus.NOT_FOUND);
@@ -122,22 +119,22 @@ export class RecordDataService implements OnApplicationBootstrap {
 
         const typeId = recordTypeEntity.recordTypeId;
 
-        // 检查是否已经存在相同日期和类型的数据
-        const result = await repository.find({
-            date,
-            typeId,
-        });
-
-        if (result.length > 0) {
-            throw new HttpException(
-                `Record of ${projectName} ${recordType} in ${date} is already exist`,
-                HttpStatus.FORBIDDEN,
-            );
-        }
-
         for (const [i, record] of records.entries()) {
             const memberInfo = projectMember[i];
             const { memberId } = memberInfo;
+
+            // eslint-disable-next-line no-await-in-loop
+            const memberRecord = await repository.find({
+                date,
+                typeId,
+                memberId,
+            });
+
+            // 检查是否已经存在相同日期和类型的数据
+            if (memberRecord.length > 0) {
+                // eslint-disable-next-line no-continue
+                continue;
+            }
 
             const data = {
                 date,
@@ -152,59 +149,68 @@ export class RecordDataService implements OnApplicationBootstrap {
     }
 
     /**
-     * 由各个基础 service 各自实现，查询单个 projectRecord
+     * 由各个基础 service 各自实现，查询单个 memberListRecord
      */
-    async findOneProjectRecord(params: QueryOneProjectRecordInCategory): Promise<null | number[]> {
+    async findMemberListRecord(params: QueryMemberListRecordInCategory): Promise<null | number[]> {
         throw new Error('Method not implemented.');
     }
 
     /**
-     * category date projectName recordType 均满足时，仅存在唯一 projectRecordEntity
+     * category date projectName recordType 均满足时，仅存在唯一 projectRecordEntity，获取相应的 memberListRecord
      */
-    async findOneProjectRecordInDB({ recordType, date, projectName }: FindOneProjectRecord) {
-        const idType = this.category === Category.couple ? 'couple_id' : 'member_id';
+    async findMemberListRecordInDB({
+        recordType,
+        projectName,
+        memberList,
+        date,
+    }: FindMemberListRecord) {
+        const isCoupleId = this.category === Category.couple;
+        const idType = isCoupleId ? 'couple_id' : 'member_id';
         const repository = this.getRepositoryByProject(projectName);
         const tableName = getRecordTableName(this.category, projectName);
+        const memberIdList = memberList.map(({ memberId }) => memberId);
 
         // member_id 顺序就是 fetch_order
-        const projectRecordStr: ProjectRecordStr[] = await repository.query(`
-            SELECT
-                '${date}' as date,
-                '${recordType}' as recordType,
-                GROUP_CONCAT(record ORDER BY ${idType} ASC SEPARATOR ',') as recordStr
-            FROM canon_record.${tableName}
-            JOIN canon_record.record_type t USING (type_id)
-            ${this.category !== Category.couple ? 'JOIN canon_member.member m USING (member_id)' : ''}
-            WHERE date = '${date}' AND t.name = '${recordType}'
-            ${this.category !== Category.couple ? 'AND m.is_active = 1' : ''}
-            GROUP BY date;
-        `);
+        const memberListRecordStr: RecordListStr[] = await repository.query(`
+                SELECT
+                    '${date}' as date,
+                    '${recordType}' as recordType,
+                    GROUP_CONCAT(record ORDER BY ${idType} ASC SEPARATOR ',') as recordStr
+                FROM canon_record.${tableName}
+                JOIN canon_record.record_type t USING (type_id)
+                JOIN canon_member.${this.category}_info m USING (${idType})
+                WHERE date = '${date}' AND t.name = '${recordType}' AND ${idType} IN (${memberIdList})
+                GROUP BY date;
+            `);
 
-        if (projectRecordStr.length === 0) {
+        if (memberListRecordStr.length === 0) {
             return null;
         }
 
-        return formatProjectRecordStr(projectRecordStr)[0].records;
+        return formatRecordListStr(memberListRecordStr)[0].records;
     }
 
     /**
      * 获取指定日期内该企划所有 record
      * 查询参数：基础类型、企划、recordType、range
      */
-    async findProjectRecordInRange(
-        params: FindProjectRecordInRange,
+    async findMemberListRecordInRange(
+        params: FindMemberListRecordInRange,
     ): Promise<null | ProjectRecordEntity[]> {
         throw new Error('Method not implemented.');
     }
 
     async findRangeProjectRecordInDB({
-        from, to,
         projectName,
+        memberList,
         recordType,
-    }: FindProjectRecordInRange) {
-        const idType = this.category === Category.couple ? 'couple_id' : 'member_id';
+        from, to,
+    }: FindMemberListRecordInRange) {
+        const isCoupleId = this.category === Category.couple;
+        const idType = isCoupleId ? 'couple_id' : 'member_id';
         const repository = this.getRepositoryByProject(projectName);
         const tableName = getRecordTableName(this.category, projectName);
+        const memberIdList = memberList.map(({ memberId }) => memberId);
 
         const queryStr = `
             SELECT
@@ -213,19 +219,21 @@ export class RecordDataService implements OnApplicationBootstrap {
                 GROUP_CONCAT(record ORDER BY ${idType} ASC SEPARATOR ',') as recordStr
             FROM canon_record.${tableName}
             JOIN canon_record.record_type t USING (type_id)
-            ${this.category !== Category.couple ? 'JOIN canon_member.member m USING (member_id)' : ''}
-            WHERE date BETWEEN '${from}' AND '${to}' AND t.name = '${recordType}'
-            ${this.category !== Category.couple ? 'AND m.is_active = 1' : ''}
+            JOIN canon_member.${this.category}_info m USING (${idType})
+            WHERE date BETWEEN '${from}' 
+                AND '${to}' 
+                AND t.name = '${recordType}'
+                AND ${idType} IN (${memberIdList})
             GROUP BY date;
         `;
         // console.log('queryStr:', queryStr);
-        const projectRecordStr: ProjectRecordStr[] = await repository.query(queryStr);
+        const projectRecordStr: RecordListStr[] = await repository.query(queryStr);
 
         if (projectRecordStr.length === 0) {
             return null;
         }
 
-        return formatProjectRecordStr(projectRecordStr);
+        return formatRecordListStr(projectRecordStr);
     }
 
     async findMemberRecordInRange({
