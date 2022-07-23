@@ -2,10 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Category, ProjectName } from '@common/root';
-import {
-    FindMemberListRecordInRange,
-    QueryMemberListRecordInCategory,
-} from '../common/dto/query-record-data.dto';
+import { FindMembersRecordInRange } from '../common/dto/query-record-data.dto';
 import { LLNPerson, LLSPerson, LLSSPerson } from './person.entity';
 import { MemberRecordEntity, RestMember } from '../common/record.entity';
 import { RecordDataService } from '../common/record-data-service';
@@ -39,24 +36,9 @@ export class PersonFollowerService extends RecordDataService {
         }
     }
 
-    /**
-     * findOnePersonProjectRecord
-     */
-    async findMemberListRecord(params: QueryMemberListRecordInCategory): Promise<null | number[]> {
-        if (params.projectName === ProjectName.ll) {
-            return null;
-        }
-
-        return this.findMemberListRecordInDB(params);
-    }
-
-    async findMemberListRecordInRange(params: FindMemberListRecordInRange) {
-        if (params.projectName === ProjectName.ll) {
-            return null;
-        }
-
+    async findMembersRecordInRange(params: FindMembersRecordInRange) {
         // 普通类型 record
-        return this.findRangeProjectRecordInDB(params);
+        return this.findMembersRangeRecordInDB(params);
     }
 
     async findLatestDailyFetchDate() {

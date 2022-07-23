@@ -19,24 +19,19 @@ export class SummaryController {
         return this.service.getHistoricalWeekIncrementOfPercentile(query);
     }
 
-    @Get('/week_increment_rank_in_range')
+    @Get('/week_increment_rank_in_range_of_category')
     findWeekIncrementRankInRange(@Query() query: QueryRecordInRangeDto) {
-        return this.service.getWeekIncrementRankInRange(query);
+        return this.service.getWeekIncrementRankInRangeOfCategory(query);
     }
 
     @Get('/week_increment_of_project_in_range')
     findWeekIncrementOfProjectInRange(@Query() query: QueryProjectRecordInRangeDto) {
-        return this.service.getMemberListWeekIncrementInRange(query);
+        return this.service.getMembersWeekIncrementInRange(query);
     }
 
     @Get('/week_increment_of_member_in_range')
     findWeekIncrementOfMemberInRange(@Query() query: QueryMemberRecordInRangeDto) {
         return this.service.getMemberWeekIncrementInRange(query);
-    }
-
-    @Get('/project_relative_increment')
-    findProjectRelativeIncrement(@Query() query: QueryProjectRecordInRangeDto) {
-        return this.service.getProjectRelativeIncrement(query);
     }
 
     @Get('/project_relative_increment_info')
@@ -45,8 +40,8 @@ export class SummaryController {
         return this.service.getProjectRelativeIncrementInfo(category, projectName, from, to);
     }
 
-    @Get('/relative_increment_in_range')
-    findRelativeIncrementInRange(@Query() query: QueryProjectRecordInRangeDto) {
-        return this.service.getRelativeIncrementInRange(query);
+    @Get('/relative_increment_since')
+    findRelativeIncrementSince(@Query() query: QueryProjectRecordInRangeDto) {
+        return this.service.getRelativeIncrementSince(query);
     }
 }

@@ -4,8 +4,8 @@ import { Category, ProjectName } from '@common/root';
 import { MemberInfoService } from './member-info.service';
 import {
     QueryMemberInfoByRomaNameDto,
-    QueryMemberListOfCategoryDto,
-    QueryProjectMemberListDto,
+    QueryMembersOfCategoryDto,
+    QueryProjectMembersDto,
 } from './dto/query-member-info.dto';
 
 @ApiTags('member_info')
@@ -14,18 +14,18 @@ export class MemberInfoController {
     constructor(private readonly service: MemberInfoService) {}
 
     @Get('/member_list_of_category')
-    getMemberListOfCategory(@Query() query: QueryMemberListOfCategoryDto) {
+    getMembersOfCategory(@Query() query: QueryMembersOfCategoryDto) {
         const { category, onlyActive } = query;
-        return this.service.findMemberListOfCategory(category, { onlyActive });
+        return this.service.findMembersOfCategory(category, { onlyActive });
     }
 
     @Get('/project_member_list_of_category')
-    getProjectMemberListOfCategory(@Query() query: QueryProjectMemberListDto) {
+    getProjectMembersOfCategory(@Query() query: QueryProjectMembersDto) {
         const { category, projectName, onlyActive } = query;
-        return this.service.findProjectMemberListOfCategory(category, projectName, { onlyActive });
+        return this.service.findProjectMembersOfCategory(category, projectName, { onlyActive });
     }
 
-    @Get('/member_info')
+    @Get('/member_info_of_name')
     @ApiQuery({ name: 'category', enum: Category })
     @ApiQuery({ name: 'romaName' })
     getMemberInfoByRomaName(@Query() { category, romaName }: QueryMemberInfoByRomaNameDto) {
@@ -34,7 +34,7 @@ export class MemberInfoController {
     }
 
     /**
-     * 返回以 romaName 为 key 整合全部 memberList
+     * 返回以 romaName 为 key 整合全部 members
      */
     @Get('member_info_map_of_category')
     @ApiQuery({ name: 'type', enum: Category })

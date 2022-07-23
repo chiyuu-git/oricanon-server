@@ -1,8 +1,9 @@
 // https://stackoverflow.com/questions/69087292/requirenode-fetch-gives-err-require-esm
 // v3 不支持 commonjs
-import { GetMemberInfoByType } from '@common/member-info';
+import { GetMemberInfoByCategory } from '@common/member-info';
 import { RecordType } from '@common/record';
 import { Category, ProjectName } from '@common/root';
+import { formatDate } from '@utils/date';
 import fetch from 'node-fetch';
 import { HOST } from './constant';
 
@@ -23,10 +24,10 @@ type CreateArticleInteractDataDto = {
     recordDate: string;
 }
 
-type QueryProjectMemberListDto = {
+type QueryProjectMembersDto = {
     category: Category;
     projectName: ProjectName;
-    onlyActive: boolean;
+    onlyActive?: boolean;
 }
 
 export type PostProjectRecord = {
@@ -65,7 +66,8 @@ export async function enhanceFetch(
     let query = '';
     for (const [key, value] of Object.entries(params)) {
         // 即使 value 为 undefined 也照样拼接
-        const valStr = typeof value === 'object' ? JSON.stringify(value) : value;
+        const shouldStringify = typeof value === 'object' && !(value instanceof Date);
+        const valStr = shouldStringify ? JSON.stringify(value) : value;
         query += `${key}=${valStr}&`;
     }
     // 去除最后一个 &
@@ -147,9 +149,9 @@ export async function getLiellaTwitterAccountList() {
     return result[2].twitterAccounts;
 }
 
-export function getProjectMemberListOfCategory<Type extends Category>(
-    query: QueryProjectMemberListDto,
-): Promise<GetMemberInfoByType<Type>[]> {
+export function getProjectMembersOfCategory<Type extends Category>(
+    query: QueryProjectMembersDto,
+): Promise<GetMemberInfoByCategory<Type>[]> {
     return enhanceFetch(`${HOST}/member_info/project_member_list_of_category`, query);
 }
 
@@ -161,7 +163,7 @@ export async function postProjectRecord(body: PostProjectRecord) {
         route,
         onlyActive,
     } = body;
-    const date = '2022-07-15';
+    const date = formatDate(new Date());
     const url = `${HOST}/${route}`;
     const res = await enhanceFetch(url, {
         projectName,

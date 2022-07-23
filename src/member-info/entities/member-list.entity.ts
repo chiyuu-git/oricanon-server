@@ -4,7 +4,7 @@ import { Column, Entity, PrimaryColumn } from 'typeorm';
     database: 'canon_member',
     name: 'member',
 })
-export class MemberList {
+export class Members {
     @PrimaryColumn({
         type: 'int',
         name: 'member_id',

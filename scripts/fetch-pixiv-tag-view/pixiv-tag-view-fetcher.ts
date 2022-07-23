@@ -1,6 +1,6 @@
 /* eslint-disable no-continue */
 /* eslint-disable no-await-in-loop */
-import { getProjectMemberListOfCategory, PostProjectRecord, postProjectRecord } from 'scripts/common/fetch';
+import { getProjectMembersOfCategory, PostProjectRecord, postProjectRecord } from 'scripts/common/fetch';
 import { Category, ProjectName } from '@common/root';
 import { CharaRecordType, CoupleRecordType, RecordType } from '@common/record';
 import { BrowserFetcher } from '../common/browser-fetch';
@@ -76,7 +76,7 @@ export class PixivTagViewFetcher extends BrowserFetcher {
         const route = 'chara_tag/create_project_record';
         const { onlyActive } = this;
         for (const projectName of Object.values(ProjectName)) {
-            const charaInfoList = await getProjectMemberListOfCategory<Category.chara>({
+            const charaInfoList = await getProjectMembersOfCategory<Category.chara>({
                 category: Category.chara,
                 projectName,
                 onlyActive,
@@ -106,7 +106,7 @@ export class PixivTagViewFetcher extends BrowserFetcher {
         const route = 'couple_tag/create_project_record';
         const { onlyActive } = this;
         for (const projectName of Object.values(ProjectName)) {
-            const coupleInfoList = await getProjectMemberListOfCategory<Category.couple>({
+            const coupleInfoList = await getProjectMembersOfCategory<Category.couple>({
                 category: Category.couple,
                 projectName,
                 onlyActive,

@@ -1,45 +1,53 @@
-import { CharaInfo } from './member-info';
-import { CharaRecordType } from './record';
-import { DateString, ProjectName } from './root';
+import { CharaInfo, CoupleInfo, GetMemberInfoByCategory, MemberCommonInfo } from './member-info';
+import { CharaRecordType, GetRecordTypeByCategory } from './record';
+import { Category, DateString, ProjectName } from './root';
 
-export interface MemberIncrementInfo {
+export interface MemberWeekIncrement {
     date: DateString;
     romaName: string;
     increment: number;
 }
 
-export type HistoricalIncrementRank = Record<ProjectName, MemberIncrementInfo[]> & {
-    historical: MemberIncrementInfo[];
+export type CategoryIncrementRank = Record<ProjectName, MemberWeekIncrement[]> & {
+    historical: MemberWeekIncrement[];
 }
 
 /**
  * 总结是使用的精确类型，便于理解，加上了 illust 前缀
  */
-export enum SummaryRecordType {
+export enum SummaryType {
     r18Rate = 'pixiv_illust_r18_rate',
     favorRate = 'pixiv_illust_favor_rate',
 }
 
 export const DIMENSION_LIST = [
     CharaRecordType.illust,
-    SummaryRecordType.r18Rate,
-    SummaryRecordType.favorRate,
+    SummaryType.r18Rate,
+    SummaryType.favorRate,
     CharaRecordType.novel,
     CharaRecordType.tagView,
 ] as const;
 
 export const dimensionTitleMap = {
     [CharaRecordType.illust]: '同人图-年增量',
-    [SummaryRecordType.r18Rate]: '同人图-年增量-R18率',
-    [SummaryRecordType.favorRate]: '同人图-年增量-高收藏率',
+    [SummaryType.r18Rate]: '同人图-年增量-R18率',
+    [SummaryType.favorRate]: '同人图-年增量-高收藏率',
     [CharaRecordType.novel]: '同人文-年增量',
     [CharaRecordType.tagView]: '角色作品浏览数-年增量',
 } as const;
 
-export type CharaMemberIncrementInfo =
-    CharaInfo
-    & Record<CharaRecordType, number>
-    & Record<SummaryRecordType, number>
+export interface RecordTypeIncrement {
+    recordType: string;
+    record: number;
+    increment: number;
+}
+
+export type MemberRelativeIncrementInfo<Type extends Category> = GetMemberInfoByCategory<Type>
+& Record<GetRecordTypeByCategory<Type>, RecordTypeIncrement>
+
+export type CharaRelativeIncrementInfo = MemberRelativeIncrementInfo<Category.chara>;
+export type CoupleRelativeIncrementInfo = MemberRelativeIncrementInfo<Category.couple>;
+export type PersonRelativeIncrementInfo = MemberRelativeIncrementInfo<Category.person>;
 
 interface RecordTypeRankInfo {
     recordType: string;
@@ -48,7 +56,7 @@ interface RecordTypeRankInfo {
 
 }
 
-export type CharaMemberIncrementRankInfo =
-    CharaInfo
+export type MemberIncrementRankInfo =
+    MemberCommonInfo
     & Record<CharaRecordType, RecordTypeRankInfo>
-    & Record<SummaryRecordType, RecordTypeRankInfo>
+    & Record<SummaryType, RecordTypeRankInfo>

@@ -1,18 +1,16 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { ProjectName, Category, DateString } from '@common/root';
-import { RecordType, ProjectRecord, MemberRecord } from '@common/record';
+import { Category, DateString } from '@common/root';
+import { MemberListRecord } from '@common/record';
 import { getPrevWeeklyFetchDate, getRelativeDate } from '@common/weekly';
 import { MemberInfoService } from 'src/member-info/member-info.service';
 import { getPercentile } from '@utils/math';
 import { CharaTagService } from './chara-tag/chara-tag.service';
 import { CoupleTagService } from './couple-tag/couple-tag.service';
 import { PersonFollowerService } from './person/person.service';
-import { RecordDataService } from './common/record-data-service';
 import {
-    QueryMemberListRecord,
-    QueryMemberListRecordInRange,
+    QueryMembersRecordOfDate,
+    QueryMembersRecordInRange,
     QueryMemberRecordInRange,
-
 } from './common/dto/query-record-data.dto';
 
 @Injectable()
@@ -25,7 +23,7 @@ export class RecordService {
         private readonly personFollowerService: PersonFollowerService,
     ) {}
 
-    private getServiceByCategory(category: Category) {
+    private getDataServiceByCategory(category: Category) {
         switch (category) {
             case Category.chara:
                 return this.charaTagService;
@@ -39,9 +37,10 @@ export class RecordService {
     }
 
     /**
-     * 调用 service 的方法时可以省略 to，由此方法统一返回 endDate
+     * 调用 dataService 的方法时可以省略 to，由此方法统一返回 endDate
+     * 默认的 endDate 为最新的 fetchDate
      */
-    async getDefaultEndDate(to?: string) {
+    private async getDefaultEndDate(to?: string) {
         let endDate = to;
         if (!endDate) {
             endDate = await this.charaTagService.findLatestWeeklyFetchDate();
@@ -50,7 +49,7 @@ export class RecordService {
     }
 
     /**
-     * 根据 endDate 获取 上周及上上周的日期
+     * 根据 endDate 获取 上周及上上周的日期，用于生成先周比
      */
     async findRelativeDate(endDate?: string): Promise<DateString[]> {
         let baseDate = endDate;
@@ -84,90 +83,86 @@ export class RecordService {
     }
 
     /**
-     * 去 service 获取单个企划的数据
+     * 去 service 获取单个企划的数据，暴露给具体业务的查询接口
+     * 查询 date 时，from 与 to 相同；若无则统一取 endDate
      */
-    async findMemberListRecord({
+    async findMembersRecord({
         category,
         recordType,
-        projectName,
-        memberList,
+        members,
         date,
-    }: QueryMemberListRecord) {
+    }: QueryMembersRecordOfDate) {
         const targetDate = await this.getDefaultEndDate(date);
 
-        if (memberList.length === 0) {
+        const membersRecordList = await this.getDataServiceByCategory(category).findMembersRecordInRange({
+            recordType,
+            members,
+            from: targetDate,
+            to: targetDate,
+        });
+
+        if (!membersRecordList) {
             return null;
         }
 
-        return this.getServiceByCategory(category).findMemberListRecord({
-            projectName,
-            recordType,
-            memberList,
-            date: targetDate,
-        });
+        return membersRecordList[0].records;
     }
 
-    async findMemberListRecordInRange({
+    /**
+     * 暴露给具体业务的查询接口
+     */
+    async findMembersRecordInRange({
         category,
         recordType,
-        projectName,
-        memberList,
+        members,
         from,
         to,
-    }: QueryMemberListRecordInRange) {
+    }: QueryMembersRecordInRange) {
         const endDate = await this.getDefaultEndDate(to);
 
-        if (memberList.length === 0) {
-            return null;
-        }
-
-        return this.getServiceByCategory(category).findMemberListRecordInRange({
+        return this.getDataServiceByCategory(category).findMembersRecordInRange({
             recordType,
-            projectName,
-            memberList,
+            members,
             from,
             to: endDate,
         });
     }
 
     /**
-     * 周增数据是可以由现有数据计算得出的，因此不应该放在外部的 service
+     * 查询周增数组的核心方法
      */
-    async findMemberListWeekIncrementInRange({
+    async findMembersWeekIncrementInRange({
         category,
         recordType,
-        projectName,
-        memberList,
+        members,
         from,
         to,
-    }: QueryMemberListRecordInRange) {
-        const endDate = await this.getDefaultEndDate(to);
-
-        if (memberList.length === 0) {
-            return null;
+    }: QueryMembersRecordInRange) {
+        let endDate = to;
+        if (!endDate) {
+            endDate = await this.getDefaultEndDate(to);
         }
 
-        const recordInRange = await this.getServiceByCategory(category).findMemberListRecordInRange({
-            projectName,
+        const rangeRecord = await this.getDataServiceByCategory(category).findMembersRecordInRange({
             recordType,
-            memberList,
+            members,
             from,
             to: endDate,
         });
 
-        if (!recordInRange) {
+        if (!rangeRecord) {
             return null;
         }
 
         // 倒过来获取周增数组
-        const incrementRecordInRange: ProjectRecord[] = [];
-        let i = recordInRange.length - 1;
-        let curRecord = recordInRange[i];
+        const incrementRecordInRange: MemberListRecord[] = [];
+        let i = rangeRecord.length - 1;
+        let curRecord = rangeRecord[i];
         while (i > 0) {
             const { date, records } = curRecord;
-            const prevDate = getPrevWeeklyFetchDate(date);
-            const prevRecord = recordInRange[i - 1];
-            if (prevRecord.date === prevDate) {
+            const prevWeeklyFetchDate = getPrevWeeklyFetchDate(date);
+            const prevRecord = rangeRecord[i - 1];
+            if (prevRecord.date === prevWeeklyFetchDate) {
                 // 当周新增了成员时，前一周对应的 index 无值
                 const incrementRecords = records.map((val, index) => {
                     const prevVal = prevRecord.records[index];
@@ -201,12 +196,14 @@ export class RecordService {
             }
         }
 
-        return {
-            projectName,
-            incrementRecordInRange,
-        };
+        return incrementRecordInRange;
     }
 
+    /**
+     * 衍生接口，查询单个成员
+     * 返回的 records 仅有一个元素，即为该成员的周增量
+     * TODO: 看是否有需要把 records 数组改成 record 字段
+     */
     async findMemberWeekIncrementInRange({
         category,
         recordType,
@@ -216,37 +213,14 @@ export class RecordService {
     }: QueryMemberRecordInRange) {
         const endDate = await this.getDefaultEndDate(to);
 
-        const recordInRange = await this.getServiceByCategory(category).findMemberRecordInRange({
+        const memberInfo = await this.memberInfoService.findMemberInfoByRomaName(category, romaName);
+
+        return this.findMembersWeekIncrementInRange({
+            category,
+            recordType,
+            members: [memberInfo],
             from,
             to: endDate,
-            romaName,
-            recordType,
         });
-
-        const incrementRecordInRange: MemberRecord[] = [];
-        let i = recordInRange.length - 1;
-        let curRecord = recordInRange[i];
-        while (i > 0) {
-            const { date, record } = curRecord;
-            const prevDate = getPrevWeeklyFetchDate(date);
-            const prevRecord = recordInRange[i - 1];
-            if (prevRecord.date === prevDate) {
-                // 当周新增了成员时，前一周对应的 index 无值
-                const incrementRecord = record - prevRecord.record;
-                incrementRecordInRange.unshift({
-                    date,
-                    record: incrementRecord,
-                });
-                // 更新循环条件
-                curRecord = prevRecord;
-                i--;
-            }
-            else {
-                // 此时的 prevRecord 是周间统计的插值数据，直接更新 i 即可
-                i--;
-            }
-        }
-
-        return incrementRecordInRange;
     }
 }

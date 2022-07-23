@@ -27,6 +27,6 @@ export class CharaTagController {
     // @ApiQuery({ name: 'recordType', type: 'string' })
     // @ApiQuery({ name: 'projectName', enum: ProjectName })
     // findRangeBasicTypeProjectRecord(@Query() query: FindProjectRecordInRange) {
-    //     return this.service.findMemberListRecordInRange(query);
+    //     return this.service.findMembersRecordInRange(query);
     // }
 }

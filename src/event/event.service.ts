@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { EventTypeEnum } from '@common/event-list';
 import { TWITTER_HOST } from '@common/twitter';
 import { Group } from '@src/member-info/entities/group.entity';
-import { MemberList } from '@src/member-info/entities/member-list.entity';
+import { Members } from '@src/member-info/entities/member-list.entity';
 import { Repository } from 'typeorm';
 import { ArticleService } from '@src/twitter/twitter.service';
 import { CreateEventRecordDto, CreateGroupEventDto, CreateSoloEventDto } from './dto/create-event.dto';
@@ -21,8 +21,8 @@ export class EventService {
     @InjectRepository(EventList)
     EventListRepository: Repository<EventList>;
 
-    @InjectRepository(MemberList)
-    MemberListRepository: Repository<MemberList>;
+    @InjectRepository(Members)
+    MembersRepository: Repository<Members>;
 
     @InjectRepository(SoloEvent)
     SoloEventRepository: Repository<SoloEvent>;
@@ -38,7 +38,7 @@ export class EventService {
     ) {}
 
     async getMemberEntity(romaName: string) {
-        const memberEntity = await this.MemberListRepository.findOne({
+        const memberEntity = await this.MembersRepository.findOne({
             romaName,
         });
 
@@ -119,16 +119,17 @@ export class EventService {
             overridePriority,
         });
 
+        // 触发 AutoIncrement 获取 eventId
+        const result = await this.EventListRepository.save(eventRecordEntity);
+
         if (relativeUrlList && relativeUrlList.length > 0) {
             eventRecordEntity.relativeUrlList = await this.handleRelativeTwitterArticle(
                 relativeUrlList,
-                eventRecordEntity.eventId,
+                result.eventId,
             );
         }
-
-        await this.EventListRepository.save(eventRecordEntity);
-
-        return eventRecordEntity;
+        // 更新 relativeUrlList
+        return this.EventListRepository.save(result);
     }
 
     async createGroupEvent(createGroupEventDto: CreateGroupEventDto) {

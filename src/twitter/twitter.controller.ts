@@ -12,6 +12,7 @@ export class TwitterController {
 
     @Post('/update_article')
     createArticle(@Body() createArticleDto: CreateArticleDto) {
+        console.log('createArticleDto:', createArticleDto);
         return this.twitterService.updateArticleInfo(createArticleDto);
     }
 

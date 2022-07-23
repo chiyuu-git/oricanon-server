@@ -14,11 +14,12 @@ export async function fetchPixivTagCount() {
     const context = await browser.newContext({ storageState: 'state.json' });
 
     const page = await context.newPage();
-    await page.goto('https://www.pixiv.net/tags/%E5%94%90%E5%8F%AF%E5%8F%AF');
+    page.goto('https://www.pixiv.net/tags/%E5%94%90%E5%8F%AF%E5%8F%AF', { timeout: 0 });
+    await page.waitForTimeout(10_000);
 
-    // const pixivTagInfoFetcher = new PixivTagFetcher(page.request, isMonthlyDate(new Date()));
-    const pixivTagInfoFetcher = new PixivTagFetcher(page.request, false);
-    // await pixivTagInfoFetcher.getPixivCharaTagCount();
+    const pixivTagInfoFetcher = new PixivTagFetcher(page.request, !isMonthlyDate(new Date()));
+    // const pixivTagInfoFetcher = new PixivTagFetcher(page.request, true);
+    await pixivTagInfoFetcher.getPixivCharaTagCount();
     await pixivTagInfoFetcher.getPixivCoupleTagCount();
 
     // Interact with login form

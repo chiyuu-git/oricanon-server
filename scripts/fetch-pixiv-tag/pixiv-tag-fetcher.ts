@@ -4,7 +4,7 @@
 import { CharaRecordType, CoupleRecordType, RecordType } from '@common/record';
 import { Category, ProjectName } from '@common/root';
 import { BrowserFetcher } from '../common/browser-fetch';
-import { getProjectMemberListOfCategory, PostProjectRecord, postProjectRecord } from '../common/fetch';
+import { getProjectMembersOfCategory, PostProjectRecord, postProjectRecord } from '../common/fetch';
 
 interface FetchPixivTagCount {
     tagList: string[];
@@ -78,7 +78,7 @@ export class PixivTagFetcher extends BrowserFetcher {
                 }
 
                 // 全量时慢慢抓
-                const delay = this.onlyActive ? 3000 : 10_000;
+                const delay = this.onlyActive ? 0 : 10_000;
                 const waitFor = new Promise((resolve) => setTimeout(() => resolve(true), delay));
                 await waitFor;
             }
@@ -125,7 +125,7 @@ export class PixivTagFetcher extends BrowserFetcher {
         const { onlyActive } = this;
 
         for (const projectName of Object.values(ProjectName)) {
-            const charaInfoList = await getProjectMemberListOfCategory<Category.chara>({
+            const charaInfoList = await getProjectMembersOfCategory<Category.chara>({
                 category: Category.chara,
                 projectName,
                 onlyActive,
@@ -152,7 +152,7 @@ export class PixivTagFetcher extends BrowserFetcher {
         const { onlyActive } = this;
 
         for (const projectName of Object.values(ProjectName)) {
-            const coupleInfoList = await getProjectMemberListOfCategory<Category.couple>({
+            const coupleInfoList = await getProjectMembersOfCategory<Category.couple>({
                 category: Category.couple,
                 projectName,
                 onlyActive,

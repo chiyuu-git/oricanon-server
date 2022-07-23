@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable unicorn/prefer-module */
 /**
  * @file 获取声优推特follower的爬虫脚本
@@ -44,11 +45,21 @@ function findFollowerCount(accounts: string[], allAccountNode: any): null | numb
 }
 
 export async function fetchTwitterFollower() {
+    const twitterAccountList: TwitterFollowerList = [];
     try {
         // 获取 person twitterAccount
-        const response = await superagent.get(`${HOST}/member_info/person_twitter_account_list`);
-
-        const twitterAccountList: TwitterFollowerList = response.body;
+        for (const projectName of Object.values(ProjectName)) {
+            const response = await superagent.get(
+                `${HOST}/member_info/project_member_list_of_category?category=person&projectName=${projectName}`,
+            );
+            const result = response.body;
+            if (projectName !== ProjectName.rest) {
+                twitterAccountList.push({
+                    projectName,
+                    twitterAccounts: result.map((personInfo: any) => personInfo.twitterAccount),
+                });
+            }
+        }
 
         // 获取网页上所有的推特账号
         const html = await superagent
@@ -61,18 +72,16 @@ export async function fetchTwitterFollower() {
         const allAccountNode = $('#f_rank>tbody>tr>td>a');
 
         for (const { projectName, twitterAccounts } of twitterAccountList) {
-            if (projectName !== ProjectName.rest) {
-                // map 推特账号数组
-                const records = findFollowerCount(twitterAccounts, allAccountNode);
+            // map 推特账号数组
+            const records = findFollowerCount(twitterAccounts, allAccountNode);
 
-                console.log('projectName:', projectName);
-                console.log('fos:', records);
-                if (records) {
-                    postProjectFollowerRecord({
-                        projectName,
-                        records,
-                    });
-                }
+            console.log('projectName:', projectName);
+            console.log('fos:', records);
+            if (records) {
+                postProjectFollowerRecord({
+                    projectName,
+                    records,
+                });
             }
         }
     }

@@ -33,7 +33,7 @@ export interface PersonInfo extends MemberCommonInfo{
     twitterAccount: string;
 }
 
-export type GetMemberInfoByType<Type extends Category> = Type extends Category.chara
+export type GetMemberInfoByCategory<Type extends Category> = Type extends Category.chara
     ? CharaInfo
     : Type extends Category.couple
         ? CoupleInfo
@@ -42,9 +42,9 @@ export type GetMemberInfoByType<Type extends Category> = Type extends Category.c
             : never
 
 export type MemberInfoMap<Type extends Category > = {
-    [romaName in string]: GetMemberInfoByType<Type>
+    [romaName in string]: GetMemberInfoByCategory<Type>
 }
 
-export interface FindMemberListOptions {
+export interface FindMembersOptions {
     onlyActive: boolean;
 }

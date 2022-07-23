@@ -23,12 +23,12 @@ async function bootstrap() {
     await app.listen(3000);
 }
 bootstrap()
-    .then(() => {
+    .then(async () => {
         // 服务启动之后再执行脚本;
         // fetchTwitterFollower();
         // fetchTwitterArticleDetail();
-        // fetchPixivTagCount();
-        // fetchPixivTagViewCount();
+        // await fetchPixivTagCount();
+        // await fetchPixivTagViewCount();
         const placeholder = 123;
         return true;
     })

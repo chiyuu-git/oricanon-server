@@ -1,199 +1,157 @@
-import { HttpException, HttpStatus, Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Category, ProjectName } from '@common/root';
-import { ProjectRecord, CharaRecordType, CoupleRecordType } from '@common/record';
 import {
-    CharaMemberIncrementInfo,
-    HistoricalIncrementRank,
-    MemberIncrementInfo,
-    SummaryRecordType,
+    MemberListRecord,
+    CharaRecordType,
+    CoupleRecordType,
+    GetRecordTypeByCategory,
+} from '@common/record';
+import {
+    MemberRelativeIncrementInfo,
+    CategoryIncrementRank,
+    MemberWeekIncrement,
+    RecordTypeIncrement,
 } from '@common/summary';
 import { MemberInfoService } from '@src/member-info/member-info.service';
 import { RecordService } from '@src/record/record.service';
-
-import { ProjectMemberListKey, ProjectMemberListMap } from 'src/member-info/common';
 import { MemberInfo } from '@src/member-info/entities/member-info.entity';
-import {
-    QueryMemberListRecordInRange,
-    QueryMemberRecordInRange,
-    QueryProjectRecordInRange,
-    QueryRecordInRange,
-} from '@src/record/common/dto/query-record-data.dto';
+import { QueryRecordInRange } from '@src/record/common/dto/query-record-data.dto';
+
 import { getPercentile } from '@utils/math';
 
-type IncrementRecordOfTypeInRange = (null | {
-    projectName: ProjectName;
-    incrementRecordInRange: ProjectRecord[];
-})[]
+import { QueryMemberRecordInRangeDto, QueryProjectRecordInRangeDto } from './query-summary-info.dto';
 
 @Injectable()
 export class SummaryService {
-    projectMemberListMap: ProjectMemberListMap;
-
     constructor(
         private readonly recordService: RecordService,
         private readonly memberInfoService: MemberInfoService,
     ) {}
 
-    getProjectMemberList(category: Category, projectName: ProjectName) {
-        return this.memberInfoService.findProjectMemberListOfCategory(
+    getProjectMembersOfCategory(
+        category: Category,
+        projectName: ProjectName,
+        onlyActive = true,
+    ) {
+        return this.memberInfoService.findProjectMembersOfCategory(
             category,
             projectName,
-            { onlyActive: false },
+            { onlyActive },
         );
     }
 
+    /**
+     * memberList 或 project 周增回顾
+     */
+    async getMembersWeekIncrementInRange({
+        category,
+        recordType,
+        from,
+        to,
+        projectName,
+    }: QueryProjectRecordInRangeDto) {
+        const members = await this.getProjectMembersOfCategory(category, projectName);
+        return this.recordService.findMembersWeekIncrementInRange({
+            category,
+            recordType,
+            members,
+            from,
+            to,
+        });
+    }
+
+    /**
+     * member 周增回顾
+     */
     async getMemberWeekIncrementInRange({
         category,
         recordType,
         from,
         to,
         romaName,
-    }: QueryMemberRecordInRange) {
-        const weekIncrementInRange = await this.recordService.findMemberWeekIncrementInRange({
+    }: QueryMemberRecordInRangeDto) {
+        return this.recordService.findMemberWeekIncrementInRange({
             category,
             recordType,
             from,
             to,
             romaName,
         });
-
-        return weekIncrementInRange;
-    }
-
-    async getMemberListWeekIncrementInRange({
-        category,
-        recordType,
-        from,
-        to,
-        projectName,
-    }: QueryProjectRecordInRange) {
-        const memberList = await this.getProjectMemberList(category, projectName);
-        const weekIncrementInRange = await this.recordService.findMemberListWeekIncrementInRange({
-            category,
-            recordType,
-            projectName,
-            memberList,
-            from,
-            to,
-        });
-
-        return weekIncrementInRange?.incrementRecordInRange;
     }
 
     /**
-     * 默认返回全企划的百分位即可
-     * 后续有企划内分位要求时再新增即可
+     * category 周增回顾
+     * 全 project 历史周增百分位
      */
     async getHistoricalWeekIncrementOfPercentile(query: QueryRecordInRange & { percentile: number; }) {
-        const rank = await this.getWeekIncrementRankInRange(query);
+        const categoryIncrementRank = await this.getWeekIncrementRankInRangeOfCategory(query);
 
-        const incrementArray = rank.historical.map(({ increment }) => increment);
+        const incrementList = categoryIncrementRank.historical.map(({ increment }) => increment);
         const { percentile } = query;
 
-        return getPercentile(incrementArray, percentile);
+        return getPercentile(incrementList, percentile);
     }
 
     /**
-     * 查找历史周增数组，先整理出排序后的数组，计算百分位套用公式即可
-     * 默认维度 category recordType
+     * category 周增回顾
      * 没有指定 project 或 member，默认以 project 维度返回所有数据
      */
-    async getWeekIncrementRankInRange({
+    async getWeekIncrementRankInRangeOfCategory({
         category,
         recordType,
         from,
         to,
     }: QueryRecordInRange) {
         // 每个企划的历史周增数据
-        const incrementRecordInRange = await this.findAllProjectWeekIncrementInRange({
-            category,
-            recordType,
-            from,
-            to,
-        });
-        const incrementRankOfTypeInRange = await this.processWeekIncrementRank(category, incrementRecordInRange);
+        const categoryIncrementRank = <CategoryIncrementRank><unknown>{
+            historical: [],
+        };
 
-        return incrementRankOfTypeInRange;
-    }
-
-    /**
-     * 查找历史周增数组
-     * 没有指定 project 或 member，默认以 project 维度返回所有数据
-     */
-    async findAllProjectWeekIncrementInRange({
-        category,
-        recordType,
-        from,
-        to,
-    }: QueryRecordInRange) {
-        return Promise.all(
+        await Promise.all(
             Object.values(ProjectName).map(async (projectName) => {
-                const memberList = await this.getProjectMemberList(category, projectName);
-                return this.recordService.findMemberListWeekIncrementInRange({
+                const members = await this.getProjectMembersOfCategory(category, projectName);
+                const incrementRecordInRange = await this.recordService.findMembersWeekIncrementInRange({
                     category,
                     recordType,
-                    projectName,
-                    memberList,
+                    members,
                     from,
                     to,
                 });
+
+                let projectIncrementRank: MemberWeekIncrement[] = [];
+
+                if (incrementRecordInRange) {
+                    // 企划内排序
+                    projectIncrementRank = this.processProjectIncrementRank(incrementRecordInRange, members);
+                }
+
+                categoryIncrementRank[projectName] = projectIncrementRank;
+                categoryIncrementRank.historical.push(...projectIncrementRank);
             }),
         );
-    }
-
-    /**
-     * 获取企划内 incrementRecord 排序后的数组
-     * 与 range、type 维度无关，函数内部的变量名均无 range、type
-     */
-    private async processWeekIncrementRank(
-        category: Category,
-        incrementRecordOfTypeInRange: IncrementRecordOfTypeInRange,
-    ) {
-        // const historicalIncrementRank: HistoricalIncrementRank = {
-        //     historical: [],
-        // } as HistoricalIncrementRank;
-        const historicalIncrementRank = <HistoricalIncrementRank><unknown>{
-            historical: [],
-        };
-        // 企划内排序
-        for (const projectIncrementRecord of incrementRecordOfTypeInRange) {
-            if (projectIncrementRecord) {
-                const { projectName, incrementRecordInRange } = projectIncrementRecord;
-                // eslint-disable-next-line no-await-in-loop
-                const memberList = await this.getProjectMemberList(category, projectName);
-
-                const sortedProjectIncrementInfo = this.processProjectWeekIncrementRank(
-                    incrementRecordInRange,
-                    // TODO: person ll 时可能为空，需要排除
-                    memberList,
-                );
-
-                historicalIncrementRank[projectName] = sortedProjectIncrementInfo;
-                historicalIncrementRank.historical.push(...sortedProjectIncrementInfo);
-            }
-        }
 
         // 全部企划再排序
-        historicalIncrementRank.historical = historicalIncrementRank.historical
+        categoryIncrementRank.historical = categoryIncrementRank.historical
             .sort((a, b) => a.increment - b.increment);
 
-        return historicalIncrementRank;
+        return categoryIncrementRank;
     }
 
     /**
+     * 获取企划内部的增量排行榜
      * flatten 企划内所有的增量记录，并添加上成员信息，排序后返回
      */
-    private processProjectWeekIncrementRank(
-        IncrementRecordInRange: ProjectRecord[],
-        memberList: MemberInfo[],
+    private processProjectIncrementRank(
+        IncrementRecordInRange: MemberListRecord[],
+        members: MemberInfo[],
     ) {
-        const projectIncrementInfoArray: MemberIncrementInfo[] = [];
+        const projectIncrementInfoArray: MemberWeekIncrement[] = [];
         // 1. flatten & add member info
         for (const { date, records } of IncrementRecordInRange) {
             const len = records.length;
             for (let index = 0; index < len; index++) {
                 const increment = records[index];
-                const { romaName } = memberList[index];
+                const { romaName } = members[index];
                 projectIncrementInfoArray.push({
                     date,
                     increment,
@@ -209,22 +167,25 @@ export class SummaryService {
     }
 
     /**
+     * memberList / project all recordType 相对增量 回顾
+     * 适用于 月榜，回顾整个月的增量
+     *
      * 获取企划所有成员的相对增量信息
      * 以企划成员整合所有 recordType 的信息
      */
-    async getProjectRelativeIncrementInfo(
-        category: Category,
+    async getProjectRelativeIncrementInfo<Type extends Category>(
+        category: Type,
         projectName: ProjectName,
         from: string,
         to?: string,
     ) {
-        const memberList = await this.getProjectMemberList(category, projectName);
+        const members = await this.getProjectMembersOfCategory(category, projectName);
         const commonParam = {
             category,
             projectName,
-            memberList,
-            from: '2020-07-08',
-            to: '2022-07-15',
+            members,
+            from: '2022-07-15',
+            to: '2022-07-22',
         };
 
         // chara record type format
@@ -248,30 +209,6 @@ export class SummaryService {
         //     this.getProjectRelativeIncrement({ ...commonParam, recordType: CharaRecordType.tenThousand }),
         // ]);
 
-        // couple record type format
-        const projectIncrementList = await Promise.all([
-
-            this.getProjectRelativeIncrement({ ...commonParam, recordType: CoupleRecordType.illust }),
-            this.getProjectRelativeIncrement({ ...commonParam, recordType: CoupleRecordType.illustReverse }),
-            this.getProjectRelativeIncrement({ ...commonParam, recordType: CoupleRecordType.illustIntersection }),
-            this.getProjectRelativeIncrement({ ...commonParam, recordType: CoupleRecordType.novel }),
-            this.getProjectRelativeIncrement({ ...commonParam, recordType: CoupleRecordType.novelReverse }),
-            this.getProjectRelativeIncrement({ ...commonParam, recordType: CoupleRecordType.novelIntersection }),
-            this.getProjectRelativeIncrement({ ...commonParam, recordType: CoupleRecordType.tagView }),
-            this.getProjectRelativeIncrement({ ...commonParam, recordType: CoupleRecordType.tagViewReverse }),
-            this.getProjectRelativeIncrement({ ...commonParam, recordType: CoupleRecordType.illustWithNovel }),
-            this.getProjectRelativeIncrement({ ...commonParam, recordType: CoupleRecordType.coupleUnionIllust }),
-            this.getProjectRelativeIncrement({ ...commonParam, recordType: CoupleRecordType.coupleUnionNovel }),
-        ]);
-
-        const projectIncrementInfoList = memberList as unknown as CharaMemberIncrementInfo[];
-
-        for (const { recordType, incrementList } of projectIncrementList) {
-            for (const [i, val] of incrementList.entries()) {
-                projectIncrementInfoList[i][recordType as CharaRecordType] = val;
-            }
-        }
-
         // 处理 r18Rate 和 favorRate 两个实用指标
         // for (const memberInfo of projectIncrementInfoList) {
         //     memberInfo[SummaryRecordType.r18Rate] = +(
@@ -283,59 +220,89 @@ export class SummaryService {
         //     ).toFixed(2);
         // }
 
+        // couple record type format
+        const allRecordTypeIncrementList = await Promise.all(
+            Object.values(CoupleRecordType)
+                .map((coupleRecordType) => this.processProjectRelativeIncrementOfType({
+                    ...commonParam,
+                    recordType: coupleRecordType,
+                })),
+        );
+
+        const projectIncrementInfoList = members as MemberRelativeIncrementInfo<Type>[];
+
+        for (const { recordType, records, increments } of allRecordTypeIncrementList) {
+            for (const [i, val] of increments.entries()) {
+                const recordTypeIncrement = projectIncrementInfoList[i][recordType as GetRecordTypeByCategory<Type>];
+
+                Object.assign(recordTypeIncrement, {
+                    recordType,
+                    record: records?.[i] || 0,
+                    increment: val,
+                });
+            }
+        }
+
         return projectIncrementInfoList;
     }
 
     /**
-     * 获取企划的相对增量
+     * project recordType 相对增量 回顾
+     * 获取企划内所有成员的指定日期的相对增量
+     *
      * 相对增量排行榜与周增量排行榜的最主要的区别就是 时间范围
-     * 相对增量排行榜时间范围是固定的，因此相关函数不需要带上 range
-     * 分别获取 from 和 to 两个指定日期的数据，然后相减即可，排序后返回
+     * 相对增量排行榜时间范围是固定的，因此相关函数名不使用 range
+     * 分别获取 from 和 to 两个指定日期的数据，然后相减获取增量
+     * to 的数据，即为总量 ，默认也返回累计量
      */
-    async getProjectRelativeIncrement(query: QueryProjectRecordInRange) {
+    private async processProjectRelativeIncrementOfType(query: QueryProjectRecordInRangeDto) {
         const { category, projectName, recordType, from, to } = query;
-        const memberList = await this.getProjectMemberList(category, projectName);
-        const compareTargetParam = {
+        const members = await this.getProjectMembersOfCategory(category, projectName);
+
+        const startParam = {
             ...query,
-            memberList,
+            members,
             date: from,
         };
-        const targetParam = {
+        const endParam = {
             ...query,
-            memberList,
+            members,
             date: to,
         };
-        const [a, b] = await Promise.all([
-            this.recordService.findMemberListRecord(compareTargetParam),
-            this.recordService.findMemberListRecord(targetParam),
+        const [startRecords, endRecords] = await Promise.all([
+            this.recordService.findMembersRecord(startParam),
+            this.recordService.findMembersRecord(endParam),
         ]);
 
-        const compare = a || [];
-        const target = b || [];
+        const compare = startRecords || [];
+        const target = endRecords || [];
 
         return {
             recordType,
-            incrementList: target.map((val, i) => (val || 0) - (compare[i] || 0)),
+            records: endRecords,
+            increments: target.map((val, i) => (val || 0) - (compare[i] || 0)),
         };
     }
 
     /**
+     * 适用于 braRace 回顾
      * 获取范围内所有数据相对于指定日期的增量
      */
-    async getRelativeIncrementInRange({
+    async getRelativeIncrementSince({
         category,
         recordType,
         projectName,
         from,
-    }: QueryProjectRecordInRange) {
-        const memberList = await this.getProjectMemberList(category, projectName);
+        to,
+    }: QueryProjectRecordInRangeDto) {
+        const members = await this.getProjectMembersOfCategory(category, projectName);
 
-        const recordInRange = await this.recordService.findMemberListRecordInRange({
+        const recordInRange = await this.recordService.findMembersRecordInRange({
             category,
-            projectName,
             recordType,
-            memberList,
+            members,
             from,
+            to,
         });
 
         if (!recordInRange) {

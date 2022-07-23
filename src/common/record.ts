@@ -1,3 +1,5 @@
+import { Category } from './root';
+
 export enum CharaRecordType {
     illust = 'pixiv_illust',
     novel = 'pixiv_novel',
@@ -32,29 +34,33 @@ export enum CoupleRecordType {
     illust = 'pixiv_illust',
     illustReverse = 'pixiv_illust_reverse',
     illustIntersection = 'pixiv_illust_intersection',
-    tagView = 'pixiv_tag_view',
-    tagViewReverse = 'pixiv_tag_view_reverse',
+    coupleUnionIllust = 'pixiv_couple_union_illust',
+    // r18 = 'pixiv_r18',
+    // r18Reverse = 'pixiv_r18_reverse',
+    // r18Intersection = 'pixiv_r18_intersection',
     novel = 'pixiv_novel',
     novelReverse = 'pixiv_novel_reverse',
     novelIntersection = 'pixiv_novel_intersection',
-    r18 = 'pixiv_r18',
-    r18Reverse = 'pixiv_r18_reverse',
-    r18Intersection = 'pixiv_r18_intersection',
+    coupleUnionNovel = 'pixiv_couple_union_novel',
     illustWithNovel = 'pixiv_illust_with_novel',
-    coupleUnionIllust = 'pixiv_couple_union_illust',
-    coupleUnionNovel = 'pixiv_couple_union_novel'
+    tagView = 'pixiv_tag_view',
+    tagViewReverse = 'pixiv_tag_view_reverse',
 }
+
+export type GetRecordTypeByCategory<Type extends Category> = Type extends Category.chara
+    ? CharaRecordType
+    : Type extends Category.couple
+        ? CoupleRecordType
+        : Type extends Category.person
+            ? PersonRecordType
+            : never
 
 export type RecordType = CharaRecordType | CoupleRecordType| PersonRecordType;
 
-export interface ProjectRecord {
+export interface MemberListRecord {
     date: string;
     records: number[];
     average: number;
     median: number;
 }
 
-export interface MemberRecord {
-    date: string;
-    record: number;
-}

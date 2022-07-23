@@ -56,7 +56,7 @@
       "value": "RxHz0Z1KaYZER3mAw8YbppCGLmbA8dHRDLOS3L7mF67LD9NmRSA0%2FmUpxy2E0Q1X",
       "domain": ".app.link",
       "path": "/",
-      "expires": 1689433346.83569,
+      "expires": 1690077195.765915,
       "httpOnly": false,
       "secure": true
     },
@@ -66,7 +66,7 @@
       "value": "GA1.2.755788112.1654244660",
       "domain": ".twitter.com",
       "path": "/",
-      "expires": 1720969348,
+      "expires": 1721613195,
       "httpOnly": false,
       "secure": false
     },
@@ -106,19 +106,9 @@
       "value": "u%3D907567453114437632",
       "domain": ".twitter.com",
       "path": "/",
-      "expires": 1689433345.8636,
+      "expires": 1690077231.04311,
       "httpOnly": false,
       "secure": true
-    },
-    {
-      "sameSite": "Lax",
-      "name": "_gid",
-      "value": "GA1.2.752650992.1657896875",
-      "domain": ".twitter.com",
-      "path": "/",
-      "expires": 1657983748,
-      "httpOnly": false,
-      "secure": false
     },
     {
       "sameSite": "Lax",
@@ -171,16 +161,6 @@
       "secure": true
     },
     {
-      "sameSite": "None",
-      "name": "__cf_bm",
-      "value": "B.oXMbe7aXeB0yyVnXjjF2PLml4HVR5KGObfekDLt64-1657955760-0-AQE4Ypiqg/GcTLu0LQYic2Jicw7hnbT7ew94EV2idqjU9Cl6zuaA2rgPPCfv5IYzl/tkTBdRk9G5bfM4XQXQlsRsP6HyM0Pajr7tf2ojm+V2tgB9Rs5ookaqwZZs5yYWnEzC4u8zdSoKhlHCVX+UnIwTowzrc/uqZbBQ72x0di+d1lPeWdUpXjiMV4/JVQhZXM5wIocIeb2TRt3pBGfI3Kk=",
-      "domain": ".pixiv.net",
-      "path": "/",
-      "expires": 1657957560.848349,
-      "httpOnly": true,
-      "secure": true
-    },
-    {
       "sameSite": "Lax",
       "name": "__utma",
       "value": "235335808.1323769567.1657955761.1657955761.1657955761.1",
@@ -207,26 +187,6 @@
       "domain": ".pixiv.net",
       "path": "/",
       "expires": 1673723815,
-      "httpOnly": false,
-      "secure": false
-    },
-    {
-      "sameSite": "Lax",
-      "name": "__utmt",
-      "value": "1",
-      "domain": ".pixiv.net",
-      "path": "/",
-      "expires": 1657956362,
-      "httpOnly": false,
-      "secure": false
-    },
-    {
-      "sameSite": "Lax",
-      "name": "__utmb",
-      "value": "235335808.1.10.1657955761",
-      "domain": ".pixiv.net",
-      "path": "/",
-      "expires": 1657957615,
       "httpOnly": false,
       "secure": false
     },
@@ -282,61 +242,11 @@
     },
     {
       "sameSite": "Lax",
-      "name": "_gid",
-      "value": "GA1.2.586481222.1657955809",
-      "domain": ".pixiv.net",
-      "path": "/",
-      "expires": 1658042210,
-      "httpOnly": false,
-      "secure": false
-    },
-    {
-      "sameSite": "Lax",
-      "name": "_gat_UA-1830249-3",
-      "value": "1",
-      "domain": ".pixiv.net",
-      "path": "/",
-      "expires": 1657955869,
-      "httpOnly": false,
-      "secure": false
-    },
-    {
-      "sameSite": "Lax",
-      "name": "_gat",
-      "value": "1",
-      "domain": ".pixiv.net",
-      "path": "/",
-      "expires": 1657955870,
-      "httpOnly": false,
-      "secure": false
-    },
-    {
-      "sameSite": "Lax",
       "name": "_ga",
       "value": "GA1.3.2084427546.1657955764",
       "domain": ".accounts.pixiv.net",
       "path": "/",
       "expires": 1721027810,
-      "httpOnly": false,
-      "secure": false
-    },
-    {
-      "sameSite": "Lax",
-      "name": "_gid",
-      "value": "GA1.3.586481222.1657955809",
-      "domain": ".accounts.pixiv.net",
-      "path": "/",
-      "expires": 1658042210,
-      "httpOnly": false,
-      "secure": false
-    },
-    {
-      "sameSite": "Lax",
-      "name": "_gat_UA-76252338-4",
-      "value": "1",
-      "domain": ".accounts.pixiv.net",
-      "path": "/",
-      "expires": 1657955870,
       "httpOnly": false,
       "secure": false
     },
@@ -419,6 +329,26 @@
       "expires": 1721027815,
       "httpOnly": false,
       "secure": false
+    },
+    {
+      "sameSite": "Lax",
+      "name": "_gid",
+      "value": "GA1.2.1228535564.1658540671",
+      "domain": ".twitter.com",
+      "path": "/",
+      "expires": 1658627595,
+      "httpOnly": false,
+      "secure": false
+    },
+    {
+      "sameSite": "None",
+      "name": "__cf_bm",
+      "value": "RX_GoTJ_BYcx91l5jbPob3yRuqObOO3_X3L20YLsKXM-1658540918-0-AZL1GaMsVz9kzBSZQ9KFv2H8up5gVL30IflTTbW6UiM9bcUp3eXSE+UCfhoMyMA/fLwrozfFv4o/tBZmLUjHvX8+NZWhm/W2E8tKa4B/OFHy",
+      "domain": ".pixiv.net",
+      "path": "/",
+      "expires": 1658542718.218675,
+      "httpOnly": true,
+      "secure": true
     }
   ],
   "origins": [
@@ -431,7 +361,7 @@
         },
         {
           "name": "branch_session_first",
-          "value": "{\"session_id\":\"1076506377025991305\",\"identity_id\":\"769329780793072246\",\"link\":\"https://twitter.app.link?%24identity_id=769329780793072246\",\"identity\":\"/84x+If0RhetahmfP6DCaEzCdqcfuyWPz4u9QCxzJ58=\",\"data\":\"{\\\"+clicked_branch_link\\\":false,\\\"+is_first_session\\\":true}\",\"browser_fingerprint_id\":\"MTA2MTE4NTg5NDA1ODIzMzEyMw==\",\"has_app\":false}"
+          "value": "{\"session_id\":\"1079206875180996595\",\"identity_id\":\"769329780793072246\",\"link\":\"https://twitter.app.link?%24identity_id=769329780793072246\",\"identity\":\"/84x+If0RhetahmfP6DCaEzCdqcfuyWPz4u9QCxzJ58=\",\"data\":\"{\\\"+clicked_branch_link\\\":false,\\\"+is_first_session\\\":true}\",\"browser_fingerprint_id\":\"MTA2MTE4NTg5NDA1ODIzMzEyMw==\",\"has_app\":false}"
         }
       ]
     },

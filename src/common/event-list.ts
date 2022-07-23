@@ -2,7 +2,7 @@ export enum EventTypeEnum {
     live = 'live',
     liveTourFirst = 'live_tour_first',
     liveTourMiddle = 'live_tour_middle',
-    liveTourLast = 'live_tour_last',
+    liveTourFinal = 'live_tour_final',
     liveAdditional = 'live_additional',
     fanMeeting = 'fan_meeting',
     miniLive = 'mini_live',
@@ -25,6 +25,11 @@ export enum EventTypeEnum {
      */
     tvProgramOnAir = 'tv_program_on_air',
     goodsRelease = 'goods_release',
+    /**
+     * 特殊类
+     */
     specialEvent0 = 'special_event_0',
     specialEvent1 = 'special_event_1',
+    // 比如联动、比如合作，公开了新的版权绘
+    speicalEventWithPhoto = 'special_event_with_new_photo'
 }

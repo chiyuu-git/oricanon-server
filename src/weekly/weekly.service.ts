@@ -1,11 +1,9 @@
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-// service
-import { MemberInfoService } from 'src/member-info/member-info.service';
-import { RecordService } from 'src/record/record.service';
-import { ProjectName, Category, DateString } from '@common/root';
+import { Injectable } from '@nestjs/common';
+import { ProjectName, Category } from '@common/root';
 import { PersonRecordType, RecordType } from '@common/record';
 import { MemberWeeklyInfo, ProjectInfo, RecordTypeWeeklyInfo } from '@common/weekly';
-import { ProjectMemberListKey, ProjectMemberListMap } from 'src/member-info/common';
+import { MemberInfoService } from 'src/member-info/member-info.service';
+import { RecordService } from 'src/record/record.service';
 import { MemberInfo } from '@src/member-info/entities/member-info.entity';
 
 import {
@@ -35,18 +33,20 @@ interface WeeklyRelativeInfo {
 
 @Injectable()
 export class WeeklyService {
-    projectMemberListMap: ProjectMemberListMap;
-
     constructor(
         private readonly recordService: RecordService,
         private readonly memberInfoService: MemberInfoService,
     ) {}
 
-    getProjectMemberList(category: Category, projectName: ProjectName) {
-        return this.memberInfoService.findProjectMemberListOfCategory(
+    getProjectMembersOfCategory(
+        category: Category,
+        projectName: ProjectName,
+        onlyActive = true,
+    ) {
+        return this.memberInfoService.findProjectMembersOfCategory(
             category,
             projectName,
-            { onlyActive: false },
+            { onlyActive },
         );
     }
 
@@ -99,14 +99,13 @@ export class WeeklyService {
 
         const relativeRecordOfType = await Promise.all(
             Object.values(ProjectName).map(async (projectName) => {
-                const memberList = await this.getProjectMemberList(category, projectName);
+                const members = await this.getProjectMembersOfCategory(category, projectName);
 
                 const [baseRecord, lastRecord, beforeLastRecord] = await Promise.all(
-                    relativeDate.map((date) => this.recordService.findMemberListRecord({
+                    relativeDate.map((date) => this.recordService.findMembersRecord({
                         category,
-                        projectName,
                         recordType,
-                        memberList,
+                        members,
                         date,
                     })),
                 );
@@ -153,11 +152,10 @@ export class WeeklyService {
                 const { projectName } = projectRelativeRecord;
                 const { projectRecord, projectInfo } = this.processProjectRelativeRecord(projectRelativeRecord);
                 // eslint-disable-next-line no-await-in-loop
-                const memberList = await this.getProjectMemberList(category, projectName);
-                const memberInfo = this.formatRecordWithMemberList(
+                const members = await this.getProjectMembersOfCategory(category, projectName);
+                const memberInfo = this.formatRecordWithMembers(
                     projectRecord,
-                    // projectRelativeRecord 已经判断过了，此时 memberList 一定是有值的
-                    memberList,
+                    members,
                 );
                 categoryInfo.projectInfoList.push(projectInfo);
                 categoryInfo.memberInfoList.push(...memberInfo);
@@ -231,9 +229,9 @@ export class WeeklyService {
      * moduleInfo 已经有每个企划的信息了，直接返回给前端即可
      * memberInfo 是全部企划的也属于 moduleInfo 的一部分，整理后返回
      */
-    private formatRecordWithMemberList(
+    private formatRecordWithMembers(
         projectRecord: ProjectRecord,
-        memberList: MemberInfo[],
+        members: MemberInfo[],
     ) {
         const {
             records,
@@ -241,7 +239,7 @@ export class WeeklyService {
             weekIncrementRateArr,
         } = projectRecord;
 
-        return memberList.map((member, i) => ({
+        return members.map((member, i) => ({
             romaName: member.romaName,
             record: records[i],
             weekIncrement: weekIncrementArr[i],
@@ -258,15 +256,14 @@ export class WeeklyService {
      */
     async getTwitterFollowerWeeklyDetail({ projectName, endDate }: QueryWeeklyDetail) {
         const { from, to } = await this.recordService.findWeekRange(endDate);
-        const memberList = await this.getProjectMemberList(
+        const members = await this.getProjectMembersOfCategory(
             Category.person,
             projectName,
         );
-        const result = await this.recordService.findMemberListRecordInRange({
+        const result = await this.recordService.findMembersRecordInRange({
             category: Category.person,
             recordType: PersonRecordType.twitterFollower,
-            projectName,
-            memberList,
+            members,
             from,
             to,
         });

@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { transformToBoolean } from '@utils/transform';
 
-export class QueryMemberListOfCategoryDto {
+export class QueryMembersOfCategoryDto {
     @IsString()
     category: Category;
 
@@ -15,7 +15,7 @@ export class QueryMemberListOfCategoryDto {
     @Transform(transformToBoolean)
     onlyActive = true;
 }
-export class QueryProjectMemberListDto extends QueryMemberListOfCategoryDto {
+export class QueryProjectMembersDto extends QueryMembersOfCategoryDto {
     @IsString()
     @ApiProperty({
         default: ProjectName.llss,

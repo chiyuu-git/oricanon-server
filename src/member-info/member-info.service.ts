@@ -1,14 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category, ProjectName } from '@common/root';
-import { MemberInfoMap, GetMemberInfoByType, MemberCommonInfo, FindMemberListOptions } from '@common/member-info';
+import { MemberInfoMap, GetMemberInfoByCategory, MemberCommonInfo, FindMembersOptions } from '@common/member-info';
 import { Repository } from 'typeorm';
 import { CharaInfo } from './entities/chara-info.entity';
 import { CoupleInfo } from './entities/couple-info.entity';
 import { PersonInfo } from './entities/person-info.entity';
 import { MemberInfo } from './entities/member-info.entity';
-import { ProjectMemberListKey, ProjectMemberListMap } from './common';
-import { MemberList } from './entities/member-list.entity';
+import { Members } from './entities/member-list.entity';
 
 type ProjectCharaTagListMap = Record<ProjectName, {
     projectName: ProjectName;
@@ -25,7 +24,7 @@ type ProjectCoupleTagListMap = Record<ProjectName, {
     pixivIntersectionTags: string[];
 }>
 
-const defaultFindMemberListOptions = {
+const defaultFindMembersOptions = {
     onlyActive: true,
 };
 
@@ -33,7 +32,7 @@ const defaultFindMemberListOptions = {
 export class MemberInfoService {
     constructor(
         @InjectRepository(CharaInfo)
-        private MemberListRepository: Repository<MemberList>,
+        private MembersRepository: Repository<Members>,
         @InjectRepository(CharaInfo)
         private charaRepository: Repository<CharaInfo>,
         @InjectRepository(PersonInfo)
@@ -58,7 +57,7 @@ export class MemberInfoService {
     findMemberInfoByRomaName<Type extends Category>(
         category: Type,
         romaName: string,
-    ): Promise<GetMemberInfoByType<Type>>
+    ): Promise<GetMemberInfoByCategory<Type>>
     async findMemberInfoByRomaName(category: Category, romaName: string) {
         const repository = this.getRepositoryByType(category);
 
@@ -90,11 +89,11 @@ export class MemberInfoService {
     /**
      * 核心查询方法，查询 category 下的所有 memberInfo
      */
-    findMemberListOfCategory<Type extends Category>(
+    findMembersOfCategory<Type extends Category>(
         type: Type,
-        options?: FindMemberListOptions
-    ): Promise<GetMemberInfoByType<Type>[]>
-    findMemberListOfCategory(type: Category, { onlyActive }: FindMemberListOptions = defaultFindMemberListOptions) {
+        options?: FindMembersOptions
+    ): Promise<GetMemberInfoByCategory<Type>[]>
+    findMembersOfCategory(type: Category, { onlyActive }: FindMembersOptions = defaultFindMembersOptions) {
         const repository = this.getRepositoryByType(type);
 
         return onlyActive
@@ -105,15 +104,15 @@ export class MemberInfoService {
     /**
      * 核心查询方法，查询 category 和 project 下的 memberInfo
      */
-    findProjectMemberListOfCategory<Type extends Category>(
+    findProjectMembersOfCategory<Type extends Category>(
         category: Type,
         projectName: ProjectName,
-        options?: FindMemberListOptions
-    ): Promise<GetMemberInfoByType<Type>[]>
-    findProjectMemberListOfCategory(
+        options?: FindMembersOptions
+    ): Promise<GetMemberInfoByCategory<Type>[]>
+    findProjectMembersOfCategory(
         category: Category,
         projectName: ProjectName,
-        { onlyActive }: FindMemberListOptions = defaultFindMemberListOptions,
+        { onlyActive }: FindMembersOptions = defaultFindMembersOptions,
     ) {
         const repository = this.getRepositoryByType(category);
 
@@ -125,8 +124,8 @@ export class MemberInfoService {
     /**
      * 获取基础类型的 memberInfoMap，以 romaName 为 key
      */
-    async findMemberInfoMapOfCategory<Type extends Category>(type: Type, options?: FindMemberListOptions) {
-        const memberInfoList = await this.findMemberListOfCategory(type, options);
+    async findMemberInfoMapOfCategory<Type extends Category>(type: Type, options?: FindMembersOptions) {
+        const memberInfoList = await this.findMembersOfCategory(type, options);
         const memberInfoMap = <MemberInfoMap<Type>>{};
         for (const memberInfo of memberInfoList) {
             const { romaName } = memberInfo;

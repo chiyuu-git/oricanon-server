@@ -15,9 +15,10 @@ export async function fetchPixivTagViewCount() {
     const context = await browser.newContext({ storageState: 'state.json' });
 
     const page = await context.newPage();
-    await page.goto('https://dic.pixiv.net/a/%E5%94%90%E5%8F%AF%E5%8F%AF');
+    await page.goto('https://dic.pixiv.net/a/%E5%94%90%E5%8F%AF%E5%8F%AF', { timeout: 0 });
+    await page.waitForTimeout(10_000);
 
-    const pixivTagViewFetcher = new PixivTagViewFetcher(page.request, isMonthlyDate(new Date()));
+    const pixivTagViewFetcher = new PixivTagViewFetcher(page.request, !isMonthlyDate(new Date()));
     // const pixivTagViewFetcher = new PixivTagViewFetcher(page.request, false);
     await pixivTagViewFetcher.getCharaTagViewCount();
     await pixivTagViewFetcher.getCoupleTagViewCount();

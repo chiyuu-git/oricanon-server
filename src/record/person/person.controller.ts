@@ -8,7 +8,7 @@ import { Category, ProjectName } from '@common/root';
 import { PersonRecordType } from '@common/record';
 import { PersonFollowerService } from './person.service';
 import { CreateRecordOfProjectDto } from '../common/dto/create-record-data.dto';
-import { QueryMemberListRecord } from '../common/dto/query-record-data.dto';
+import { QueryMembersRecordOfDate } from '../common/dto/query-record-data.dto';
 
 @ApiTags('person_follower')
 @Controller('person_follower')

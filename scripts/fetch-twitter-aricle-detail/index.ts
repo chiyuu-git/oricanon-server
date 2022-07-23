@@ -2,10 +2,11 @@
 /* eslint-disable no-continue */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable unicorn/prefer-dom-node-text-content */
+import { Category, ProjectName } from '@common/root';
 import { getPrevWeeklyFetchDate } from '@common/weekly';
 import { formatDate } from '@utils/date';
 import { BrowserContext, chromium } from 'playwright';
-import { getLiellaTwitterAccountList } from 'scripts/common/fetch';
+import { getLiellaTwitterAccountList, getProjectMembersOfCategory } from 'scripts/common/fetch';
 import { DOWNLOAD_PATH, getTwitterPhotoFileName } from '../common/file';
 import { processHighFavorArticle } from './process-high-favor-article';
 
@@ -128,7 +129,7 @@ export async function fetchTwitterArticleDetail() {
     //   ]
     // const account = 'lovelive_staff';
     // 获取搜索参数
-    const account = 'AyaEmori_BOX';
+    // const account = 'AyaEmori_BOX';
     // 查询的标准是 1000，可以保证看到所有有意义的推特
     // 记录的标准是 7000，低于 7000 的直接删掉就好。
     const minFaves = 1000;
@@ -144,27 +145,31 @@ export async function fetchTwitterArticleDetail() {
 
     // 如果是周五以外的时间回溯，那么我需要手动指定 since 和 since + 7
     // 动画之前的 6000 就要保存了，再早的 5000 就要保存
-    const since = '2022-07-02';
-    const until = '2022-07-09';
-    await getTwitterArticleOfAccount(context, {
-        account,
-        minFaves,
-        since,
-        until,
-        saveFaves: 6000,
+    const since = '2022-07-09';
+    const until = '2022-07-16';
+    // await getTwitterArticleOfAccount(context, {
+    //     account,
+    //     minFaves,
+    //     since,
+    //     until,
+    //     saveFaves: 6000,
+    // });
+    const personInfoList = await getProjectMembersOfCategory<Category.person>({
+        category: Category.person,
+        projectName: ProjectName.llss,
     });
-    // const liellaTwitterAccountList: string[] = await getLiellaTwitterAccountList();
-    // console.log('liellaTwitterAccountList:', liellaTwitterAccountList);
-    // for (const [index, account] of Object.entries(liellaTwitterAccountList)) {
-    //     const saveFaves = +index <= 4 ? 7000 : 6000;
-    //     await getTwitterArticleOfAccount(context, {
-    //         account,
-    //         minFaves,
-    //         since,
-    //         until,
-    //         saveFaves,
-    //     });
-    // }
+    const twitterAccountList = personInfoList.map(({ twitterAccount }) => twitterAccount);
+    console.log('liellaTwitterAccountList:', twitterAccountList);
+    for (const [index, account] of Object.entries(twitterAccountList)) {
+        const saveFaves = +index <= 4 ? 7000 : 6000;
+        await getTwitterArticleOfAccount(context, {
+            account,
+            minFaves,
+            since,
+            until,
+            saveFaves,
+        });
+    }
 
     console.log('done');
 
