@@ -133,8 +133,8 @@ export class RecordDataService {
                 memberId,
             });
 
-            // 检查是否已经存在相同日期和类型的数据
-            if (memberRecord.length > 0) {
+            // 检查是否已经存在相同日期和类型的数据且值有意义
+            if (memberRecord.length > 0 && memberRecord[0].record) {
                 // eslint-disable-next-line no-continue
                 continue;
             }

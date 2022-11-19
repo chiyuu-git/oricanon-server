@@ -3,10 +3,8 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable unicorn/prefer-dom-node-text-content */
 import { Category, ProjectName } from '@common/root';
-import { getPrevWeeklyFetchDate } from '@common/weekly';
-import { formatDate } from '@utils/date';
 import { BrowserContext, chromium } from 'playwright';
-import { getLiellaTwitterAccountList, getProjectMembersOfCategory } from 'scripts/common/fetch';
+import { getProjectMembersOfCategory } from 'scripts/common/fetch';
 import { DOWNLOAD_PATH, getTwitterPhotoFileName } from '../common/file';
 import { processHighFavorArticle } from './process-high-favor-article';
 
@@ -145,8 +143,8 @@ export async function fetchTwitterArticleDetail() {
 
     // 如果是周五以外的时间回溯，那么我需要手动指定 since 和 since + 7
     // 动画之前的 6000 就要保存了，再早的 5000 就要保存
-    const since = '2022-07-09';
-    const until = '2022-07-16';
+    const since = '2022-07-30';
+    const until = '2022-08-06';
     // await getTwitterArticleOfAccount(context, {
     //     account,
     //     minFaves,

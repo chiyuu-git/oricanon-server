@@ -39,7 +39,7 @@ export class PixivTagViewFetcher extends BrowserFetcher {
                 }
 
                 // 全量时慢慢抓
-                const delay = this.onlyActive ? 3000 : 10_000;
+                const delay = this.onlyActive ? 1000 : 5000;
                 const waitFor = new Promise((resolve) => setTimeout(() => resolve(true), delay));
                 await waitFor;
             }
@@ -87,7 +87,7 @@ export class PixivTagViewFetcher extends BrowserFetcher {
             if (charaTagList.length === 0) {
                 continue;
             }
-            this.handleTagList({
+            await this.handleTagList({
                 route,
                 projectName,
                 recordType: CoupleRecordType.tagView,

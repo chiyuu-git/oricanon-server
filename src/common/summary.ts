@@ -40,6 +40,10 @@ export interface RecordTypeIncrement {
     recordType: string;
     record: number;
     increment: number;
+    /**
+     * template: `${record} (${increment})`
+     */
+    template: string;
 }
 
 export type MemberRelativeIncrementInfo<Type extends Category> = GetMemberInfoByCategory<Type>

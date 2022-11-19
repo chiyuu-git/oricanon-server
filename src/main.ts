@@ -26,7 +26,7 @@ bootstrap()
     .then(async () => {
         // 服务启动之后再执行脚本;
         // fetchTwitterFollower();
-        // fetchTwitterArticleDetail();
+        // await fetchTwitterArticleDetail();
         // await fetchPixivTagCount();
         // await fetchPixivTagViewCount();
         const placeholder = 123;

@@ -10,12 +10,11 @@ import {
     MemberRelativeIncrementInfo,
     CategoryIncrementRank,
     MemberWeekIncrement,
-    RecordTypeIncrement,
 } from '@common/summary';
 import { MemberInfoService } from '@src/member-info/member-info.service';
 import { RecordService } from '@src/record/record.service';
 import { MemberInfo } from '@src/member-info/entities/member-info.entity';
-import { QueryRecordInRange } from '@src/record/common/dto/query-record-data.dto';
+import { QueryMembersRecordInRange, QueryRecordInRange } from '@src/record/common/dto/query-record-data.dto';
 
 import { getPercentile } from '@utils/math';
 
@@ -184,8 +183,8 @@ export class SummaryService {
             category,
             projectName,
             members,
-            from: '2022-07-15',
-            to: '2022-07-22',
+            from: '2022-08-05',
+            to: '2022-08-12',
         };
 
         // chara record type format
@@ -226,19 +225,24 @@ export class SummaryService {
                 .map((coupleRecordType) => this.processProjectRelativeIncrementOfType({
                     ...commonParam,
                     recordType: coupleRecordType,
+                    members,
                 })),
         );
 
         const projectIncrementInfoList = members as MemberRelativeIncrementInfo<Type>[];
 
         for (const { recordType, records, increments } of allRecordTypeIncrementList) {
-            for (const [i, val] of increments.entries()) {
-                const recordTypeIncrement = projectIncrementInfoList[i][recordType as GetRecordTypeByCategory<Type>];
+            for (const [i, increment] of increments.entries()) {
+                const record = records?.[i] || 0;
 
-                Object.assign(recordTypeIncrement, {
-                    recordType,
-                    record: records?.[i] || 0,
-                    increment: val,
+                // TODO: 无法赋值，却可以 assign
+                Object.assign(projectIncrementInfoList[i], {
+                    [recordType]: {
+                        recordType,
+                        record,
+                        increment,
+                        template: `${record} (${increment})`,
+                    },
                 });
             }
         }
@@ -255,9 +259,8 @@ export class SummaryService {
      * 分别获取 from 和 to 两个指定日期的数据，然后相减获取增量
      * to 的数据，即为总量 ，默认也返回累计量
      */
-    private async processProjectRelativeIncrementOfType(query: QueryProjectRecordInRangeDto) {
-        const { category, projectName, recordType, from, to } = query;
-        const members = await this.getProjectMembersOfCategory(category, projectName);
+    private async processProjectRelativeIncrementOfType(query: QueryMembersRecordInRange) {
+        const { category, recordType, members, from, to } = query;
 
         const startParam = {
             ...query,

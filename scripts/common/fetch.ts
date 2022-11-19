@@ -3,7 +3,6 @@
 import { GetMemberInfoByCategory } from '@common/member-info';
 import { RecordType } from '@common/record';
 import { Category, ProjectName } from '@common/root';
-import { formatDate } from '@utils/date';
 import fetch from 'node-fetch';
 import { HOST } from './constant';
 
@@ -144,11 +143,6 @@ export async function createArticleInteractData(body: CreateArticleInteractDataD
     return result;
 }
 
-export async function getLiellaTwitterAccountList() {
-    const result = await enhanceFetch(`${HOST}/member_info/person_twitter_account_list`);
-    return result[2].twitterAccounts;
-}
-
 export function getProjectMembersOfCategory<Type extends Category>(
     query: QueryProjectMembersDto,
 ): Promise<GetMemberInfoByCategory<Type>[]> {
@@ -163,7 +157,8 @@ export async function postProjectRecord(body: PostProjectRecord) {
         route,
         onlyActive,
     } = body;
-    const date = formatDate(new Date());
+    const date = new Date();
+    // const date = '2022-08-12';
     const url = `${HOST}/${route}`;
     const res = await enhanceFetch(url, {
         projectName,

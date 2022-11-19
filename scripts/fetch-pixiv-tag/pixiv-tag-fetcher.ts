@@ -68,8 +68,13 @@ export class PixivTagFetcher extends BrowserFetcher {
                 if (data.ok()) {
                     const result = await data.json();
                     // pixiv 默认也会返回 0，还是别保险了，报错发现问题
-                    illusts.push(result.body.illustManga?.total);
-                    novels.push(result.body.novel?.total);
+                    const illust = result.body.illustManga.total;
+                    const novel = result.body.novel.total;
+                    if (typeof (illust) === 'undefined' || typeof (novel) === 'undefined') {
+                        throw new TypeError('illust or novel undefined');
+                    }
+                    illusts.push(illust);
+                    novels.push(novel);
                     // tags.push(result.body.novel.total)
                 }
                 else {
@@ -78,7 +83,7 @@ export class PixivTagFetcher extends BrowserFetcher {
                 }
 
                 // 全量时慢慢抓
-                const delay = this.onlyActive ? 0 : 10_000;
+                const delay = this.onlyActive ? 1000 : 5000;
                 const waitFor = new Promise((resolve) => setTimeout(() => resolve(true), delay));
                 await waitFor;
             }
@@ -181,23 +186,20 @@ export class PixivTagFetcher extends BrowserFetcher {
                 tagList: coupleReverseTagList,
             });
 
-            // 只有 active 的成员才计算 intersection
-            if (onlyActive) {
-                const coupleIntersectionTagList = coupleInfoList.map(({
-                    pixivTag,
-                    pixivReverseTag,
-                }) => `${pixivTag} ${pixivReverseTag}`);
-                console.log(projectName, 'coupleIntersectionTagList:', coupleIntersectionTagList);
+            const coupleIntersectionTagList = coupleInfoList.map(({
+                pixivTag,
+                pixivReverseTag,
+            }) => `${pixivTag} ${pixivReverseTag}`);
+            console.log(projectName, 'coupleIntersectionTagList:', coupleIntersectionTagList);
 
-                await this.handleTagList({
-                    route,
-                    projectName,
-                    illustRecordType: CoupleRecordType.illustIntersection,
-                    novelRecordType: CoupleRecordType.novelIntersection,
-                    onlyActive,
-                    tagList: coupleIntersectionTagList,
-                });
-            }
+            await this.handleTagList({
+                route,
+                projectName,
+                illustRecordType: CoupleRecordType.illustIntersection,
+                novelRecordType: CoupleRecordType.novelIntersection,
+                onlyActive,
+                tagList: coupleIntersectionTagList,
+            });
         }
 
         console.log('==== fetch couple end');

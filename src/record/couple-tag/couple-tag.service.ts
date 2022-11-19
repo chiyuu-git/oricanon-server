@@ -38,9 +38,9 @@ export class CoupleTagService extends RecordDataService {
         const { recordType } = params;
 
         switch (recordType) {
-            case CoupleRecordType.coupleUnionIllust:
+            case CoupleRecordType.illustUnion:
                 return this.findUnionIllust(params);
-            case CoupleRecordType.coupleUnionNovel:
+            case CoupleRecordType.novelUnion:
                 return this.findUnionNovel(params);
             case CoupleRecordType.illustWithNovel:
                 return this.findIllustWithNovel(params);
