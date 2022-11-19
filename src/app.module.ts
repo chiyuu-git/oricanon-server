@@ -1,9 +1,11 @@
+/* eslint-disable unicorn/prefer-module */
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection, EntityManager } from 'typeorm';
 import { ServeStaticModule } from '@nestjs/serve-static';
 // eslint-disable-next-line unicorn/import-style
 import { resolve } from 'path';
+import { MulterModule } from '@nestjs/platform-express';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { WeeklyModule } from './weekly/weekly.module';
@@ -28,7 +30,6 @@ import { TwitterModule } from './twitter/twitter.module';
         }),
         ServeStaticModule.forRoot({
             // 相对于打包后的dist目录
-            // eslint-disable-next-line unicorn/prefer-module
             rootPath: resolve(__dirname, '../../public'),
 
         }),
@@ -38,6 +39,7 @@ import { TwitterModule } from './twitter/twitter.module';
         SummaryModule,
         WeeklyModule,
         RecordModule,
+        MulterModule.register({ dest: resolve(__dirname, '../../public/assets') }),
     ],
     controllers: [AppController],
     providers: [AppService],
